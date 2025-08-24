@@ -14,7 +14,7 @@
 <body>
     <div class="main-container" style="height: 100vh; position: relative; padding: 2px;">
         <!-- Items panel on the left, width calculated to fill remaining space -->
-        <div class="items-panel" style="position: absolute; left: 2px; top: 2px; bottom: 2px; width: calc(100vw - calc((100vh - 4px - 90px - 20px) * 10 * 297 / (9 * 310)) - 10px); background-color: #d4d0c8 !important; border: 2px solid #999; padding: 0; margin: 0;">
+        <div class="items-panel" style="position: absolute; left: 2px; top: 2px; bottom: 2px; width: calc(100vw - calc((100vh - 4px - 90px - 20px) * 10 * 297 / (9 * 310)) - 10px); background-color: #d4d0c8 !important; border: 2px solid #999; padding: 0; margin: 0; display: flex; flex-direction: column;">
             <div class="header-top-content" style="font-size: 11px; font-style: normal; font-weight: bold; font-family: arial; background-color: #d3d0c8; color: rgb(64, 64, 64); display: flex; height: 25px; border: 1px solid #999;">
                 <div style="display: flex; align-items: center; justify-content: center; flex: 1; border-right: 1px solid #999;">OUT</div>
                 <div style="display: flex; align-items: center; justify-content: center; flex: 1; border-right: 1px solid #999;">Side1</div>
@@ -22,7 +22,7 @@
                 <div style="display: flex; align-items: center; justify-content: center; flex: 1;">331</div>
             </div>
             
-            <div class="order-panel" style="background-color: #d4d0c8 !important; border: 1px solid #999; padding: 5px;">
+            <div class="order-panel" style="background-color: #d4d0c8 !important; border: 1px solid #999; padding: 5px; flex: 1;">
                 <div class="order-item" style="font-size: 16px; line-height: 16px; font-style: normal; font-weight: bold; font-family: arial; text-decoration: none; color: rgb(0, 0, 0); background-color: transparent; align-items: flex-start; justify-content: flex-start; text-align: left; display: flex; justify-content: space-between;">
                     <div class="name">  1 S Coke</div>
                     <div class="price">1.00</div>
@@ -44,13 +44,15 @@
                 </div>
             </div>
             
-            <div style="background-color: #d4d0c8; padding: 5px; text-align: left;">
+            <!-- Bottom status bar inside items panel -->
+            <div style="background-color: #d4d0c8; border-top: 1px solid #999; display: flex; align-items: center; justify-content: space-between; padding: 8px; height: 30px;">
                 <span style="font-size: 14px; line-height: 14px; font-style: normal; font-weight: bold; font-family: arial; text-decoration: none; color: rgb(64, 64, 64);">Click here to show last sale</span>
+                <img src="img/upArrow.png" alt="Up Arrow" style="width: 2.5vw; height: auto; max-height: 24px;">
             </div>
         </div>
         
-        <!-- Header positioned above grid in bottom right -->
-        <div class="panel-indicator" style="position: absolute; bottom: calc(100vh - 4px - 90px - 20px + 2px + 2px); right: 2px; display: flex; background-color: rgb(212, 208, 200); border: 1px solid #999; width: calc((100vh - 4px - 90px - 20px) * 10 * 297 / (9 * 310));">
+        <!-- Header positioned at top right -->
+        <div class="panel-indicator" style="position: absolute; top: 2px; right: 2px; display: flex; background-color: rgb(212, 208, 200); border: 1px solid #999; width: calc((100vh - 4px - 90px - 20px) * 10 * 297 / (9 * 310));">
             <div class="operation-icon" style="width: 105px; height: 90px; background-color: rgb(168, 212, 168); border-right: 1px solid #999; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
                 <div style="font-size: 11px; font-style: normal; font-weight: bold; font-family: arial; color: rgb(64, 64, 64); text-align: center; line-height: 1.1;">User<br>Logged</div>
                 <div style="font-size: 16px; margin-top: 2px;">👤</div>
@@ -104,9 +106,10 @@
             </div>
         </div>
         
-        <!-- Grid positioned in bottom right corner -->
+        <!-- Grid positioned below header in right side -->
         <div class="grid-container" style="
             position: absolute;
+            top: 94px;
             bottom: 2px;
             right: 2px;
             background-image: url('/img/BckGround01.png'); 
@@ -120,7 +123,6 @@
             background-color: #bbb; 
             padding: 10px; 
             border: 3px solid #ff0000;
-            height: calc(100vh - 4px - 90px - 20px);
             width: calc((100vh - 4px - 90px - 20px) * 10 * 297 / (9 * 310));
         ">
                 <div class="grid-item"></div>
