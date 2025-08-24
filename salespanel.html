@@ -1,0 +1,169 @@
+<div class="screen-component sales-panel-container">
+    <!-- ko component: 'sales-panel' --><!-- ko if: loaded -->
+<div class="sales-panel" data-bind="style: { backgroundColor: config.BackgroundColor, border: (config.ShowBorder &amp;&amp; config.BorderColor) ? '1px solid' + config.BorderColor : 'none' } " style="background-color: rgb(212, 208, 200);">
+  <script type="text/html" id="sales-panel-subitem">
+    <div class="order-sub-item" data-bind="style: style, css: css">
+      <hr class="void-line">
+      <div class="name" data-bind="html: text"></div>
+      <div class="price" data-bind="html: price"></div>
+      <hr class="separator" data-bind="style: separatorStyle, visible: hasSeparator">      
+    </div>
+    <!-- ko template: { name: 'itemPerLevel',  foreach: subItems } -->
+    <!-- /ko -->
+  </script>
+  <script type="text/html" id="sales-panel-item">
+    <div class="order-item" data-bind="clickAndTouch, style: style, css: css, event: { mouseenter: onMouseEnter, mouseleave: onMouseLeave, mousedown: onMouseDown, mouseup: onMouseUp, touchstart: onMouseDown, touchend: onTouchEnd, dblclick: onDblClick }">
+      <hr class="void-line">
+      <div>
+        <div class="name" data-bind="html: text"></div>
+        <div class="price" data-bind="html: price"></div>
+        <hr class="separator" data-bind="style: separatorStyle, visible: hasSeparator">
+      </div>
+      <!-- ko template: { name: 'sales-panel-subitem',  foreach: subItems } -->
+      <!-- /ko -->
+    </div>
+  </script>
+  <script type="text/html" id="sales-panel-tenderinfo">
+    <div class="tender-item" data-bind="style: style">
+      <div class="tender-item-table">
+        <div class="name" data-bind="html: text"></div>
+        <div class="currency" data-bind="html: currencySymbol, style: { color: $component.getCurrencyColor() }"></div>
+        <div class="price" data-bind="html: amount"></div>
+      </div>
+    </div>
+  </script>
+  <div class="top-container">
+    <div class="header-top-container clearfix">
+      <div class="header-top-content" data-bind="style: $component.getHeaderStyle()" style="font-size: 12px; line-height: 12px; font-style: normal; font-weight: bold; font-family: ARIAL; text-decoration: none; color: rgb(0, 0, 0); background-color: rgb(211, 208, 200); align-items: center; justify-content: center; text-align: center;">
+        <div class="eat-in-take-out" data-bind="text: data.EatInTakeOut, event: { dblclick: $component.emergencyRollback }">OUT</div>
+        <div class="production-side" data-bind="text: data.ProductionSide">Side2</div>
+        <div class="order-number-seconds-elapsed">
+          <span data-bind="text: data.OrderNumber">04</span>
+          <span data-bind="text: orderTime.text">(999)</span>
+        </div>
+        <div class="quantity-indicator" data-bind="text: salesData.Quantity, click: quantityClick">1</div>
+      </div>
+    </div>
+  </div>
+  <div data-bind="visible: !$component.enableIdAtCOD(), component: 'sale-message-area', style:{ width: '100%'}" style="display: none; width: 100%;"><!-- ko if: loaded --><!-- /ko -->
+</div>
+  <!-- ko component: 'promotion-message-area' -->    <!-- Bluetooth COD  -->
+    <div class="promotion-message-area" data-bind="style: style">
+        <div class="waiting-section" data-bind="style: { backgroundColor: config.WaitingSectionBackgroundColor } " style="background-color: rgb(255, 255, 224);">
+            <div class="cod-section-item">
+                 <div data-bind="foreach: CODBluetoothSectionList"></div>
+             </div>
+         </div>
+    </div>
+
+<!-- ko if: loaded --><!-- /ko -->
+<!-- /ko -->
+  <div data-bind="visible: $component.enableIdAtCOD(), component: 'sale-message-area', style: {width: '100%'}" style="width: 100%;"><!-- ko if: loaded --><!-- /ko -->
+</div>
+  <div class="order-panel" data-bind="salesPanelAutoScroll: items, event: { touchend: onmouseup, touchmove: onscroll }">
+    <!-- ko foreach: items -->
+      <!-- ko template: { name: 'sales-panel-item', ifnot: isTenderInfo } -->
+    <div class="order-item" data-bind="clickAndTouch, style: style, css: css, event: { mouseenter: onMouseEnter, mouseleave: onMouseLeave, mousedown: onMouseDown, mouseup: onMouseUp, touchstart: onMouseDown, touchend: onTouchEnd, dblclick: onDblClick }" style="font-size: 16px; line-height: 16px; font-style: normal; font-weight: bold; font-family: arial; text-decoration: none; color: rgb(0, 0, 0); background-color: transparent; align-items: flex-start; justify-content: flex-start; text-align: left;">
+      <hr class="void-line">
+      <div>
+        <div class="name" data-bind="html: text">&nbsp;&nbsp;1&nbsp;S&nbsp;Coke</div>
+        <div class="price" data-bind="html: price">1.00</div>
+        <hr class="separator" data-bind="style: separatorStyle, visible: hasSeparator" style="border-color: rgb(0, 128, 0);">
+      </div>
+      <!-- ko template: { name: 'sales-panel-subitem',  foreach: subItems } --><!-- /ko -->
+    </div>
+  <!-- /ko -->
+      <!-- ko template: { name: 'sales-panel-tenderinfo', if: isTenderInfo } --><!-- /ko -->
+    
+      <!-- ko template: { name: 'sales-panel-item', ifnot: isTenderInfo } -->
+    <div class="order-item" data-bind="clickAndTouch, style: style, css: css, event: { mouseenter: onMouseEnter, mouseleave: onMouseLeave, mousedown: onMouseDown, mouseup: onMouseUp, touchstart: onMouseDown, touchend: onTouchEnd, dblclick: onDblClick }" style="font-size: 16px; line-height: 16px; font-style: normal; font-weight: bold; font-family: arial; text-decoration: none; color: rgb(0, 0, 0); background-color: transparent; align-items: flex-start; justify-content: flex-start; text-align: left;">
+      <hr class="void-line">
+      <div>
+        <div class="name" data-bind="html: text">&nbsp;&nbsp;1&nbsp;Honey&nbsp;Must&nbsp;Cup</div>
+        <div class="price" data-bind="html: price"></div>
+        <hr class="separator" data-bind="style: separatorStyle, visible: hasSeparator" style="border-color: rgb(0, 128, 0); display: none;">
+      </div>
+      <!-- ko template: { name: 'sales-panel-subitem',  foreach: subItems } --><!-- /ko -->
+    </div>
+  <!-- /ko -->
+      <!-- ko template: { name: 'sales-panel-tenderinfo', if: isTenderInfo } --><!-- /ko -->
+    
+      <!-- ko template: { name: 'sales-panel-item', ifnot: isTenderInfo } -->
+    <div class="order-item selected" data-bind="clickAndTouch, style: style, css: css, event: { mouseenter: onMouseEnter, mouseleave: onMouseLeave, mousedown: onMouseDown, mouseup: onMouseUp, touchstart: onMouseDown, touchend: onTouchEnd, dblclick: onDblClick }" style="font-size: 16px; line-height: 16px; font-style: normal; font-weight: bold; font-family: arial; text-decoration: none; color: rgb(255, 255, 255); background-color: rgb(0, 0, 0); align-items: flex-start; justify-content: flex-start; text-align: left;">
+      <hr class="void-line">
+      <div>
+        <div class="name" data-bind="html: text">&nbsp;&nbsp;2&nbsp;S&amp;S&nbsp;Cup</div>
+        <div class="price" data-bind="html: price"></div>
+        <hr class="separator" data-bind="style: separatorStyle, visible: hasSeparator" style="border-color: rgb(0, 128, 0);">
+      </div>
+      <!-- ko template: { name: 'sales-panel-subitem',  foreach: subItems } --><!-- /ko -->
+    </div>
+  <!-- /ko -->
+      <!-- ko template: { name: 'sales-panel-tenderinfo', if: isTenderInfo } --><!-- /ko -->
+    
+      <!-- ko template: { name: 'sales-panel-item', ifnot: isTenderInfo } -->
+    <div class="order-item" data-bind="clickAndTouch, style: style, css: css, event: { mouseenter: onMouseEnter, mouseleave: onMouseLeave, mousedown: onMouseDown, mouseup: onMouseUp, touchstart: onMouseDown, touchend: onTouchEnd, dblclick: onDblClick }" style="font-size: 16px; line-height: 16px; font-style: normal; font-weight: bold; font-family: arial; text-decoration: none; color: rgb(0, 0, 0); background-color: transparent; align-items: flex-start; justify-content: flex-start; text-align: left;">
+      <hr class="void-line">
+      <div>
+        <div class="name" data-bind="html: text">&nbsp;&nbsp;1&nbsp;Big&nbsp;Mac</div>
+        <div class="price" data-bind="html: price">4.79</div>
+        <hr class="separator" data-bind="style: separatorStyle, visible: hasSeparator" style="border-color: rgb(0, 128, 0); display: none;">
+      </div>
+      <!-- ko template: { name: 'sales-panel-subitem',  foreach: subItems } --><!-- /ko -->
+    </div>
+  <!-- /ko -->
+      <!-- ko template: { name: 'sales-panel-tenderinfo', if: isTenderInfo } --><!-- /ko -->
+    <!-- /ko -->
+    <button class="click-out-button" data-bind="click: clickOutMultiSelect.clickout, visible: endMultiSelectButton" style="display: none;"></button>
+  </div>
+  <div class="bottom-container">
+    <dynamic-crew><script type="text/html" id="double-crew-panel-template">
+	<div class="item-container">
+		<div class="item">
+			<pre name="text" data-bind="text: Text, style: style"></pre>
+			<pre name="price" data-bind="text: Price, style: style"></pre>
+			<hr/>
+		</div>
+	</div>
+	<!-- ko template: { name: 'double-crew-panel-template',  foreach: SubItems }-->
+	<!-- /ko -->
+</script>
+
+<!-- ko if: visibleCarImage --><!-- /ko -->
+<!-- ko if: visibleDoubleCrew --><!-- /ko -->
+<div id="dynamic_crew" name="dynamic-crew" data-bind="event: { click: click, touchend: click }, visible: visible">
+	<span data-bind="style: style, text: message" style="font-size: 14px; line-height: 14px; font-style: normal; font-weight: bold; font-family: arial; text-decoration: none; color: rgb(64, 64, 64); background-color: rgb(212, 208, 200); align-items: flex-start; justify-content: flex-start; text-align: left;">Click here to show last sale</span>
+	<div id="dynamic_crew_button" name="button" data-bind="style: button" style="background-image: url(&quot;/npsharp/mediadb/en-US/maxCrewIcon.png?v=695A9CC7D5BA22D0C4B011DDEC0D1959&quot;);">
+	</div>
+</div>
+<!-- ko if: visibleGenericCounter --><!-- /ko --></dynamic-crew>
+  </div>
+
+  <script type="text/html" id="foe-item">
+    <button class="card" data-bind="click: processFoeOrder">
+      <h1 class="vendor-id" data-bind="text: vendorId"></h1>
+      <p class="vendor-number" data-bind="text: vendorNumber"></p>
+      <p class="total-amount" data-bind="text: totalAmount"></p>
+    </button>
+  </script>
+
+  <div class="container-foe" data-bind="visible: shouldShowFiscalFoeOrdersPanel" style="display: none;">
+    <div class="card notification-menu" data-bind="click: showFoeOrders">
+      <div class="notification">
+        <div class="orders" data-bind="text: foeOrdersCount"></div>
+      </div>
+      <div class="menu">
+        <div class="burger">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ko template: { name: 'foe-item',  foreach: foeItems } --><!-- /ko -->
+
+  </div>
+  <!-- /ko -->
+</div><!-- /ko -->
+  </div>
