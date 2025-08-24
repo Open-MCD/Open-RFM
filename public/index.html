@@ -9,9 +9,53 @@
         body {
             background-color: #d3d0c8 !important;
         }
+        
+        #screen-width-warning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        
+        #screen-width-warning .warning-content {
+            background-color: #333;
+            padding: 30px;
+            border: 2px solid #666;
+            max-width: 400px;
+        }
+        
+        #screen-width-warning h2 {
+            margin-bottom: 15px;
+            color: #ff6666;
+        }
+        
+        @media (max-width: 949px) {
+            #screen-width-warning {
+                display: flex !important;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Screen width warning overlay -->
+    <div id="screen-width-warning">
+        <div class="warning-content">
+            <h2>Screen Too Narrow</h2>
+            <p>This application requires a minimum screen width of 950 pixels to function properly.</p>
+            <p>Please resize your browser window or use a larger screen.</p>
+            <p>Current width: <span id="current-width"></span>px</p>
+        </div>
+    </div>
+    
     <div class="main-container" style="height: 100vh; position: relative; padding: 2px;">
         <!-- Items panel on the left, width calculated to fill remaining space -->
         <div class="items-panel" style="position: absolute; left: 2px; top: 2px; bottom: 2px; width: calc(100vw - calc((100vh - 4px - 90px - 20px) * 10 * 297 / (9 * 310)) - 10px); background-color: #d4d0c8 !important; border: 2px solid #999; padding: 0; margin: 0; display: flex; flex-direction: column;">
@@ -87,7 +131,7 @@
                         <span>DT(OT/CS)</span>
                     </div>
                     <div class="stored-orders" style="font-size: 11px; font-style: normal; font-weight: bold; font-family: arial; background-color: rgb(232, 232, 232); color: rgb(64, 64, 64); display: flex; align-items: center; justify-content: center; flex: 1; border-right: 1px solid #999;">
-                        <span>Pending paid orders</span>
+                        <span>Stored orders not paid</span>
                     </div>
                     <div class="cash-drawer-status" style="font-size: 11px; font-style: normal; font-weight: bold; font-family: arial; background-color: rgb(232, 232, 232); color: rgb(64, 64, 64); display: flex; align-items: center; justify-content: center; flex: 1;">
                         <span>Drawer Status</span>

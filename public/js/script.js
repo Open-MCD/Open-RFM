@@ -10,13 +10,34 @@ function alignHeaderBoxes() {
     }
 }
 
-// Run alignment when page loads
-window.addEventListener('load', alignHeaderBoxes);
+// Function to update screen width display
+function updateScreenWidth() {
+    const currentWidthSpan = document.getElementById('current-width');
+    if (currentWidthSpan) {
+        currentWidthSpan.textContent = window.innerWidth;
+    }
+}
 
-// Run alignment when window resizes
+// Function to check screen width and show/hide warning
+function checkScreenWidth() {
+    updateScreenWidth();
+    // The CSS media query handles showing/hiding the overlay
+}
+
+// Run alignment when page loads
+window.addEventListener('load', function() {
+    alignHeaderBoxes();
+    checkScreenWidth();
+});
+
+// Run alignment and width check when window resizes
 window.addEventListener('resize', function() {
     alignHeaderBoxes();
+    checkScreenWidth();
 });
 
 // Also run on DOM content loaded as backup
-document.addEventListener('DOMContentLoaded', alignHeaderBoxes);
+document.addEventListener('DOMContentLoaded', function() {
+    alignHeaderBoxes();
+    checkScreenWidth();
+});
