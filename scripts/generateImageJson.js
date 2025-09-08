@@ -26,6 +26,51 @@ async function parseXmlFile(filePath) {
     }
 }
 
+// Helper function to identify ingredients, components, and non-menu items
+function isIngredientOrComponent(nameInfo, productCode) {
+    const allNames = [
+        nameInfo.shortName || '',
+        nameInfo.longName || '',
+        nameInfo.csoName || '',
+        nameInfo.dtName || ''
+    ].join(' ').toLowerCase();
+    
+    // Common ingredient/component patterns
+    const excludePatterns = [
+        // Ingredients
+        'cheese', 'lettuce', 'tomato', 'onion', 'pickle', 'sauce', 'mayo', 'ketchup', 'mustard',
+        'patty', 'bun', 'bacon strips', 'egg', 'syrup', 'butter', 'cream', 'milk',
+        
+        // Size/option selectors
+        'select', 'choose', 'small', 'medium', 'large', 'extra large',
+        'size', 'option', 'upgrade',
+        
+        // Service items
+        'comment', 'note', 'special', 'request', 'instruction',
+        'add', 'extra', 'no ', 'without', 'plain',
+        
+        // Packaging/containers
+        'cup', 'lid', 'straw', 'napkin', 'bag', 'tray',
+        
+        // Non-food items
+        'tag', 'label', 'code', 'id', 'reference'
+    ];
+    
+    // Check if any exclude pattern matches
+    const hasExcludePattern = excludePatterns.some(pattern => 
+        allNames.includes(pattern)
+    );
+    
+    // Additional checks for product codes that are typically ingredients
+    const isIngredientCode = 
+        // Very high product codes are often ingredients/modifiers
+        parseInt(productCode) > 80000 ||
+        // Very low codes might be basic ingredients
+        (parseInt(productCode) < 200 && parseInt(productCode) > 100);
+    
+    return hasExcludePattern || isIngredientCode;
+}
+
 // Convert XML data to consolidated JSON
 async function generateProductsJson() {
     console.log('Starting XML to JSON conversion...');
@@ -97,6 +142,31 @@ async function generateProductsJson() {
             if (product && product.ProductCode) {
                 const productCode = product.ProductCode.toString();
                 const nameInfo = nameMap.get(productCode) || {};
+
+                // Filter criteria for sellable products only
+                const isActualProduct = 
+                    // Must be salable
+                    product.salable === 'true' &&
+                    // Must have a meaningful product class (exclude COMMENT, SERVICE, etc.)
+                    product.productClass && 
+                    ['PRODUCT', 'VALUE_MEAL'].includes(product.productClass) &&
+                    // Must have a product category that indicates food/beverage
+                    product.productCategory && 
+                    ['FOOD', 'BEVERAGE'].includes(product.productCategory) &&
+                    // Must not be a secondary product (variations/sizes)
+                    product.Secondary !== 'true' &&
+                    // Must not be a dummy product
+                    product.DummyProduct !== 'true' &&
+                    // Must have some kind of name
+                    (nameInfo.shortName || nameInfo.longName || nameInfo.csoName) &&
+                    // Exclude items that look like ingredients/components
+                    !isIngredientOrComponent(nameInfo, productCode) &&
+                    // Must have an image (BitmapName) to be a real menu item
+                    product.Presentation && product.Presentation.BitmapName;
+
+                if (!isActualProduct) {
+                    return; // Skip this product
+                }
 
                 // Build comprehensive product object
                 const productObj = {
