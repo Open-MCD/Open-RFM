@@ -271,7 +271,26 @@
         </div>
     </div>
     
+    <!-- Export Controls -->
+    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+        <button id="export-btn" onclick="downloadScreenXML()" style="
+            padding: 12px 24px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: background-color 0.2s;
+        " onmouseover="this.style.backgroundColor='#218838'" onmouseout="this.style.backgroundColor='#28a745'">
+            📥 Export Screen XML
+        </button>
+    </div>
+    
     <script src="/js/productSelector.js"></script>
+    <script src="/js/screenExport.js"></script>
     <script src="/js/script.js"></script>
 </body>
 </html>

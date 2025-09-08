@@ -9,6 +9,7 @@ const outputPath = path.join(__dirname, '..', 'public', 'products.json');
 const namesDbPath = path.join(xmlDir, 'names-db.xml');
 const productDbPath = path.join(xmlDir, 'product-db.xml');
 const storeDbPath = path.join(xmlDir, 'store-db.xml');
+const screenDbPath = path.join(xmlDir, 'screen.xml');
 
 // Parse XML to JavaScript object
 async function parseXmlFile(filePath) {
@@ -76,10 +77,11 @@ async function generateProductsJson() {
     console.log('Starting XML to JSON conversion...');
     
     // Parse all XML files
-    const [namesDb, productDb, storeDb] = await Promise.all([
+    const [namesDb, productDb, storeDb, screenDb] = await Promise.all([
         parseXmlFile(namesDbPath),
         parseXmlFile(productDbPath),
-        parseXmlFile(storeDbPath)
+        parseXmlFile(storeDbPath),
+        parseXmlFile(screenDbPath)
     ]);
 
     if (!namesDb || !productDb || !storeDb) {
@@ -88,6 +90,39 @@ async function generateProductsJson() {
     }
 
     console.log('XML files parsed successfully');
+    
+    // Extract button styling from screen.xml
+    const buttonStyling = new Map();
+    if (screenDb && screenDb.Screens && screenDb.Screens.Screen) {
+        const screens = Array.isArray(screenDb.Screens.Screen) 
+            ? screenDb.Screens.Screen 
+            : [screenDb.Screens.Screen];
+        
+        screens.forEach(screen => {
+            if (screen && screen.Button) {
+                const buttons = Array.isArray(screen.Button) 
+                    ? screen.Button 
+                    : [screen.Button];
+                
+                buttons.forEach(button => {
+                    if (button && button.productCode) {
+                        const productCode = button.productCode.toString();
+                        buttonStyling.set(productCode, {
+                            textup: button.textup || 'BLACK',
+                            textdn: button.textdn || 'WHITE',
+                            bgup: button.bgup || 'WHITE',
+                            bgdn: button.bgdn || 'BLACK',
+                            title: button.title || '',
+                            bitmap: button.bitmap || '',
+                            outageModeButtonDisabled: button.outageModeButtonDisabled || 'false'
+                        });
+                    }
+                });
+            }
+        });
+    }
+    
+    console.log(`Extracted styling for ${buttonStyling.size} products from screen.xml`);
     
     // Create lookup map for product names (English only)
     const nameMap = new Map();
@@ -187,6 +222,20 @@ async function generateProductsJson() {
                     displayWaste: product.DisplayWaste === 'true',
                     upsizable: product.Upsizable === 'true'
                 };
+
+                // Add button styling from screen.xml if available
+                const styling = buttonStyling.get(productCode);
+                if (styling) {
+                    productObj.buttonStyling = styling;
+                    // Use the title from screen.xml as it preserves newlines and proper formatting
+                    if (styling.title) {
+                        productObj.displayTitle = styling.title;
+                    }
+                    // Use the bitmap from screen.xml if available (might be different from product-db)
+                    if (styling.bitmap) {
+                        productObj.screenBitmap = styling.bitmap;
+                    }
+                }
 
                 // Add sales type information
                 if (product.SalesType) {

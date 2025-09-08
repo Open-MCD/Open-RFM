@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-09-08T00:16:32.676Z",
+    "generatedAt": "2025-09-08T22:09:08.650Z",
     "totalProducts": 107,
     "version": "1.0"
   },
@@ -61,6 +61,17 @@
       "displayOrder": 728,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "4 pc. Chicken McNuggets\\r",
+        "bitmap": "CSO_4_MCNUGGETS_483.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "4 pc. Chicken McNuggets\\r",
+      "screenBitmap": "CSO_4_MCNUGGETS_483.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -371,6 +382,17 @@
       "displayOrder": 674,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Steak\\nPatty\\n",
+        "bitmap": "STKPAT.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Steak\\nPatty\\n",
+      "screenBitmap": "STKPAT.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -656,6 +678,17 @@
       "displayOrder": 751,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "$5 Hot n Spicy McChicken\\r Meal Deal",
+        "bitmap": "Kiosk_202405_25138_5dollar_HotnSpicy_McChicken_MealDeal.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "$5 Hot n Spicy McChicken\\r Meal Deal",
+      "screenBitmap": "Kiosk_202405_25138_5dollar_HotnSpicy_McChicken_MealDeal.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -947,6 +980,17 @@
       "displayOrder": 751,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Hamburger",
+        "bitmap": "Kiosk_202302_0001-999_Hamburger_Alt.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Hamburger",
+      "screenBitmap": "Kiosk_202302_0001-999_Hamburger_Alt.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -1586,6 +1630,17 @@
       "displayOrder": 727,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "6 pc. Chicken McNuggets\\r",
+        "bitmap": "CSO_6_MCNUGGETS_60.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "6 pc. Chicken McNuggets\\r",
+      "screenBitmap": "CSO_6_MCNUGGETS_60.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -1914,6 +1969,17 @@
       "displayOrder": 722,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "20 pc. Chicken McNuggets\\r",
+        "bitmap": "CSO - 20 McNuggets - Serves 2 - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "20 pc. Chicken McNuggets\\r",
+      "screenBitmap": "CSO - 20 McNuggets - Serves 2 - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -2221,6 +2287,17 @@
       "displayOrder": 674,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Sausage",
+        "bitmap": "CSO_SAUSAGE.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Sausage",
+      "screenBitmap": "CSO_SAUSAGE.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -2472,6 +2549,17 @@
       "displayOrder": 749,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Filet-O-Fish\\r",
+        "bitmap": "Kiosk_202302_5926-999_Filet-O-Fish_HalfSlice.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Filet-O-Fish\\r",
+      "screenBitmap": "Kiosk_202302_5926-999_Filet-O-Fish_HalfSlice.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -3070,6 +3158,17 @@
       "displayOrder": 673,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Big Breakfast\\r with Steak & Hotcakes",
+        "bitmap": "CSO - Big Breakfast With Steak And Hot Cakes - 500X500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Big Breakfast\\r with Steak & Hotcakes",
+      "screenBitmap": "CSO - Big Breakfast With Steak And Hot Cakes - 500X500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -3311,6 +3410,17 @@
       "displayOrder": 743,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Big Mac\\r",
+        "bitmap": "Kiosk_202302_0005-999_BigMac.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Big Mac\\r",
+      "screenBitmap": "Kiosk_202302_0005-999_BigMac.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -4015,6 +4125,17 @@
       "displayOrder": 674,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "2 Full\\nStrips\\nBacon",
+        "bitmap": "2BACONB.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "2 Full\\nStrips\\nBacon",
+      "screenBitmap": "2BACONB.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -4256,6 +4377,17 @@
       "displayOrder": 680,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Sausage Burrito",
+        "bitmap": "CSO - SAUSAGE BURRITO - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Sausage Burrito",
+      "screenBitmap": "CSO - SAUSAGE BURRITO - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -4554,6 +4686,17 @@
       "displayOrder": 724,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "10 pc. Chicken McNuggets\\r",
+        "bitmap": "CSO_10NUGGETS_11004.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "10 pc. Chicken McNuggets\\r",
+      "screenBitmap": "CSO_10NUGGETS_11004.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -4886,6 +5029,17 @@
       "displayOrder": 674,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Canadian\\nBacon\\n",
+        "bitmap": "CANBAC.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Canadian\\nBacon\\n",
+      "screenBitmap": "CANBAC.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -5117,6 +5271,17 @@
       "displayOrder": 673,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Big Breakfast\\r with Hotcakes",
+        "bitmap": "CSO_BIG_BREAKFAST_W_HTCK.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Big Breakfast\\r with Hotcakes",
+      "screenBitmap": "CSO_BIG_BREAKFAST_W_HTCK.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -5377,6 +5542,17 @@
       "displayOrder": 751,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "McChicken\\r",
+        "bitmap": "Kiosk_202302_4314-999_McChicken.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "McChicken\\r",
+      "screenBitmap": "Kiosk_202302_4314-999_McChicken.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -5992,6 +6168,17 @@
       "displayOrder": 721,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "KVSRGOLD",
+        "bgup": "KVSRGOLD",
+        "bgdn": "BLACK",
+        "title": "Classic Big Mac\\r Pack ",
+        "bitmap": "Kiosk_202307_6651_ClassicBigMacPack.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Classic Big Mac\\r Pack ",
+      "screenBitmap": "Kiosk_202307_6651_ClassicBigMacPack.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -6281,6 +6468,17 @@
       "displayOrder": 722,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "40 pc. Chicken McNuggets\\r",
+        "bitmap": "CSO - 40 Piece McNuggets - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "40 pc. Chicken McNuggets\\r",
+      "screenBitmap": "CSO - 40 Piece McNuggets - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -6596,6 +6794,17 @@
       "displayOrder": 751,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Hot 'N Spicy McChicken\\r",
+        "bitmap": "Kiosk_202302_4834-999_HotNSpicyMcChicken.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Hot 'N Spicy McChicken\\r",
+      "screenBitmap": "Kiosk_202302_4834-999_HotNSpicyMcChicken.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -7199,6 +7408,17 @@
       "displayOrder": 583,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "4 pc. Chicken McNugget\\r Happy Meal\\r",
+        "bitmap": "CSO - HAPPY MEAL 4 PIECE - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "4 pc. Chicken McNugget\\r Happy Meal\\r",
+      "screenBitmap": "CSO - HAPPY MEAL 4 PIECE - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -7516,6 +7736,17 @@
       "displayOrder": 583,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Hamburger Happy Meal\\r",
+        "bitmap": "Kiosk_202307_6975_HamburgerHappyMeal_AppleSlices_WhiteMilkJug_Left.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Hamburger Happy Meal\\r",
+      "screenBitmap": "Kiosk_202307_6975_HamburgerHappyMeal_AppleSlices_WhiteMilkJug_Left.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -7830,6 +8061,17 @@
       "displayOrder": 751,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Deluxe McCrispy\\t",
+        "bitmap": "Kiosk_201911_0370_DeluxeCrispyChickenSandwich.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Deluxe McCrispy\\t",
+      "screenBitmap": "Kiosk_201911_0370_DeluxeCrispyChickenSandwich.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -8352,6 +8594,17 @@
       "displayOrder": 750,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Double Filet-O-Fish\\r",
+        "bitmap": "Kiosk_202302_3933-999_DoubleFilet-O-Fish_WholeSlice.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Double Filet-O-Fish\\r",
+      "screenBitmap": "Kiosk_202302_3933-999_DoubleFilet-O-Fish_WholeSlice.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -8976,6 +9229,17 @@
       "displayOrder": 673,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Hotcakes",
+        "bitmap": "CSO - Hotcakes - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Hotcakes",
+      "screenBitmap": "CSO - Hotcakes - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -9291,6 +9555,17 @@
       "displayOrder": 678,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Sausage Biscuit",
+        "bitmap": "CSO_SAUSAGE_BISCUIT.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Sausage Biscuit",
+      "screenBitmap": "CSO_SAUSAGE_BISCUIT.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -9987,6 +10262,17 @@
       "displayOrder": 677,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Sausage McMuffin\\r",
+        "bitmap": "CSO_SAUSAGE_MCMUFFIN.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Sausage McMuffin\\r",
+      "screenBitmap": "CSO_SAUSAGE_MCMUFFIN.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -10410,6 +10696,17 @@
       "displayOrder": 673,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "BLANCHEDALMOND",
+        "bgup": "BLANCHEDALMOND",
+        "bgdn": "BLACK",
+        "title": "Big Breakfast\\r with Steak",
+        "bitmap": "CSO - Big Breakfast With Steak - 500X500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Big Breakfast\\r with Steak",
+      "screenBitmap": "CSO - Big Breakfast With Steak - 500X500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -10652,6 +10949,17 @@
       "displayOrder": 583,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "6 pc. Chicken McNuggets\\r Happy Meal\\r",
+        "bitmap": "CSO_Happy_Meal_6_Nuggets.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "6 pc. Chicken McNuggets\\r Happy Meal\\r",
+      "screenBitmap": "CSO_Happy_Meal_6_Nuggets.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -10964,6 +11272,17 @@
       "displayOrder": 950,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "REGULAR\\nMEAT",
+        "bitmap": "4259 _Regular Meat_Grill_1.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "REGULAR\\nMEAT",
+      "screenBitmap": "4259 _Regular Meat_Grill_1.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -11220,6 +11539,17 @@
       "displayOrder": 751,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BRIGHTWHITE",
+        "textdn": "BRIGHTWHITE",
+        "bgup": "DARKSLATEBLUE",
+        "bgdn": "DARKSLATEBLUE",
+        "title": "Deluxe Spicy McCrispy\\t",
+        "bitmap": "Kiosk_202104_0100_DeluxeSpicyCrispyChickenSandwich_PotatoBun3.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Deluxe Spicy McCrispy\\t",
+      "screenBitmap": "Kiosk_202104_0100_DeluxeSpicyCrispyChickenSandwich_PotatoBun3.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -11741,6 +12071,17 @@
       "displayOrder": 950,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "CRISPY\\nCHICKEN\\nPATTY*",
+        "bitmap": "MEATCKNC.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "CRISPY\\nCHICKEN\\nPATTY*",
+      "screenBitmap": "MEATCKNC.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -12047,6 +12388,17 @@
       "displayOrder": 673,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "BLANCHEDALMOND",
+        "bgup": "BLANCHEDALMOND",
+        "bgdn": "BLACK",
+        "title": "Hotcakes and Steak",
+        "bitmap": "CSO - HOTCAKES with STEAK - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Hotcakes and Steak",
+      "screenBitmap": "CSO - HOTCAKES with STEAK - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -12426,6 +12778,17 @@
       "displayOrder": 751,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "$5 McDouble\\r Meal Deal",
+        "bitmap": "Kiosk_202405_25137_5dollar_McDouble_MealDeal.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "$5 McDouble\\r Meal Deal",
+      "screenBitmap": "Kiosk_202405_25137_5dollar_McDouble_MealDeal.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -12992,6 +13355,17 @@
       "displayOrder": 751,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "KVSRORANGE",
+        "bgup": "KVSRORANGE",
+        "bgdn": "BLACK",
+        "title": "McCrispy\\t",
+        "bitmap": "Kiosk_201911_0383_CrispyChickenSandwich.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "McCrispy\\t",
+      "screenBitmap": "Kiosk_201911_0383_CrispyChickenSandwich.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -13504,6 +13878,17 @@
       "displayOrder": 751,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "$5 McChicken\\r Meal Deal",
+        "bitmap": "Kiosk_202405_14463_5dollar_McChicken_Bundle.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "$5 McChicken\\r Meal Deal",
+      "screenBitmap": "Kiosk_202405_14463_5dollar_McChicken_Bundle.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -13789,6 +14174,17 @@
       "displayOrder": 751,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "McDouble\\r",
+        "bitmap": "Kiosk_202302_0592-999_McDouble_Alt.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "McDouble\\r",
+      "screenBitmap": "Kiosk_202302_0592-999_McDouble_Alt.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -14442,6 +14838,17 @@
       "displayOrder": 751,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Double Hamburger",
+        "bitmap": "Kiosk_202307_0002-999_DoubleHamburger.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Double Hamburger",
+      "screenBitmap": "Kiosk_202307_0002-999_DoubleHamburger.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -15106,6 +15513,17 @@
       "displayOrder": 743,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Big Mac\\n4 Sacks",
+        "bitmap": "Big-Macs-for-Sacks.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Big Mac\\n4 Sacks",
+      "screenBitmap": "Big-Macs-for-Sacks.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -15335,6 +15753,17 @@
       "displayOrder": 751,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "MEDIUMPURPLE",
+        "bgup": "MEDIUMPURPLE",
+        "bgdn": "BLACK",
+        "title": "Double Big Mac\\r",
+        "bitmap": "Kiosk_202307_0684-999_DoubleBigMac.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Double Big Mac\\r",
+      "screenBitmap": "Kiosk_202307_0684-999_DoubleBigMac.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -16234,6 +16663,17 @@
       "displayOrder": 675,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Biscuit",
+        "bitmap": "CSO_BISCUIT.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Biscuit",
+      "screenBitmap": "CSO_BISCUIT.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -16591,6 +17031,17 @@
       "displayOrder": 673,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Hotcakes and Sausage",
+        "bitmap": "CSO_HOTCAKES_SAUSAGE.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Hotcakes and Sausage",
+      "screenBitmap": "CSO_HOTCAKES_SAUSAGE.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -16964,6 +17415,17 @@
       "displayOrder": 675,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "English McMuffin\\r",
+        "bitmap": "CSO - English Muffin - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "English McMuffin\\r",
+      "screenBitmap": "CSO - English Muffin - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -17312,6 +17774,17 @@
       "displayOrder": 751,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Bacon McDouble\\r",
+        "bitmap": "Kiosk_202307_1043-999_BaconMcDouble.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Bacon McDouble\\r",
+      "screenBitmap": "Kiosk_202307_1043-999_BaconMcDouble.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -18884,6 +19357,17 @@
       "displayOrder": 251,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Mini M&M\\r McFlurry\\r",
+        "bitmap": "Kiosk_202408_25067_MandMMcFlurry_Mini.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Mini M&M\\r McFlurry\\r",
+      "screenBitmap": "Kiosk_202408_25067_MandMMcFlurry_Mini.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -19213,6 +19697,17 @@
       "displayOrder": 251,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "M&M\\r McFlurry\\r",
+        "bitmap": "Kiosk_202002_3830_MandMMcFlurry.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "M&M\\r McFlurry\\r",
+      "screenBitmap": "Kiosk_202002_3830_MandMMcFlurry.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -19546,6 +20041,17 @@
       "displayOrder": 251,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "GREEN",
+        "bgup": "GREEN",
+        "bgdn": "BLACK",
+        "title": "OREO\\r Shamrock McFlurry\\r",
+        "bitmap": "Kiosk_201908_0601_OreoMintMcFlurry.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "OREO\\r Shamrock McFlurry\\r",
+      "screenBitmap": "Kiosk_201908_0601_OreoMintMcFlurry.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -20083,6 +20589,17 @@
       "displayOrder": 212,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Hot Fudge Sundae",
+        "bitmap": "CSO_HOT_FUDGE_SUNDAE_337.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Hot Fudge Sundae",
+      "screenBitmap": "CSO_HOT_FUDGE_SUNDAE_337.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -20416,6 +20933,17 @@
       "displayOrder": 251,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "OREO\\r McFlurry\\r",
+        "bitmap": "CSO_OREO_MCFLURRY_3832.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "OREO\\r McFlurry\\r",
+      "screenBitmap": "CSO_OREO_MCFLURRY_3832.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -20963,6 +21491,17 @@
       "displayOrder": 273,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Vanilla Cone",
+        "bitmap": "CSO_VANILLA_CONE_366.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Vanilla Cone",
+      "screenBitmap": "CSO_VANILLA_CONE_366.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -21796,6 +22335,17 @@
       "displayOrder": 212,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Caramel Sundae",
+        "bitmap": "CSO_CARAMEL_SUNDAE_345.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Caramel Sundae",
+      "screenBitmap": "CSO_CARAMEL_SUNDAE_345.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -22117,6 +22667,17 @@
       "displayOrder": 251,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Mini OREO\\r McFlurry\\r",
+        "bitmap": "Kiosk_202408_25066_OREOMcFlurry_Mini.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Mini OREO\\r McFlurry\\r",
+      "screenBitmap": "Kiosk_202408_25066_OREOMcFlurry_Mini.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -22457,6 +23018,17 @@
       "displayOrder": 863,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Hash Browns",
+        "bitmap": "CSO - Hashbrown - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Hash Browns",
+      "screenBitmap": "CSO - Hashbrown - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -22714,6 +23286,17 @@
       "displayOrder": 826,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "13 Cookie Tote",
+        "bitmap": "CSO_13_CHOCOLATE_CHIP.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "13 Cookie Tote",
+      "screenBitmap": "CSO_13_CHOCOLATE_CHIP.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -22981,6 +23564,17 @@
       "displayOrder": 552,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Grape Jam",
+        "bitmap": "Kiosk_Ingredient_SV_201909_00037-039__0988_GrapeJam_500op.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Grape Jam",
+      "screenBitmap": "Kiosk_Ingredient_SV_201909_00037-039__0988_GrapeJam_500op.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -23209,6 +23803,17 @@
       "displayOrder": 864,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Apple\\nSlices\\n",
+        "bitmap": "APSLC.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Apple\\nSlices\\n",
+      "screenBitmap": "APSLC.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -23409,6 +24014,17 @@
       "displayOrder": 113,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Equal Packet",
+        "bitmap": "CSO - EQUAL PACKET - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Equal Packet",
+      "screenBitmap": "CSO - EQUAL PACKET - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -23641,6 +24257,17 @@
       "displayOrder": 310,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LAWNGREEN",
+        "bgup": "LAWNGREEN",
+        "bgdn": "BLACK",
+        "title": "Apple Slices",
+        "bitmap": "CSO - APPLE SLICES - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Apple Slices",
+      "screenBitmap": "CSO - APPLE SLICES - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -24079,6 +24706,17 @@
       "displayOrder": 827,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "CHOC \\nCHIP CK\\n",
+        "bitmap": "COOKFBCC.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "CHOC \\nCHIP CK\\n",
+      "screenBitmap": "COOKFBCC.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -24280,6 +24918,17 @@
       "displayOrder": 552,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Salt Packet",
+        "bitmap": "Kiosk_Ingredient_Condiment_SV_201909_9003_SaltPacket_500op.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Salt Packet",
+      "screenBitmap": "Kiosk_Ingredient_Condiment_SV_201909_9003_SaltPacket_500op.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -24508,6 +25157,17 @@
       "displayOrder": 552,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Hot Picante Salsa",
+        "bitmap": "Kiosk_Ingredient_SV_201909_03399-015__0990_HotPicante_500op.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Hot Picante Salsa",
+      "screenBitmap": "Kiosk_Ingredient_SV_201909_03399-015__0990_HotPicante_500op.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -24933,6 +25593,16 @@
       "displayOrder": 553,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTGREEN",
+        "bgup": "LIGHTGREEN",
+        "bgdn": "BLACK",
+        "title": "Diced\\nApples",
+        "bitmap": "",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Diced\\nApples",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -25115,6 +25785,17 @@
       "displayOrder": 317,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "DASANI\\r Bottled Water",
+        "bitmap": "CSO_BOTTLED_WATER_5474.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "DASANI\\r Bottled Water",
+      "screenBitmap": "CSO_BOTTLED_WATER_5474.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -25346,6 +26027,16 @@
       "displayOrder": 553,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "BURLYWOOD",
+        "bgup": "BURLYWOOD",
+        "bgdn": "BLACK",
+        "title": "Raisin\\nAnd\\nCrnbrrys",
+        "bitmap": "",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Raisin\\nAnd\\nCrnbrrys",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -25529,6 +26220,17 @@
       "displayOrder": 826,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "1 Cookie",
+        "bitmap": "CSO_1_COOKIE_4193.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "1 Cookie",
+      "screenBitmap": "CSO_1_COOKIE_4193.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -25761,6 +26463,16 @@
       "displayOrder": 950,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nSUGAR",
+        "bitmap": "",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nSUGAR",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -25953,6 +26665,17 @@
       "displayOrder": 826,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "3 Pack Of Cookies",
+        "bitmap": "CSO - 3 Pack of Cookies - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "3 Pack Of Cookies",
+      "screenBitmap": "CSO - 3 Pack of Cookies - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -26406,6 +27129,17 @@
       "displayOrder": 113,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Sugar Packet",
+        "bitmap": "CSO - SUGAR PACKET - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Sugar Packet",
+      "screenBitmap": "CSO - SUGAR PACKET - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -26638,6 +27372,17 @@
       "displayOrder": 552,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Mild Picante Salsa",
+        "bitmap": "CSO - MILD PICANTE - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Mild Picante Salsa",
+      "screenBitmap": "CSO - MILD PICANTE - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -26874,6 +27619,17 @@
       "displayOrder": 113,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Splenda Packet",
+        "bitmap": "CSO - SPLENDA PACKET - 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Splenda Packet",
+      "screenBitmap": "CSO - SPLENDA PACKET - 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -27106,6 +27862,17 @@
       "displayOrder": 822,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Apple Pie",
+        "bitmap": "CSO_APPLE_PIE_706.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Apple Pie",
+      "screenBitmap": "CSO_APPLE_PIE_706.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -27338,6 +28105,16 @@
       "displayOrder": 950,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nSPLENDA",
+        "bitmap": "",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nSPLENDA",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -27530,6 +28307,17 @@
       "displayOrder": 5,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Oatmeal",
+        "bitmap": "CSO_OATMEAL.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Oatmeal",
+      "screenBitmap": "CSO_OATMEAL.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -27992,6 +28780,17 @@
       "displayOrder": 552,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "Pepper Packet",
+        "bitmap": "Kiosk_Ingredient_Condiment_SV_201909_0987_PepperPacket_500op.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Pepper Packet",
+      "screenBitmap": "Kiosk_Ingredient_Condiment_SV_201909_0987_PepperPacket_500op.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -28220,6 +29019,17 @@
       "displayOrder": 950,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "1/4\\nLB\\nBeef",
+        "bitmap": "4076_Qtr Lb Beef.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "1/4\\nLB\\nBeef",
+      "screenBitmap": "4076_Qtr Lb Beef.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -28492,6 +29302,17 @@
       "displayOrder": 745,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "LIGHTCYAN",
+        "bgup": "LIGHTCYAN",
+        "bgdn": "BLACK",
+        "title": "Quarter Pounder\\r Hamburger",
+        "bitmap": "CSO - QUARTER POUNDER HAMBURGER- 500x500.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "Quarter Pounder\\r Hamburger",
+      "screenBitmap": "CSO - QUARTER POUNDER HAMBURGER- 500x500.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -29155,6 +29976,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nChrysler",
+        "bitmap": "Chrysler.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nChrysler",
+      "screenBitmap": "Chrysler.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -29291,6 +30123,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nFord",
+        "bitmap": "Ford.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nFord",
+      "screenBitmap": "Ford.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -29427,6 +30270,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nBMW",
+        "bitmap": "BMW.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nBMW",
+      "screenBitmap": "BMW.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -29563,6 +30417,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nInfinity",
+        "bitmap": "Infiniti.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nInfinity",
+      "screenBitmap": "Infiniti.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -29699,6 +30564,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nJeep",
+        "bitmap": "Jeep.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nJeep",
+      "screenBitmap": "Jeep.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -29835,6 +30711,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nAudi",
+        "bitmap": "Audi.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nAudi",
+      "screenBitmap": "Audi.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -29971,6 +30858,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nBuick",
+        "bitmap": "Buick.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nBuick",
+      "screenBitmap": "Buick.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -30107,6 +31005,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nToyota",
+        "bitmap": "Toyota.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nToyota",
+      "screenBitmap": "Toyota.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -30243,6 +31152,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nTesla",
+        "bitmap": "Tesla.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nTesla",
+      "screenBitmap": "Tesla.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -30379,6 +31299,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nHonda",
+        "bitmap": "Honda.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nHonda",
+      "screenBitmap": "Honda.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -30515,6 +31446,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nLexus",
+        "bitmap": "Lexus.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nLexus",
+      "screenBitmap": "Lexus.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -30651,6 +31593,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nVolkswagon",
+        "bitmap": "Volkswagon.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nVolkswagon",
+      "screenBitmap": "Volkswagon.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -30787,6 +31740,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nDodge",
+        "bitmap": "Dodge.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nDodge",
+      "screenBitmap": "Dodge.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -30923,6 +31887,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nNissan",
+        "bitmap": "Nissan.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nNissan",
+      "screenBitmap": "Nissan.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -31059,6 +32034,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nSubaru",
+        "bitmap": "Subaru.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nSubaru",
+      "screenBitmap": "Subaru.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -31195,6 +32181,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nLincoln",
+        "bitmap": "Lincoln.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nLincoln",
+      "screenBitmap": "Lincoln.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
@@ -31331,6 +32328,17 @@
       "displayOrder": 1,
       "displayWaste": false,
       "upsizable": false,
+      "buttonStyling": {
+        "textup": "BLACK",
+        "textdn": "WHITE",
+        "bgup": "WHITE",
+        "bgdn": "BLACK",
+        "title": "\\nChevy",
+        "bitmap": "Chevy.png",
+        "outageModeButtonDisabled": "false"
+      },
+      "displayTitle": "\\nChevy",
+      "screenBitmap": "Chevy.png",
       "salesType": {
         "eatin": true,
         "takeout": true,
