@@ -304,3 +304,28 @@ body {
     background: rgba(240, 240, 240, 0.7);
     border-color: #cc0000;
 }
+
+/* Product selector styles */
+.product-card {
+    transition: all 0.2s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.product-card button:hover {
+    background: #218838 !important;
+}
+
+/* Close button hover effect */
+button:hover {
+    opacity: 0.9;
+}
+
+/* Search input focus effect */
+input[type="text"]:focus {
+    outline: 2px solid #007bff;
+    border-color: #007bff;
+}

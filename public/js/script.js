@@ -1,3 +1,5 @@
+// Main POS System Script
+
 // Function to align the timer/blank box with the "Small" box
 function alignHeaderBoxes() {
     const smallBox = document.querySelector('.dimension');
@@ -24,20 +26,23 @@ function checkScreenWidth() {
     // The CSS media query handles showing/hiding the overlay
 }
 
-// Run alignment when page loads
-window.addEventListener('load', function() {
+// Initialize everything when page loads
+function initializeApp() {
     alignHeaderBoxes();
     checkScreenWidth();
-});
+    
+    // Initialize product selector when the page loads
+    if (typeof initializeProductSelector === 'function') {
+        initializeProductSelector();
+    }
+}
 
-// Run alignment and width check when window resizes
+// Event listeners
+window.addEventListener('load', initializeApp);
+
 window.addEventListener('resize', function() {
     alignHeaderBoxes();
     checkScreenWidth();
 });
 
-// Also run on DOM content loaded as backup
-document.addEventListener('DOMContentLoaded', function() {
-    alignHeaderBoxes();
-    checkScreenWidth();
-});
+document.addEventListener('DOMContentLoaded', initializeApp);

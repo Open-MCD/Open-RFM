@@ -152,13 +152,31 @@ async function generateProductsJson() {
                     productObj.allergens = product.Allergens;
                 }
 
+                // Add presentation/image information
+                if (product.Presentation) {
+                    productObj.presentation = {
+                        bitmapName: product.Presentation.BitmapName || '',
+                        grillBitmapName: product.Presentation.GrillBitmapName || '',
+                        csoLargeImageName: product.Presentation.CSOLargeImageName || '',
+                        csoSmallImageName: product.Presentation.CSOSmallImageName || '',
+                        csoGrillImageName: product.Presentation.CSOGrillImageName || '',
+                        csoDimensionImageName: product.Presentation.CSODimensionImageName || '',
+                        csoCartImageName: product.Presentation.CSOCartImageName || ''
+                    };
+                    
+                    // Add the primary image name for easy access
+                    if (product.Presentation.BitmapName) {
+                        productObj.imageName = product.Presentation.BitmapName;
+                    }
+                }
+
                 // Add any additional product attributes
                 Object.keys(product).forEach(key => {
                     if (!productObj.hasOwnProperty(key) && 
                         !['ProductCode', 'Secondary', 'FamilyGroup', 'DayPartCode', 
                           'DummyProduct', 'ContainerVM', 'CSOHasLimitedTimeDiscount',
                           'DisplayOrder', 'DisplayWaste', 'Upsizable', 'SalesType',
-                          'Distribution', 'Price', 'Nutrition', 'Allergens'].includes(key)) {
+                          'Distribution', 'Price', 'Nutrition', 'Allergens', 'Presentation'].includes(key)) {
                         productObj[key] = product[key];
                     }
                 });
