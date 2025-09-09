@@ -110,7 +110,7 @@
 
 
         <Button number="24" category="1" title="Drink" keyscan="0" keyshift="0" bitmap="MenuPage_Drinks.png" bitmapdn="" textup="BRIGHTWHITE" textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
-            <Action type="onclick" workflow="WF_ShowFloatScreen">
+            <Action type="onclick" workflow="WF_ShowScreen">
                 <Parameter name="ScreenNumber" value="604" />
             </Action>
             <Language code="en_US" name="English" parent="en">
@@ -119,7 +119,7 @@
             </Language>
         </Button>
         <Button number="24" category="1" title="Drink" keyscan="0" keyshift="0" bitmap="Drinks_highlighted.png" bitmapdn="" textup="BRIGHTWHITE" textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
-            <Action type="onclick" workflow="WF_ShowFloatScreen">
+            <Action type="onclick" workflow="WF_ShowScreen">
                 <Parameter name="ScreenNumber" value="604" />
             </Action>
             <Language code="en_US" name="English" parent="en">
