@@ -135,6 +135,7 @@ class ScreenManager {
                 specialButtonId: item.dataset.specialButtonId || null,
                 numberButtonId: item.dataset.numberButtonId || null,
                 pageButtonId: item.dataset.pageButtonId || null,
+                screenButtonId: item.dataset.screenButtonId || null,
                 buttonType: item.dataset.buttonType || null,
                 innerHTML: item.innerHTML || ''
             };
@@ -160,6 +161,7 @@ class ScreenManager {
             delete item.dataset.specialButtonId;
             delete item.dataset.numberButtonId;
             delete item.dataset.pageButtonId;
+            delete item.dataset.screenButtonId;
             delete item.dataset.buttonType;
         });
         
@@ -181,6 +183,9 @@ class ScreenManager {
                     }
                     if (cellData.pageButtonId) {
                         gridItem.dataset.pageButtonId = cellData.pageButtonId;
+                    }
+                    if (cellData.screenButtonId) {
+                        gridItem.dataset.screenButtonId = cellData.screenButtonId;
                     }
                     if (cellData.buttonType) {
                         gridItem.dataset.buttonType = cellData.buttonType;

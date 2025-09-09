@@ -135,12 +135,10 @@ ${actionsXML}            <Language code="en_US" name="English" parent="en">
             } else if (cellData.numberButtonId && buttonType === 'number') {
                 // Number button
                 console.log('Processing number button:', cellData.numberButtonId);
-                console.log('Available numberButtons:', numberButtons.map(b => b.id));
                 const numberButton = numberButtons.find(b => b.id === cellData.numberButtonId);
-                console.log('Found numberButton:', numberButton);
                 if (numberButton) {
-                    const title = numberButton.title || numberButton.name || '';
-                    const bitmap = numberButton.bitmap || numberButton.image || `${title}.png`;
+                    const title = numberButton.title || '';
+                    const bitmap = numberButton.bitmap || '';
                     const keyscan = numberButton.keyscan || '1';
                     const keyshift = numberButton.keyshift || '1';
                     const textup = numberButton.textup || 'BLACK';
@@ -155,6 +153,50 @@ ${actionsXML}            <Language code="en_US" name="English" parent="en">
                     let actionsXML = '';
                     if (numberButton.actions && Array.isArray(numberButton.actions)) {
                         numberButton.actions.forEach(action => {
+                            let actionParams = '';
+                            if (action.params) {
+                                Object.keys(action.params).forEach(key => {
+                                    actionParams += `                <Parameter name="${key}" value="${action.params[key]}" />
+`;
+                                });
+                            }
+                            actionsXML += `            <Action type="${action.type}" workflow="${action.workflow}">
+${actionParams}            </Action>
+`;
+                        });
+                    }
+                    
+                    xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmap="${bitmap}"
+            bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}" bgdn="${bgdn}" v="${v}" h="${h}"
+            outageModeButtonDisabled="${outageModeButtonDisabled}">
+${actionsXML}            <Language code="en_US" name="English" parent="en">
+                <title>${title}</title>
+                <bitmap>${bitmap}</bitmap>
+            </Language>
+        </Button>
+`;
+                }
+            } else if (cellData.screenButtonId && buttonType === 'screen') {
+                // Screen button
+                console.log('Processing screen button:', cellData.screenButtonId);
+                const screenButton = screenButtons.find(b => b.id === cellData.screenButtonId);
+                if (screenButton) {
+                    const title = screenButton.title || '';
+                    const bitmap = screenButton.bitmap || '';
+                    const keyscan = screenButton.keyscan || '0';
+                    const keyshift = screenButton.keyshift || '0';
+                    const textup = screenButton.textup || 'BRIGHTWHITE';
+                    const textdn = screenButton.textdn || 'WHITE';
+                    const bgup = screenButton.bgup || 'DARKBLUE';
+                    const bgdn = screenButton.bgdn || 'BLACK';
+                    const outageModeButtonDisabled = screenButton.outageModeButtonDisabled || 'false';
+                    const v = screenButton.v || '1';
+                    const h = screenButton.h || '1';
+                    
+                    // Build actions XML from the actions array
+                    let actionsXML = '';
+                    if (screenButton.actions && Array.isArray(screenButton.actions)) {
+                        screenButton.actions.forEach(action => {
                             let actionParams = '';
                             if (action.params) {
                                 Object.keys(action.params).forEach(key => {
@@ -217,12 +259,9 @@ function exportSingleScreen() {
             // Regular product button
             const product = productsData.find(p => p.productCode === productCode);
             if (product) {
-                // Use the displayTitle from screen.xml if available (preserves formatting), otherwise use shortName
                 const title = (product.displayTitle || product.shortName || 'Product').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                // Use screenBitmap from screen.xml if available, otherwise fall back to imageName
                 const bitmap = product.screenBitmap || product.imageName || '';
                 
-                // Use button styling from screen.xml if available, otherwise use defaults
                 const styling = product.buttonStyling || {};
                 const textup = styling.textup || 'BLACK';
                 const textdn = styling.textdn || 'WHITE';
@@ -244,7 +283,7 @@ function exportSingleScreen() {
 `;
             }
         } else if (specialButtonId && buttonType === 'special') {
-            // Special button
+            // Special button - using old format for backward compatibility in single screen export
             const button = specialButtons.find(b => b.id === specialButtonId);
             if (button) {
                 const title = button.title.replace(/\n/g, ' ').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -259,39 +298,54 @@ function exportSingleScreen() {
                 const v = button.v || '1';
                 const h = button.h || '1';
                 
-                // Build all actions XML
+                // Build actions XML - check for new format first, then fall back to old format
                 let actionsXML = '';
                 
-                // Add onactivate action if present
-                if (button.onActivate) {
-                    let onActivateParams = '';
-                    if (button.onActivate.params) {
-                        Object.keys(button.onActivate.params).forEach(key => {
-                            onActivateParams += `                <Parameter name="${key}" value="${button.onActivate.params[key]}" />
+                if (button.actions && Array.isArray(button.actions)) {
+                    // New format
+                    button.actions.forEach(action => {
+                        let actionParams = '';
+                        if (action.params) {
+                            Object.keys(action.params).forEach(key => {
+                                actionParams += `                <Parameter name="${key}" value="${action.params[key]}" />
+`;
+                            });
+                        }
+                        actionsXML += `            <Action type="${action.type}" workflow="${action.workflow}">
+${actionParams}            </Action>
+`;
+                    });
+                } else {
+                    // Old format fallback
+                    if (button.onActivate) {
+                        let onActivateParams = '';
+                        if (button.onActivate.params) {
+                            Object.keys(button.onActivate.params).forEach(key => {
+                                onActivateParams += `                <Parameter name="${key}" value="${button.onActivate.params[key]}" />
+`;
+                            });
+                        }
+                        actionsXML += `            <Action type="onactivate" workflow="${button.onActivate.workflow}">
+${onActivateParams}            </Action>
+`;
+                    }
+                    
+                    let onClickParams = '';
+                    if (button.params) {
+                        Object.keys(button.params).forEach(key => {
+                            onClickParams += `                <Parameter name="${key}" value="${button.params[key]}" />
 `;
                         });
                     }
-                    actionsXML += `            <Action type="onactivate" workflow="${button.onActivate.workflow}">
-${onActivateParams}            </Action>
+                    actionsXML += `            <Action type="onclick" workflow="${button.workflow}">
+${onClickParams}            </Action>
 `;
                 }
-                
-                // Add onclick action
-                let onClickParams = '';
-                if (button.params) {
-                    Object.keys(button.params).forEach(key => {
-                        onClickParams += `                <Parameter name="${key}" value="${button.params[key]}" />
-`;
-                    });
-                }
-                actionsXML += `            <Action type="onclick" workflow="${button.workflow}">
-${onClickParams}            </Action>`;
                 
                 xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}"
             bitmap="${bitmap}" bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}"
             bgdn="${bgdn}" v="${v}" h="${h}" outageModeButtonDisabled="${outageModeButtonDisabled}">
-${actionsXML}
-            <Language code="en_US" name="English" parent="en">
+${actionsXML}            <Language code="en_US" name="English" parent="en">
                 <title>${title}</title>
                 <bitmap>${bitmap}</bitmap>
             </Language>
@@ -302,17 +356,34 @@ ${actionsXML}
             // Number button
             const numberButton = numberButtons.find(b => b.id === item.dataset.numberButtonId);
             if (numberButton) {
-                const title = numberButton.name;
-                const bitmap = numberButton.image || `${numberButton.name}.png`;
-                const keyscan = '1';
-                const keyshift = '1';
-                const outageModeButtonDisabled = 'true';
+                const title = numberButton.title || '';
+                const bitmap = numberButton.bitmap || '';
                 
-                xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmap="${bitmap}"
+                xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="1" keyshift="1" bitmap="${bitmap}"
             bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
-            outageModeButtonDisabled="${outageModeButtonDisabled}">
+            outageModeButtonDisabled="true">
             <Action type="onclick" workflow="WF_DoQuantum">
-                <Parameter name="Quantity" value="${numberButton.parameter}" />
+                <Parameter name="Quantity" value="${numberButton.actions[0].params.Quantity}" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>${title}</title>
+                <bitmap>${bitmap}</bitmap>
+            </Language>
+        </Button>
+`;
+            }
+        } else if (item.dataset.screenButtonId && buttonType === 'screen') {
+            // Screen button
+            const screenButton = screenButtons.find(b => b.id === item.dataset.screenButtonId);
+            if (screenButton) {
+                const title = screenButton.title || '';
+                const bitmap = screenButton.bitmap || '';
+                
+                xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="0" keyshift="0" bitmap="${bitmap}"
+            bitmapdn="" textup="BRIGHTWHITE" textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1"
+            outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="${screenButton.actions[0].workflow}">
+                <Parameter name="${Object.keys(screenButton.actions[0].params)[0]}" value="${screenButton.actions[0].params[Object.keys(screenButton.actions[0].params)[0]]}" />
             </Action>
             <Language code="en_US" name="English" parent="en">
                 <title>${title}</title>
@@ -403,6 +474,8 @@ function getConfigurationSummary() {
         const allScreens = window.screenManager.getAllScreens();
         let totalProducts = 0;
         let totalSpecialButtons = 0;
+        let totalNumberButtons = 0;
+        let totalScreenButtons = 0;
         let totalEmpty = 0;
         let totalCells = 0;
         
@@ -415,6 +488,10 @@ function getConfigurationSummary() {
                             totalProducts++;
                         } else if (cellData.specialButtonId && cellData.buttonType === 'special') {
                             totalSpecialButtons++;
+                        } else if (cellData.numberButtonId && cellData.buttonType === 'number') {
+                            totalNumberButtons++;
+                        } else if (cellData.screenButtonId && cellData.buttonType === 'screen') {
+                            totalScreenButtons++;
                         } else {
                             totalEmpty++;
                         }
@@ -433,6 +510,8 @@ function getConfigurationSummary() {
             total: totalCells,
             products: totalProducts,
             specialButtons: totalSpecialButtons,
+            numberButtons: totalNumberButtons,
+            screenButtons: totalScreenButtons,
             empty: totalEmpty
         };
     } else {
@@ -440,6 +519,8 @@ function getConfigurationSummary() {
         const gridItems = document.querySelectorAll('.grid-item');
         let productCount = 0;
         let specialButtonCount = 0;
+        let numberButtonCount = 0;
+        let screenButtonCount = 0;
         let emptyCount = 0;
         
         gridItems.forEach(item => {
@@ -447,6 +528,10 @@ function getConfigurationSummary() {
                 productCount++;
             } else if (item.dataset.specialButtonId && item.dataset.buttonType === 'special') {
                 specialButtonCount++;
+            } else if (item.dataset.numberButtonId && item.dataset.buttonType === 'number') {
+                numberButtonCount++;
+            } else if (item.dataset.screenButtonId && item.dataset.buttonType === 'screen') {
+                screenButtonCount++;
             } else {
                 emptyCount++;
             }
@@ -457,6 +542,8 @@ function getConfigurationSummary() {
             total: gridItems.length,
             products: productCount,
             specialButtons: specialButtonCount,
+            numberButtons: numberButtonCount,
+            screenButtons: screenButtonCount,
             empty: emptyCount
         };
     }

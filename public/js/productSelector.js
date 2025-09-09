@@ -2,7 +2,8 @@
 let productsData = [];
 let specialButtons = [];
 let numberButtons = [];
-let pageButtons = [];
+let pageButtons = []; // Keep for backward compatibility  
+let screenButtons = [];
 let currentGridPosition = null;
 
 // Function to load all data from products.json
@@ -13,9 +14,10 @@ async function loadProductsData() {
         productsData = data.products || [];
         specialButtons = data.specialButtons || [];
         numberButtons = data.numberButtons || [];
-        pageButtons = data.pageButtons || [];
+        pageButtons = data.pageButtons || []; // Keep for backward compatibility
+        screenButtons = data.screenButtons || [];
         
-        console.log(`Loaded ${productsData.length} products, ${specialButtons.length} special buttons, ${numberButtons.length} number buttons, ${pageButtons.length} page buttons`);
+        console.log(`Loaded ${productsData.length} products, ${specialButtons.length} special buttons, ${numberButtons.length} number buttons, ${screenButtons.length} screen buttons`);
         initializeGrid();
     } catch (error) {
         console.error('Error loading products data:', error);
@@ -234,7 +236,7 @@ function openProductSelector(gridIndex) {
                 cursor: pointer;
                 font-family: Arial, sans-serif;
                 border-radius: 4px;
-            ">Pages</button>
+            ">Screen</button>
         </div>
         <div style="display: flex; gap: 10px; align-items: center;">
             <input type="text" id="product-search" placeholder="Search products..." style="
@@ -301,7 +303,7 @@ function openProductSelector(gridIndex) {
             'products': 'Search products...',
             'numbers': 'Search number buttons...',
             'special': 'Search special buttons...',
-            'pages': 'Search page buttons...'
+            'pages': 'Search screen buttons...'
         };
         searchInput.placeholder = placeholders[tabName] || 'Search...';
         
@@ -539,8 +541,11 @@ function renderPageButtonsList(searchTerm = '') {
     const container = document.getElementById('products-container');
     if (!container) return;
     
-    // Filter page buttons based on search term
-    const filteredButtons = pageButtons.filter(button => {
+    // Use screen buttons instead of page buttons
+    const buttonsToFilter = screenButtons.length > 0 ? screenButtons : pageButtons; // Fallback for compatibility
+    
+    // Filter screen buttons based on search term
+    const filteredButtons = buttonsToFilter.filter(button => {
         if (!searchTerm) return true;
         
         const term = searchTerm.toLowerCase();
@@ -550,7 +555,7 @@ function renderPageButtonsList(searchTerm = '') {
         );
     });
     
-    renderButtonCategory(filteredButtons, container, 'page', searchTerm);
+    renderButtonCategory(filteredButtons, container, 'screen', searchTerm);
 }
 
 // Generic function to render any button category
@@ -829,7 +834,8 @@ function selectSpecialButton(buttonId) {
     // Search for button across all categories
     let button = specialButtons.find(b => b.id === buttonId);
     if (!button) button = numberButtons.find(b => b.id === buttonId);
-    if (!button) button = pageButtons.find(b => b.id === buttonId);
+    if (!button) button = screenButtons.find(b => b.id === buttonId);
+    if (!button) button = pageButtons.find(b => b.id === buttonId); // Fallback for compatibility
     
     if (!button || currentGridPosition === null) return;
     
@@ -882,19 +888,15 @@ function selectSpecialButton(buttonId) {
         } else if (numberButtons.find(b => b.id === buttonId)) {
             buttonType = 'number';
             gridItem.dataset.numberButtonId = buttonId;
-            console.log('Storing number button:', buttonId, 'with type:', buttonType);
+        } else if (screenButtons.find(b => b.id === buttonId)) {
+            buttonType = 'screen';
+            gridItem.dataset.screenButtonId = buttonId;
         } else if (pageButtons.find(b => b.id === buttonId)) {
             buttonType = 'page';
             gridItem.dataset.pageButtonId = buttonId;
         }
         
         gridItem.dataset.buttonType = buttonType;
-        console.log('Final grid item datasets:', {
-            buttonType: gridItem.dataset.buttonType,
-            specialButtonId: gridItem.dataset.specialButtonId,
-            numberButtonId: gridItem.dataset.numberButtonId,
-            pageButtonId: gridItem.dataset.pageButtonId
-        });
         
         // Save to screen manager if available
         if (window.screenManager) {

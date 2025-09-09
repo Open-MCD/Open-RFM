@@ -12,6 +12,7 @@ const storeDbPath = path.join(xmlDir, 'store-db.xml');
 const screenDbPath = path.join(xmlDir, 'screen.xml');
 const specialButtonsPath = path.join(xmlDir, 'special-buttons.xml');
 const numberButtonsPath = path.join(xmlDir, 'number-buttons.xml');
+const screenButtonsPath = path.join(xmlDir, 'screen-buttons.xml');
 
 // Parse XML to JavaScript object
 async function parseXmlFile(filePath) {
@@ -188,6 +189,87 @@ async function parseSpecialButtonsXml() {
     return specialButtonsFromManual;
 }
 
+// Function to parse screen buttons from manual XML file
+async function parseScreenButtonsXml() {
+    const screenButtonsFromManual = [];
+    
+    try {
+        if (!fs.existsSync(screenButtonsPath)) {
+            console.log('screen-buttons.xml not found, skipping manual screen buttons');
+            return screenButtonsFromManual;
+        }
+        
+        const screenButtonsContent = fs.readFileSync(screenButtonsPath, 'utf8');
+        const parser = new xml2js.Parser({ 
+            explicitArray: false,
+            mergeAttrs: true 
+        });
+        
+        const screenButtonsData = await parser.parseStringPromise(screenButtonsContent);
+        
+        if (screenButtonsData && screenButtonsData.ScreenButtons && screenButtonsData.ScreenButtons.Button) {
+            const buttons = Array.isArray(screenButtonsData.ScreenButtons.Button) 
+                ? screenButtonsData.ScreenButtons.Button 
+                : [screenButtonsData.ScreenButtons.Button];
+            
+            buttons.forEach(button => {
+                if (button && button.title) {
+                    // Extract actions from Action elements
+                    const extractedActions = [];
+                    if (button.Action) {
+                        const actions = Array.isArray(button.Action) ? button.Action : [button.Action];
+                        
+                        actions.forEach(action => {
+                            const params = {};
+                            if (action.Parameter) {
+                                const parameters = Array.isArray(action.Parameter) ? action.Parameter : [action.Parameter];
+                                parameters.forEach(param => {
+                                    if (param.name && param.value !== undefined) {
+                                        params[param.name] = param.value;
+                                    }
+                                });
+                            }
+                            extractedActions.push({
+                                type: action.type || 'onclick',
+                                workflow: action.workflow || 'WF_ShowScreen',
+                                params: params
+                            });
+                        });
+                    }
+                    
+                    // Create screen button object matching special buttons format exactly
+                    const screenButton = {
+                        id: `screen_${button.title.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase()}`,
+                        screenNumber: button.number || '0',
+                        buttonNumber: button.number || '0',
+                        title: button.title,
+                        bitmap: button.bitmap || '',
+                        keyscan: button.keyscan || '0',
+                        keyshift: button.keyshift || '0',
+                        textup: button.textup || 'BRIGHTWHITE',
+                        textdn: button.textdn || 'WHITE',
+                        bgup: button.bgup || 'DARKBLUE',
+                        bgdn: button.bgdn || 'BLACK',
+                        v: button.v || '1',
+                        h: button.h || '1',
+                        outageModeButtonDisabled: button.outageModeButtonDisabled || 'false',
+                        actions: extractedActions
+                    };
+                    
+                    screenButtonsFromManual.push(screenButton);
+                }
+            });
+        }
+        
+        console.log(`Loaded ${screenButtonsFromManual.length} screen buttons from screen-buttons.xml`);
+        
+    } catch (error) {
+        console.error('Error parsing screen-buttons.xml:', error.message);
+    }
+    
+    return screenButtonsFromManual;
+}
+
 // Function to parse number buttons from manual XML file
 async function parseNumberButtonsXml() {
     const numberButtonsFromManual = [];
@@ -320,16 +402,15 @@ async function generateProductsJson() {
 
     console.log('XML files parsed successfully');
     
-    // Load special buttons and number buttons from manual XML files
+    // Load special buttons, number buttons, and screen buttons from manual XML files
     const specialButtonsFromScreen = await parseSpecialButtonsXml();
     const numbersFromManual = await parseNumberButtonsXml();
+    const screenButtonsFromManual = await parseScreenButtonsXml();
     
-    // Extract button styling from screen.xml
+    // Extract button styling from screen.xml (only for products now)
     const buttonStyling = new Map();
-    const pagesFromScreen = [];
     
-    // Use Map to track unique page buttons and avoid duplicates
-    const uniquePageButtons = new Map();
+    // No longer extract page/screen buttons automatically - they come from manual file
     
     if (screenDb && screenDb.Screens && screenDb.Screens.Screen) {
         const screens = Array.isArray(screenDb.Screens.Screen) 
@@ -420,30 +501,22 @@ async function generateProductsJson() {
                             actions: extractedActions
                         };
                         
-                        // Only extract pages, skip number and special buttons (they come from manual files)
-                        const buttonTitle = (button.title || '').trim();
-                        const hasShowScreenAction = extractedActions.some(action => 
-                            action.workflow === 'WF_ShowScreen' && action.params.ScreenNumber
-                        );
-                        
-                        if (hasShowScreenAction) {
-                            uniquePageButtons.set(uniqueKey, buttonObj);
-                        }
+                        // All button types now come from manual files - no automatic extraction
                         // Skip number buttons - they come from manual file
-                        // Skip special buttons - they come from manual file
+                        // Skip special buttons - they come from manual file  
+                        // Skip screen/page buttons - they come from manual file
                     }
                 });
             }
         });
     }
     
-    // Convert Map to array (numbers come from manual file, special buttons already loaded from manual file)
-    pagesFromScreen.push(...Array.from(uniquePageButtons.values()));
+    // Convert Map to array (numbers and screen buttons come from manual files, special buttons already loaded from manual file)
     
     console.log(`Extracted styling for ${buttonStyling.size} products from screen.xml`);
     console.log(`Loaded ${specialButtonsFromScreen.length} special buttons from manual XML`);
     console.log(`Loaded ${numbersFromManual.length} number buttons from manual XML`);
-    console.log(`Extracted ${pagesFromScreen.length} unique page buttons from screen.xml`);
+    console.log(`Loaded ${screenButtonsFromManual.length} screen buttons from manual XML`);
     
     // Create lookup map for product names (English only)
     const nameMap = new Map();
@@ -662,14 +735,14 @@ async function generateProductsJson() {
             totalProducts: products.length,
             totalSpecialButtons: specialButtonsFromScreen.length,
             totalNumberButtons: numbersFromManual.length,
-            totalPageButtons: pagesFromScreen.length,
+            totalScreenButtons: screenButtonsFromManual.length,
             version: '1.0'
         },
         store: storeInfo,
         products: products,
         specialButtons: specialButtonsFromScreen,
         numberButtons: numbersFromManual,
-        pageButtons: pagesFromScreen
+        screenButtons: screenButtonsFromManual
     };
 
     // Write to file
