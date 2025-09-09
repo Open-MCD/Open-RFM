@@ -27,6 +27,39 @@ async function parseXmlFile(filePath) {
     }
 }
 
+// Helper function to identify modifiers/toppings
+function isModifierProduct(nameInfo, productCode) {
+    const allNames = [
+        nameInfo.shortName || '',
+        nameInfo.longName || '',
+        nameInfo.csoName || '',
+        nameInfo.dtName || ''
+    ].join(' ').toLowerCase();
+    
+    // Common modifier/topping patterns
+    const modifierPatterns = [
+        'topping', 'drizzle', 'syrup', 'sauce', 'dressing',
+        'no ', 'without', 'plain', 'add', 'extra', 'substitute', 'sub ',
+        'crushed', 'chopped', 'diced', 'sliced',
+        'vanilla', 'caramel', 'chocolate', 'strawberry', 'oreo', 'fudge',
+        'whipped cream', 'cream', 'butter', 'sugar', 'sweetener'
+    ];
+    
+    // Check if any modifier pattern matches
+    const hasModifierPattern = modifierPatterns.some(pattern => 
+        allNames.includes(pattern)
+    );
+    
+    // Known modifier product codes
+    const modifierCodes = [
+        '658', '9021', '9027', '9019', // Caramel Drizzle, Caramel Topping, Crushed Oreo, Fudge Topping
+    ];
+    
+    const isKnownModifier = modifierCodes.includes(productCode.toString());
+    
+    return hasModifierPattern || isKnownModifier;
+}
+
 // Helper function to identify ingredients, components, and non-menu items
 function isIngredientOrComponent(nameInfo, productCode) {
     const allNames = [
@@ -306,6 +339,8 @@ async function generateProductsJson() {
                     (nameInfo.shortName || nameInfo.longName || nameInfo.csoName) &&
                     // Exclude items that look like ingredients/components
                     !isIngredientOrComponent(nameInfo, productCode) &&
+                    // Exclude modifiers/toppings
+                    !isModifierProduct(nameInfo, productCode) &&
                     // Must have an image (BitmapName) to be a real menu item
                     product.Presentation && product.Presentation.BitmapName;
 
