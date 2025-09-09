@@ -293,8 +293,20 @@ function openProductSelector(gridIndex) {
         activeTab.classList.add('active');
         activeTab.style.backgroundColor = '#007bff';
         
-        // Show/hide search based on tab
-        searchInput.style.display = (tabName === 'products') ? 'block' : 'none';
+        // Show/hide search based on tab - now show for all tabs
+        searchInput.style.display = 'block';
+        
+        // Update placeholder text based on current tab
+        const placeholders = {
+            'products': 'Search products...',
+            'numbers': 'Search number buttons...',
+            'special': 'Search special buttons...',
+            'pages': 'Search page buttons...'
+        };
+        searchInput.placeholder = placeholders[tabName] || 'Search...';
+        
+        // Clear search when switching tabs
+        searchInput.value = '';
         
         renderCurrentTab();
     }
@@ -305,22 +317,21 @@ function openProductSelector(gridIndex) {
     pagesTab.addEventListener('click', () => setActiveTab('pages'));
     
     function renderCurrentTab() {
+        const searchTerm = searchInput.value;
         if (currentTab === 'products') {
-            renderProductsList(searchInput.value);
+            renderProductsList(searchTerm);
         } else if (currentTab === 'numbers') {
-            renderNumberButtonsList();
+            renderNumberButtonsList(searchTerm);
         } else if (currentTab === 'special') {
-            renderSpecialButtonsList();
+            renderSpecialButtonsList(searchTerm);
         } else if (currentTab === 'pages') {
-            renderPageButtonsList();
+            renderPageButtonsList(searchTerm);
         }
     }
 
-    // Search functionality
+    // Search functionality - now works for all tabs
     searchInput.addEventListener('input', function(e) {
-        if (currentTab === 'products') {
-            renderProductsList(e.target.value);
-        }
+        renderCurrentTab();
     });
     
     // Close button functionality
@@ -350,12 +361,23 @@ function openProductSelector(gridIndex) {
 }
 
 // Render special buttons list
-function renderSpecialButtonsList() {
+function renderSpecialButtonsList(searchTerm = '') {
     const container = document.getElementById('products-container');
     if (!container) return;
     
+    // Filter special buttons based on search term
+    const filteredButtons = specialButtons.filter(button => {
+        if (!searchTerm) return true;
+        
+        const term = searchTerm.toLowerCase();
+        return (
+            (button.title && button.title.toLowerCase().includes(term)) ||
+            (button.id && button.id.toLowerCase().includes(term))
+        );
+    });
+    
     // Create special buttons grid
-    const specialButtonsHtml = specialButtons.map(button => {
+    const specialButtonsHtml = filteredButtons.map(button => {
         const imageUrl = button.bitmap ? `/NP6-Images/${button.bitmap}` : null;
         const imageHtml = imageUrl 
             ? `<img src="${imageUrl}" alt="${button.title}" style="
@@ -427,6 +449,7 @@ function renderSpecialButtonsList() {
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
             ${specialButtonsHtml}
         </div>
+        ${filteredButtons.length === 0 ? '<p style="text-align: center; color: #666; font-family: Arial, sans-serif; margin-top: 50px;">No special buttons found matching your search.</p>' : ''}
     `;
     
     // Add event listeners to special button cards
@@ -478,23 +501,45 @@ function convertPOSColor(posColor) {
 }
 
 // Render number buttons list
-function renderNumberButtonsList() {
+function renderNumberButtonsList(searchTerm = '') {
     const container = document.getElementById('products-container');
     if (!container) return;
     
-    renderButtonCategory(numberButtons, container, 'number');
+    // Filter number buttons based on search term
+    const filteredButtons = numberButtons.filter(button => {
+        if (!searchTerm) return true;
+        
+        const term = searchTerm.toLowerCase();
+        return (
+            (button.title && button.title.toLowerCase().includes(term)) ||
+            (button.id && button.id.toLowerCase().includes(term))
+        );
+    });
+    
+    renderButtonCategory(filteredButtons, container, 'number', searchTerm);
 }
 
 // Render page buttons list  
-function renderPageButtonsList() {
+function renderPageButtonsList(searchTerm = '') {
     const container = document.getElementById('products-container');
     if (!container) return;
     
-    renderButtonCategory(pageButtons, container, 'page');
+    // Filter page buttons based on search term
+    const filteredButtons = pageButtons.filter(button => {
+        if (!searchTerm) return true;
+        
+        const term = searchTerm.toLowerCase();
+        return (
+            (button.title && button.title.toLowerCase().includes(term)) ||
+            (button.id && button.id.toLowerCase().includes(term))
+        );
+    });
+    
+    renderButtonCategory(filteredButtons, container, 'page', searchTerm);
 }
 
 // Generic function to render any button category
-function renderButtonCategory(buttons, container, buttonType) {
+function renderButtonCategory(buttons, container, buttonType, searchTerm = '') {
     // Create buttons grid
     const buttonsHtml = buttons.map(button => {
         const imageUrl = button.bitmap ? `/NP6-Images/${button.bitmap}` : null;
@@ -571,6 +616,7 @@ function renderButtonCategory(buttons, container, buttonType) {
         ">
             ${buttonsHtml}
         </div>
+        ${buttons.length === 0 ? `<p style="text-align: center; color: #666; font-family: Arial, sans-serif; margin-top: 50px;">No ${buttonType} buttons found matching your search.</p>` : ''}
     `;
     
     // Add event listeners for button selection
