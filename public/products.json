@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "generatedAt": "2025-09-09T06:19:00.700Z",
+    "generatedAt": "2025-09-09T06:29:07.208Z",
     "totalProducts": 73,
     "totalSpecialButtons": 25,
     "totalNumberButtons": 10,
-    "totalScreenButtons": 9,
+    "totalScreenButtons": 25,
     "version": "1.0"
   },
   "store": {
@@ -26564,11 +26564,111 @@
       ]
     },
     {
+      "id": "screen_breakfst_n-------------_nbreakfst2",
+      "screenNumber": "21",
+      "buttonNumber": "21",
+      "title": "Breakfst\\n-------------\\nBreakfst2",
+      "bitmap": "MenuPage_Brkfast2.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BRIGHTWHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "314"
+          }
+        }
+      ]
+    },
+    {
+      "id": "screen_breakfst_n-------------_nbreakfst2",
+      "screenNumber": "21",
+      "buttonNumber": "21",
+      "title": "Breakfst\\n-------------\\nBreakfst2",
+      "bitmap": "MenuPage_Brkfast1.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BRIGHTWHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "302"
+          }
+        }
+      ]
+    },
+    {
       "id": "screen_lunch_n-------------_nlunch2",
       "screenNumber": "22",
       "buttonNumber": "22",
       "title": "Lunch\\n-------------\\nLunch2",
       "bitmap": "MenuPage_Lunch3.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BRIGHTWHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "301"
+          }
+        }
+      ]
+    },
+    {
+      "id": "screen_lunch_n-------------_nlunch2",
+      "screenNumber": "22",
+      "buttonNumber": "22",
+      "title": "Lunch\\n-------------\\nLunch2",
+      "bitmap": "MenuPage_Lunch1.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BRIGHTWHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "303"
+          }
+        }
+      ]
+    },
+    {
+      "id": "screen_lunch_n-------------_nlunch2",
+      "screenNumber": "22",
+      "buttonNumber": "22",
+      "title": "Lunch\\n-------------\\nLunch2",
+      "bitmap": "MenuPage_Lunch2.png",
       "keyscan": "0",
       "keyshift": "0",
       "textup": "BRIGHTWHITE",
@@ -26614,11 +26714,86 @@
       ]
     },
     {
+      "id": "screen_value_menu_n----------_nsalads",
+      "screenNumber": "23",
+      "buttonNumber": "23",
+      "title": "Value Menu\\n----------\\nSalads",
+      "bitmap": "ValueMenuSalads2.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "GOLD",
+      "textdn": "SEAGREEN",
+      "bgup": "SEAGREEN",
+      "bgdn": "GOLD",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "315"
+          }
+        }
+      ]
+    },
+    {
+      "id": "screen_value_menu_n----------_nsalads",
+      "screenNumber": "23",
+      "buttonNumber": "23",
+      "title": "Value Menu\\n----------\\nSalads",
+      "bitmap": "Salads McValue.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "GOLD",
+      "textdn": "SEAGREEN",
+      "bgup": "SEAGREEN",
+      "bgdn": "GOLD",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "306"
+          }
+        }
+      ]
+    },
+    {
       "id": "screen_drink",
       "screenNumber": "24",
       "buttonNumber": "24",
       "title": "Drink",
       "bitmap": "MenuPage_Drinks.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BRIGHTWHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowFloatScreen",
+          "params": {
+            "ScreenNumber": "604"
+          }
+        }
+      ]
+    },
+    {
+      "id": "screen_drink",
+      "screenNumber": "24",
+      "buttonNumber": "24",
+      "title": "Drink",
+      "bitmap": "Drinks_highlighted.png",
       "keyscan": "0",
       "keyshift": "0",
       "textup": "BRIGHTWHITE",
@@ -26664,11 +26839,86 @@
       ]
     },
     {
+      "id": "screen_mccafe",
+      "screenNumber": "25",
+      "buttonNumber": "25",
+      "title": "McCafe",
+      "bitmap": "MenuPage_McCafe_H.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "WHITESMOKE",
+      "textdn": "MEDIUMBLUE",
+      "bgup": "MEDIUMBLUE",
+      "bgdn": "WHITESMOKE",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "310"
+          }
+        }
+      ]
+    },
+    {
       "id": "screen_dessert_n-----------_ndessert2",
       "screenNumber": "26",
       "buttonNumber": "26",
       "title": "Dessert\\n-----------\\nDessert2",
       "bitmap": "MenuPage_DESSERT3.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BRIGHTWHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "307"
+          }
+        }
+      ]
+    },
+    {
+      "id": "screen_dessert_n-----------_ndessert2",
+      "screenNumber": "26",
+      "buttonNumber": "26",
+      "title": "Dessert\\n-----------\\nDessert2",
+      "bitmap": "MenuPage_DESSERT2.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BRIGHTWHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "323"
+          }
+        }
+      ]
+    },
+    {
+      "id": "screen_dessert_n-----------_ndessert2",
+      "screenNumber": "26",
+      "buttonNumber": "26",
+      "title": "Dessert\\n-----------\\nDessert2",
+      "bitmap": "MenuPage_DESSERT1.png",
       "keyscan": "0",
       "keyshift": "0",
       "textup": "BRIGHTWHITE",
@@ -26714,6 +26964,56 @@
       ]
     },
     {
+      "id": "screen_hpymeal_n------------_nb-parties",
+      "screenNumber": "27",
+      "buttonNumber": "27",
+      "title": "HpyMeal\\n------------\\nB-Parties",
+      "bitmap": "MenuPage_HM_Bday2.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BRIGHTWHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "316"
+          }
+        }
+      ]
+    },
+    {
+      "id": "screen_hpymeal_n--------------_nb-parties",
+      "screenNumber": "27",
+      "buttonNumber": "27",
+      "title": "HpyMeal\\n--------------\\nB-Parties",
+      "bitmap": "MenuPage_HM_Bday1.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BRIGHTWHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "305"
+          }
+        }
+      ]
+    },
+    {
       "id": "screen_lsm_n---------_nlsm2",
       "screenNumber": "28",
       "buttonNumber": "28",
@@ -26739,11 +27039,111 @@
       ]
     },
     {
+      "id": "screen_lsm_n---------_nlsm2",
+      "screenNumber": "28",
+      "buttonNumber": "28",
+      "title": "LSM\\n---------\\nLSM2",
+      "bitmap": "MenuPage_LSM2.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BRIGHTWHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "318"
+          }
+        }
+      ]
+    },
+    {
+      "id": "screen_lsm_n---------_nlsm2",
+      "screenNumber": "28",
+      "buttonNumber": "28",
+      "title": "LSM\\n---------\\nLSM2",
+      "bitmap": "MenuPage_LSM1.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BRIGHTWHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "317"
+          }
+        }
+      ]
+    },
+    {
       "id": "screen_condiments_n---------_ngifts",
       "screenNumber": "29",
       "buttonNumber": "29",
       "title": "Condiments\\n---------\\nGifts",
       "bitmap": "MenuPage_CondimentsGifts.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BRIGHTWHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "312"
+          }
+        }
+      ]
+    },
+    {
+      "id": "screen_condiments_n---------_ngifts",
+      "screenNumber": "29",
+      "buttonNumber": "29",
+      "title": "Condiments\\n---------\\nGifts",
+      "bitmap": "MenuPage_CondimentsGifts_Condiments_H.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BRIGHTWHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreen",
+          "params": {
+            "ScreenNumber": "313"
+          }
+        }
+      ]
+    },
+    {
+      "id": "screen_condiments_n---------_ngifts",
+      "screenNumber": "29",
+      "buttonNumber": "29",
+      "title": "Condiments\\n---------\\nGifts",
+      "bitmap": "MenuPage_CondimentsGifts_Gifts_H.png",
       "keyscan": "0",
       "keyshift": "0",
       "textup": "BRIGHTWHITE",

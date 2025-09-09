@@ -12,6 +12,30 @@
                 <bitmap>MenuPage_Brkfast3.png</bitmap>
             </Language>
         </Button>
+        <Button number="21" category="1" title="Breakfst\n-------------\nBreakfst2" keyscan="0"
+            keyshift="0" bitmap="MenuPage_Brkfast2.png" bitmapdn="" textup="BRIGHTWHITE"
+            textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="314" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Breakfst\n-------------\nBreakfst2</title>
+                <bitmap>MenuPage_Brkfast2.png</bitmap>
+            </Language>
+        </Button>
+        <Button number="21" category="1" title="Breakfst\n-------------\nBreakfst2" keyscan="0"
+            keyshift="0" bitmap="MenuPage_Brkfast1.png" bitmapdn="" textup="BRIGHTWHITE"
+            textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="302" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Breakfst\n-------------\nBreakfst2</title>
+                <bitmap>MenuPage_Brkfast1.png</bitmap>
+            </Language>
+        </Button>
+
+
 
         <Button number="22" category="1" title="Lunch\n-------------\nLunch2" keyscan="0"
             keyshift="0" bitmap="MenuPage_Lunch3.png" bitmapdn="" textup="BRIGHTWHITE"
@@ -24,6 +48,30 @@
                 <bitmap>MenuPage_Lunch3.png</bitmap>
             </Language>
         </Button>
+        <Button number="22" category="1" title="Lunch\n-------------\nLunch2" keyscan="0"
+            keyshift="0" bitmap="MenuPage_Lunch1.png" bitmapdn="" textup="BRIGHTWHITE"
+            textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="303" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Lunch\n-------------\nLunch2</title>
+                <bitmap>MenuPage_Lunch1.png</bitmap>
+            </Language>
+        </Button>
+        <Button number="22" category="1" title="Lunch\n-------------\nLunch2" keyscan="0"
+            keyshift="0" bitmap="MenuPage_Lunch2.png" bitmapdn="" textup="BRIGHTWHITE"
+            textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="301" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Lunch\n-------------\nLunch2</title>
+                <bitmap>MenuPage_Lunch2.png</bitmap>
+            </Language>
+        </Button>
+
+
 
         <Button number="23" category="1" title="Value Menu\n----------\nSalads" keyscan="0"
             keyshift="0" bitmap="ValueMenuSalads1.png" bitmapdn="" textup="GOLD" textdn="SEAGREEN"
@@ -36,6 +84,30 @@
                 <bitmap>ValueMenuSalads1.png</bitmap>
             </Language>
         </Button>
+        <Button number="23" category="1" title="Value Menu\n----------\nSalads" keyscan="0"
+            keyshift="0" bitmap="ValueMenuSalads2.png" bitmapdn="" textup="GOLD" textdn="SEAGREEN"
+            bgup="SEAGREEN" bgdn="GOLD" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="315" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Value Menu\n----------\nSalads</title>
+                <bitmap>ValueMenuSalads2.png</bitmap>
+            </Language>
+        </Button>
+        <Button number="23" category="1" title="Value Menu\n----------\nSalads" keyscan="0"
+            keyshift="0" bitmap="Salads McValue.png" bitmapdn="" textup="GOLD" textdn="SEAGREEN"
+            bgup="SEAGREEN" bgdn="GOLD" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="306" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Value Menu\n----------\nSalads</title>
+                <bitmap>Salads McValue.png</bitmap>
+            </Language>
+        </Button>
+
+
 
         <Button number="24" category="1" title="Drink" keyscan="0" keyshift="0" bitmap="MenuPage_Drinks.png" bitmapdn="" textup="BRIGHTWHITE" textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
             <Action type="onclick" workflow="WF_ShowFloatScreen">
@@ -46,6 +118,17 @@
                 <bitmap>MenuPage_Drinks.png</bitmap>
             </Language>
         </Button>
+        <Button number="24" category="1" title="Drink" keyscan="0" keyshift="0" bitmap="Drinks_highlighted.png" bitmapdn="" textup="BRIGHTWHITE" textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowFloatScreen">
+                <Parameter name="ScreenNumber" value="604" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Drink</title>
+                <bitmap>Drinks_highlighted.png</bitmap>
+            </Language>
+        </Button>
+
+
 
         <Button number="25" category="1" title="McCafe" keyscan="0" keyshift="0"
             bitmap="MenuPage_McCafe.png" bitmapdn="" textup="WHITESMOKE" textdn="MEDIUMBLUE"
@@ -58,6 +141,19 @@
                 <bitmap>MenuPage_McCafe.png</bitmap>
             </Language>
         </Button>
+        <Button number="25" category="1" title="McCafe" keyscan="0" keyshift="0"
+            bitmap="MenuPage_McCafe_H.png" bitmapdn="" textup="WHITESMOKE" textdn="MEDIUMBLUE"
+            bgup="MEDIUMBLUE" bgdn="WHITESMOKE" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="310" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>McCafe</title>
+                <bitmap>MenuPage_McCafe_H.png</bitmap>
+            </Language>
+        </Button>
+
+
 
         <Button number="26" category="1" title="Dessert\n-----------\nDessert2" keyscan="0"
             keyshift="0" bitmap="MenuPage_DESSERT3.png" bitmapdn="" textup="BRIGHTWHITE"
@@ -70,6 +166,30 @@
                 <bitmap>MenuPage_DESSERT3.png</bitmap>
             </Language>
         </Button>
+        <Button number="26" category="1" title="Dessert\n-----------\nDessert2" keyscan="0"
+            keyshift="0" bitmap="MenuPage_DESSERT2.png" bitmapdn="" textup="BRIGHTWHITE"
+            textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="323" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Dessert\n-----------\nDessert2</title>
+                <bitmap>MenuPage_DESSERT2.png</bitmap>
+            </Language>
+        </Button>
+        <Button number="26" category="1" title="Dessert\n-----------\nDessert2" keyscan="0"
+            keyshift="0" bitmap="MenuPage_DESSERT1.png" bitmapdn="" textup="BRIGHTWHITE"
+            textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="307" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Dessert\n-----------\nDessert2</title>
+                <bitmap>MenuPage_DESSERT1.png</bitmap>
+            </Language>
+        </Button>
+
+
 
         <Button number="27" category="1" title="HpyMeal\n------------\nB-Parties" keyscan="0"
             keyshift="0" bitmap="MenuPage_HM_Bday3.png" bitmapdn="" textup="BRIGHTWHITE"
@@ -82,6 +202,30 @@
                 <bitmap>MenuPage_HM_Bday3.png</bitmap>
             </Language>
         </Button>
+        <Button number="27" category="1" title="HpyMeal\n------------\nB-Parties" keyscan="0"
+            keyshift="0" bitmap="MenuPage_HM_Bday2.png" bitmapdn="" textup="BRIGHTWHITE"
+            textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="316" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>HpyMeal\n------------\nB-Parties</title>
+                <bitmap>MenuPage_HM_Bday2.png</bitmap>
+            </Language>
+        </Button>
+        <Button number="27" category="1" title="HpyMeal\n--------------\nB-Parties" keyscan="0"
+            keyshift="0" bitmap="MenuPage_HM_Bday1.png" bitmapdn="" textup="BRIGHTWHITE"
+            textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="305" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>HpyMeal\n--------------\nB-Parties</title>
+                <bitmap>MenuPage_HM_Bday1.png</bitmap>
+            </Language>
+        </Button>
+
+
 
         <Button number="28" category="1" title="LSM\n---------\nLSM2" keyscan="0" keyshift="0"
             bitmap="MenuPage_LSM3.png" bitmapdn="" textup="BRIGHTWHITE" textdn="WHITE"
@@ -94,6 +238,30 @@
                 <bitmap>MenuPage_LSM3.png</bitmap>
             </Language>
         </Button>
+        <Button number="28" category="1" title="LSM\n---------\nLSM2" keyscan="0" keyshift="0"
+            bitmap="MenuPage_LSM2.png" bitmapdn="" textup="BRIGHTWHITE" textdn="WHITE"
+            bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="318" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>LSM\n---------\nLSM2</title>
+                <bitmap>MenuPage_LSM2.png</bitmap>
+            </Language>
+        </Button>
+        <Button number="28" category="1" title="LSM\n---------\nLSM2" keyscan="0" keyshift="0"
+            bitmap="MenuPage_LSM1.png" bitmapdn="" textup="BRIGHTWHITE" textdn="WHITE"
+            bgup="DARKBLUE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="317" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>LSM\n---------\nLSM2</title>
+                <bitmap>MenuPage_LSM1.png</bitmap>
+            </Language>
+        </Button>
+
+
 
         <Button number="29" category="1" title="Condiments\n---------\nGifts" keyscan="0"
             keyshift="0" bitmap="MenuPage_CondimentsGifts.png" bitmapdn="" textup="BRIGHTWHITE"
@@ -104,6 +272,30 @@
             <Language code="en_US" name="English" parent="en">
                 <title>Condiments\n---------\nGifts</title>
                 <bitmap>MenuPage_CondimentsGifts.png</bitmap>
+            </Language>
+        </Button>
+        <Button number="29" category="1" title="Condiments\n---------\nGifts" keyscan="0"
+            keyshift="0" bitmap="MenuPage_CondimentsGifts_Condiments_H.png" bitmapdn=""
+            textup="BRIGHTWHITE" textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1"
+            outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="313" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Condiments\n---------\nGifts</title>
+                <bitmap>MenuPage_CondimentsGifts_Condiments_H.png</bitmap>
+            </Language>
+        </Button>
+        <Button number="29" category="1" title="Condiments\n---------\nGifts" keyscan="0"
+            keyshift="0" bitmap="MenuPage_CondimentsGifts_Gifts_H.png" bitmapdn=""
+            textup="BRIGHTWHITE" textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1"
+            outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="312" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Condiments\n---------\nGifts</title>
+                <bitmap>MenuPage_CondimentsGifts_Gifts_H.png</bitmap>
             </Language>
         </Button>
 
