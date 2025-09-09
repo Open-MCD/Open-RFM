@@ -93,6 +93,8 @@ async function generateProductsJson() {
     
     // Extract button styling from screen.xml
     const buttonStyling = new Map();
+    const specialButtonsFromScreen = [];
+    
     if (screenDb && screenDb.Screens && screenDb.Screens.Screen) {
         const screens = Array.isArray(screenDb.Screens.Screen) 
             ? screenDb.Screens.Screen 
@@ -106,6 +108,7 @@ async function generateProductsJson() {
                 
                 buttons.forEach(button => {
                     if (button && button.productCode) {
+                        // Product buttons
                         const productCode = button.productCode.toString();
                         buttonStyling.set(productCode, {
                             textup: button.textup || 'BLACK',
@@ -116,6 +119,47 @@ async function generateProductsJson() {
                             bitmap: button.bitmap || '',
                             outageModeButtonDisabled: button.outageModeButtonDisabled || 'false'
                         });
+                    } else if (button && button.Action && !button.productCode) {
+                        // Special buttons without productCode
+                        const actions = Array.isArray(button.Action) ? button.Action : [button.Action];
+                        
+                        // Extract all actions and parameters
+                        const extractedActions = actions.map(action => {
+                            const params = {};
+                            if (action.Parameter) {
+                                const parameters = Array.isArray(action.Parameter) ? action.Parameter : [action.Parameter];
+                                parameters.forEach(param => {
+                                    if (param.name && param.value !== undefined) {
+                                        params[param.name] = param.value;
+                                    }
+                                });
+                            }
+                            return {
+                                type: action.type,
+                                workflow: action.workflow,
+                                params: params
+                            };
+                        });
+                        
+                        // Create special button object
+                        const specialButton = {
+                            screenNumber: screen.number,
+                            buttonNumber: button.number,
+                            title: button.title || '',
+                            bitmap: button.bitmap || '',
+                            keyscan: button.keyscan || '0',
+                            keyshift: button.keyshift || '0',
+                            textup: button.textup || 'BLACK',
+                            textdn: button.textdn || 'WHITE',
+                            bgup: button.bgup || 'WHITE',
+                            bgdn: button.bgdn || 'BLACK',
+                            v: button.v || '1',
+                            h: button.h || '1',
+                            outageModeButtonDisabled: button.outageModeButtonDisabled || 'false',
+                            actions: extractedActions
+                        };
+                        
+                        specialButtonsFromScreen.push(specialButton);
                     }
                 });
             }
@@ -123,6 +167,7 @@ async function generateProductsJson() {
     }
     
     console.log(`Extracted styling for ${buttonStyling.size} products from screen.xml`);
+    console.log(`Extracted ${specialButtonsFromScreen.length} special buttons from screen.xml`);
     
     // Create lookup map for product names (English only)
     const nameMap = new Map();
@@ -321,10 +366,12 @@ async function generateProductsJson() {
         metadata: {
             generatedAt: new Date().toISOString(),
             totalProducts: products.length,
+            totalSpecialButtons: specialButtonsFromScreen.length,
             version: '1.0'
         },
         store: storeInfo,
-        products: products
+        products: products,
+        specialButtons: specialButtonsFromScreen
     };
 
     // Write to file

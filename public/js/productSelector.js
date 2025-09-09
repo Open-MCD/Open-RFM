@@ -2,7 +2,146 @@
 let productsData = [];
 let currentGridPosition = null;
 
-// Special buttons data based on screen.xml structure
+// Function to load special buttons data from screen.xml
+async function loadSpecialButtonsFromScreen() {
+    try {
+        const response = await fetch('/products.json');
+        const data = await response.json();
+        productsData = data.products || [];
+        
+        // Load and integrate special buttons from screen.xml
+        const screenSpecialButtons = await loadSpecialButtonsFromScreen();
+        
+        // Add screen-extracted buttons to the beginning of specialButtons array
+        if (screenSpecialButtons.length > 0) {
+            specialButtons.unshift(...screenSpecialButtons);
+            console.log(`Added ${screenSpecialButtons.length} special buttons from screen.xml`);
+        }
+        
+        console.log(`Loaded ${productsData.length} products and ${specialButtons.length} total special buttons`);
+        initializeGrid();
+    } catch (error) {
+        console.error('Error loading products data:', error);
+    }
+}
+
+// Function to load special buttons data from screen.xml  
+async function loadSpecialButtonsFromScreen() {
+    try {
+        const response = await fetch('/products.json');
+        const data = await response.json();
+        
+        // Curated list of important special buttons from screen.xml
+        const curatedSpecialButtons = [];
+        
+        // Find specific buttons by title patterns
+        if (data.specialButtons) {
+            // Eat In Total button
+            const eatInButton = data.specialButtons.find(btn => 
+                btn.title && btn.title.includes('Eat') && btn.title.includes('In') && btn.title.includes('Total')
+            );
+            if (eatInButton) {
+                curatedSpecialButtons.push({
+                    id: 'eat_in_total',
+                    title: 'Eat\\nIn\\nTotal',
+                    bitmap: eatInButton.bitmap,
+                    colors: {
+                        bgup: eatInButton.bgup,
+                        textup: eatInButton.textup,
+                        bgdn: eatInButton.bgdn,
+                        textdn: eatInButton.textdn
+                    },
+                    workflow: 'WF_DoTotalBySaleType',
+                    params: { SaleType: '0', ScreenNumber: '53' },
+                    onActivate: {
+                        workflow: 'WF_OnActivate_EatInTotal',
+                        params: { POD: 'DRIVE_THRU', ButtonNumber: '0' }
+                    },
+                    keyscan: eatInButton.keyscan,
+                    keyshift: eatInButton.keyshift,
+                    outageModeButtonDisabled: eatInButton.outageModeButtonDisabled
+                });
+            }
+            
+            // Menu navigation buttons
+            const menuButtons = [
+                { pattern: /Lunch.*Lunch2/, id: 'lunch_menu', screenNumber: '301' },
+                { pattern: /Dessert.*Dessert2/, id: 'dessert_menu', screenNumber: '307' },
+                { pattern: /Value Menu.*Salads/, id: 'value_salads', screenNumber: '306' },
+                { pattern: /HpyMeal.*B-Parties/, id: 'happy_meal', screenNumber: '305' },
+                { pattern: /Breakfst.*Breakfst2/, id: 'breakfast_menu', screenNumber: '302' }
+            ];
+            
+            menuButtons.forEach(menuBtn => {
+                const foundButton = data.specialButtons.find(btn => 
+                    btn.title && menuBtn.pattern.test(btn.title)
+                );
+                if (foundButton) {
+                    curatedSpecialButtons.push({
+                        id: menuBtn.id,
+                        title: foundButton.title.replace(/\\\\/g, ''),
+                        bitmap: foundButton.bitmap,
+                        colors: {
+                            bgup: foundButton.bgup,
+                            textup: foundButton.textup,
+                            bgdn: foundButton.bgdn,
+                            textdn: foundButton.textdn
+                        },
+                        workflow: 'WF_ShowScreen',
+                        params: { ScreenNumber: menuBtn.screenNumber },
+                        keyscan: foundButton.keyscan,
+                        keyshift: foundButton.keyshift,
+                        outageModeButtonDisabled: foundButton.outageModeButtonDisabled
+                    });
+                }
+            });
+            
+            // Navigation buttons
+            const navButtons = [
+                { pattern: /^Back$/, id: 'back_button' },
+                { pattern: /Main Lunch/, id: 'main_lunch' },
+                { pattern: /Click for Tag 1 - 60/, id: 'tag_1_60' },
+                { pattern: /Click for Tag 61 - 120/, id: 'tag_61_120' }
+            ];
+            
+            navButtons.forEach(navBtn => {
+                const foundButton = data.specialButtons.find(btn => 
+                    btn.title && navBtn.pattern.test(btn.title)
+                );
+                if (foundButton) {
+                    const actions = foundButton.actions || [];
+                    const clickAction = actions.find(a => a.type === 'onclick') || {};
+                    
+                    curatedSpecialButtons.push({
+                        id: navBtn.id,
+                        title: foundButton.title.replace(/\\\\/g, ''),
+                        bitmap: foundButton.bitmap,
+                        colors: {
+                            bgup: foundButton.bgup,
+                            textup: foundButton.textup,
+                            bgdn: foundButton.bgdn,
+                            textdn: foundButton.textdn
+                        },
+                        workflow: clickAction.workflow || 'DoNothing',
+                        params: clickAction.params || {},
+                        keyscan: foundButton.keyscan,
+                        keyshift: foundButton.keyshift,
+                        outageModeButtonDisabled: foundButton.outageModeButtonDisabled,
+                        v: foundButton.v,
+                        h: foundButton.h
+                    });
+                }
+            });
+        }
+        
+        return curatedSpecialButtons;
+    } catch (error) {
+        console.error('Error loading special buttons from screen.xml:', error);
+        return [];
+    }
+}
+
+// Special buttons data with authentic POS styling and workflows
 const specialButtons = [
     // COD Lanes
     { id: 'cod1', title: 'COD\n1', bitmap: 'G1_COD1.png', workflow: 'WF_ButtonCOD', params: { COD: '1' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
@@ -250,7 +389,7 @@ function renderSpecialButtonsList() {
     
     // Create special buttons grid
     const specialButtonsHtml = specialButtons.map(button => {
-        const imageUrl = button.bitmap ? `/KVS-Images/${button.bitmap}` : null;
+        const imageUrl = button.bitmap ? `/NP6-Images/${button.bitmap}` : null;
         const imageHtml = imageUrl 
             ? `<img src="${imageUrl}" alt="${button.title}" style="
                 width: 100%;

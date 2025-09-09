@@ -63,21 +63,44 @@ function exportScreenXML() {
                 const textup = button.colors.textup;
                 const bgdn = button.colors.bgdn || 'BLACK';
                 const textdn = button.colors.textdn || 'WHITE';
+                const keyscan = button.keyscan || '1';
+                const keyshift = button.keyshift || '1';
+                const outageModeButtonDisabled = button.outageModeButtonDisabled || 'true';
+                const v = button.v || '1';
+                const h = button.h || '1';
                 
-                // Build parameters string
-                let parametersXML = '';
+                // Build all actions XML
+                let actionsXML = '';
+                
+                // Add onactivate action if present
+                if (button.onActivate) {
+                    let onActivateParams = '';
+                    if (button.onActivate.params) {
+                        Object.keys(button.onActivate.params).forEach(key => {
+                            onActivateParams += `                <Parameter name="${key}" value="${button.onActivate.params[key]}" />
+`;
+                        });
+                    }
+                    actionsXML += `            <Action type="onactivate" workflow="${button.onActivate.workflow}">
+${onActivateParams}            </Action>
+`;
+                }
+                
+                // Add onclick action
+                let onClickParams = '';
                 if (button.params) {
                     Object.keys(button.params).forEach(key => {
-                        parametersXML += `                <Parameter name="${key}" value="${button.params[key]}" />
+                        onClickParams += `                <Parameter name="${key}" value="${button.params[key]}" />
 `;
                     });
                 }
+                actionsXML += `            <Action type="onclick" workflow="${button.workflow}">
+${onClickParams}            </Action>`;
                 
-                xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="1" keyshift="1"
+                xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}"
             bitmap="${bitmap}" bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}"
-            bgdn="${bgdn}" v="1" h="1" outageModeButtonDisabled="true">
-            <Action type="onclick" workflow="${button.workflow}">
-${parametersXML}            </Action>
+            bgdn="${bgdn}" v="${v}" h="${h}" outageModeButtonDisabled="${outageModeButtonDisabled}">
+${actionsXML}
             <Language code="en_US" name="English" parent="en">
                 <title>${title}</title>
                 <bitmap>${bitmap}</bitmap>
