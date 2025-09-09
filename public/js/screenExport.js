@@ -20,6 +20,40 @@ function escapeXMLAttribute(str) {
         .replace(/"/g, '&quot;');
 }
 
+// XML formatter using js-beautify library
+function formatXML(xmlString) {
+    try {
+        // Use js-beautify's HTML formatter which handles XML well
+        if (typeof html_beautify !== 'undefined') {
+            return html_beautify(xmlString, {
+                indent_size: 4,
+                indent_char: ' ',
+                max_preserve_newlines: 1,
+                preserve_newlines: true,
+                keep_array_indentation: false,
+                break_chained_methods: false,
+                indent_scripts: 'keep',
+                brace_style: 'collapse',
+                space_before_conditional: true,
+                unescape_strings: false,
+                jslint_happy: false,
+                end_with_newline: false,
+                wrap_line_length: 0,
+                indent_inner_html: true,
+                comma_first: false,
+                e4x: true,
+                indent_empty_lines: false
+            });
+        } else {
+            console.warn('js-beautify not loaded, using original XML');
+            return xmlString;
+        }
+    } catch (error) {
+        console.error('Error formatting XML with js-beautify:', error);
+        return xmlString; // Return original if formatting fails
+    }
+}
+
 // Function to export all screens to XML format
 function exportScreenXML() {
     // Check if screen manager is available
@@ -55,7 +89,12 @@ function exportScreenXML() {
     xmlContent += `</Screens>`;
     
     console.log(`Total XML length: ${xmlContent.length} characters`);
-    return xmlContent;
+    
+    // Format the XML for pretty printing
+    const formattedXML = formatXML(xmlContent);
+    console.log('XML formatted for pretty printing');
+    
+    return formattedXML;
 }
 
 // Function to export a single screen's data
@@ -74,7 +113,7 @@ function exportScreenData(screen) {
         screenAttribs = `number="${screenNumber}" timeout="false" type="1000" title="${escapeXMLAttribute(screenTitle)}" bgimage="BckGround01.png"`;
     }
     
-    let xmlContent = `    <Screen ${screenAttribs}>
+    let xmlContent = `<Screen ${screenAttribs}>
 `;
 
     // Add screen-level actions
@@ -83,20 +122,20 @@ function exportScreenData(screen) {
             let actionParams = '';
             if (action.params) {
                 Object.keys(action.params).forEach(key => {
-                    actionParams += `            <Parameter name="${escapeXMLAttribute(key)}" value="${escapeXMLAttribute(action.params[key])}" />
+                    actionParams += `<Parameter name="${escapeXMLAttribute(key)}" value="${escapeXMLAttribute(action.params[key])}" />
 `;
                 });
             }
-            xmlContent += `        <Action type="${escapeXMLAttribute(action.type)}" workflow="${escapeXMLAttribute(action.workflow)}">
-${actionParams}        </Action>
+            xmlContent += `<Action type="${escapeXMLAttribute(action.type)}" workflow="${escapeXMLAttribute(action.workflow)}">
+${actionParams}</Action>
 `;
         });
     } else {
         // Default actions for manually created screens
-        xmlContent += `        <Action type="onactivate" workflow="DoNothing"></Action>
-        <Action type="oncomplete" workflow="WF_ShowPrice">
-            <Parameter name="floatScreen" value="false" />
-        </Action>
+        xmlContent += `<Action type="onactivate" workflow="DoNothing"></Action>
+<Action type="oncomplete" workflow="WF_ShowPrice">
+<Parameter name="floatScreen" value="false" />
+</Action>
 `;
     }
 
@@ -115,13 +154,14 @@ ${actionParams}        </Action>
                 let originalXML = cellData.originalXML;
                 originalXML = originalXML.replace(/number="\d+"/, `number="${buttonNumber}"`);
                 
-                // Add proper indentation to the XML
-                const indentedXML = originalXML
+                // Just clean up extra whitespace but preserve line structure
+                const cleanedXML = originalXML
                     .split('\n')
-                    .map(line => line.trim() ? '        ' + line : line)
+                    .map(line => line.trim())
+                    .filter(line => line)
                     .join('\n');
                 
-                xmlContent += indentedXML + '\n';
+                xmlContent += cleanedXML + '\n';
                 return;
             }
             
@@ -137,17 +177,15 @@ ${actionParams}        </Action>
                     const title = escapeXMLAttribute(product.displayTitle || product.shortName || 'Product');
                     const bitmap = escapeXMLAttribute(product.image || 'default.png');
                     
-                    xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="0" keyshift="0" bitmap="${bitmap}"
-            bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
-            productCode="${escapeXMLAttribute(productCode)}" outageModeButtonDisabled="false">
-            <Action type="onclick" workflow="WF_DoSale">
-                <Parameter name="ProductCode" value="${escapeXMLAttribute(productCode)}" />
-            </Action>
-            <Language code="en_US" name="English" parent="en">
-                <title>${escapeXML(product.displayTitle || product.shortName || 'Product')}</title>
-                <bitmap>${escapeXML(product.image || 'default.png')}</bitmap>
-            </Language>
-        </Button>
+                    xmlContent += `<Button number="${buttonNumber}" category="1" title="${title}" keyscan="0" keyshift="0" bitmap="${bitmap}" bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1" productCode="${escapeXMLAttribute(productCode)}" outageModeButtonDisabled="false">
+<Action type="onclick" workflow="WF_DoSale">
+<Parameter name="ProductCode" value="${escapeXMLAttribute(productCode)}" />
+</Action>
+<Language code="en_US" name="English" parent="en">
+<title>${escapeXML(product.displayTitle || product.shortName || 'Product')}</title>
+<bitmap>${escapeXML(product.image || 'default.png')}</bitmap>
+</Language>
+</Button>
 `;
                 }
             } else if (specialButtonId && buttonType === 'special') {
@@ -159,14 +197,12 @@ ${actionParams}        </Action>
                     const keyshift = escapeXMLAttribute(button.keyshift || '0');
                     const bitmap = escapeXMLAttribute(button.bitmap || '');
                     
-                    xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}"
-            bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
-            outageModeButtonDisabled="false">
-            <Language code="en_US" name="English" parent="en">
-                <title>${escapeXML(button.title.replace(/\\n/g, '\n'))}</title>
-                <bitmap>${escapeXML(button.bitmap || '')}</bitmap>
-            </Language>
-        </Button>
+                    xmlContent += `<Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+<Language code="en_US" name="English" parent="en">
+<title>${escapeXML(button.title.replace(/\\n/g, '\n'))}</title>
+<bitmap>${escapeXML(button.bitmap || '')}</bitmap>
+</Language>
+</Button>
 `;
                 }
             } else if (buttonType === 'number') {
@@ -223,13 +259,14 @@ ${actionParams}        </Action>
                 let originalXML = cellData.originalXML;
                 originalXML = originalXML.replace(/number="\d+"/, `number="${buttonNumber}"`);
                 
-                // Add proper indentation to the XML
-                const indentedXML = originalXML
+                // Just clean up extra whitespace but preserve line structure
+                const cleanedXML = originalXML
                     .split('\n')
-                    .map(line => line.trim() ? '        ' + line : line)
+                    .map(line => line.trim())
+                    .filter(line => line)
                     .join('\n');
                 
-                xmlContent += indentedXML + '\n';
+                xmlContent += cleanedXML + '\n';
                 buttonNumber++;
                 return;
             }
@@ -411,7 +448,7 @@ ${actionsXML}            <Language code="en_US" name="English" parent="en">
         }
     }
     
-    xmlContent += `    </Screen>
+    xmlContent += `</Screen>
 `;
     
     return xmlContent;
@@ -585,10 +622,13 @@ ${actionsXML}            <Language code="en_US" name="English" parent="en">
         buttonNumber++;
     });
     
-    xmlContent += `    </Screen>
+    xmlContent += `</Screen>
 </Screens>`;
     
-    return xmlContent;
+    // Format the XML for pretty printing
+    const formattedXML = formatXML(xmlContent);
+    
+    return formattedXML;
 }
 
 // Function to download the XML file
