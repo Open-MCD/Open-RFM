@@ -200,7 +200,13 @@ ${actionsXML}            <Language code="en_US" name="English" parent="en">
                             let actionParams = '';
                             if (action.params) {
                                 Object.keys(action.params).forEach(key => {
-                                    actionParams += `                <Parameter name="${key}" value="${action.params[key]}" />
+                                    // Use custom screen number if available for ScreenNumber parameter
+                                    let paramValue = action.params[key];
+                                    if (key === 'ScreenNumber' && cellData.customScreenNumber) {
+                                        paramValue = cellData.customScreenNumber;
+                                        console.log(`Using custom screen number ${paramValue} for button ${cellData.screenButtonId}`);
+                                    }
+                                    actionParams += `                <Parameter name="${key}" value="${paramValue}" />
 `;
                                 });
                             }
@@ -379,11 +385,14 @@ ${actionsXML}            <Language code="en_US" name="English" parent="en">
                 const title = screenButton.title || '';
                 const bitmap = screenButton.bitmap || '';
                 
+                // Use custom screen number if available
+                const screenNumber = item.dataset.customScreenNumber || screenButton.actions[0].params[Object.keys(screenButton.actions[0].params)[0]];
+                
                 xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="0" keyshift="0" bitmap="${bitmap}"
             bitmapdn="" textup="BRIGHTWHITE" textdn="WHITE" bgup="DARKBLUE" bgdn="BLACK" v="1" h="1"
             outageModeButtonDisabled="false">
             <Action type="onclick" workflow="${screenButton.actions[0].workflow}">
-                <Parameter name="${Object.keys(screenButton.actions[0].params)[0]}" value="${screenButton.actions[0].params[Object.keys(screenButton.actions[0].params)[0]]}" />
+                <Parameter name="${Object.keys(screenButton.actions[0].params)[0]}" value="${screenNumber}" />
             </Action>
             <Language code="en_US" name="English" parent="en">
                 <title>${title}</title>

@@ -137,6 +137,7 @@ class ScreenManager {
                 pageButtonId: item.dataset.pageButtonId || null,
                 screenButtonId: item.dataset.screenButtonId || null,
                 buttonType: item.dataset.buttonType || null,
+                customScreenNumber: item.dataset.customScreenNumber || null,
                 innerHTML: item.innerHTML || ''
             };
             gridState.push(cellData);
@@ -157,12 +158,14 @@ class ScreenManager {
         gridItems.forEach(item => {
             item.innerHTML = '';
             item.style.backgroundColor = '';
+            item.style.position = '';
             delete item.dataset.productCode;
             delete item.dataset.specialButtonId;
             delete item.dataset.numberButtonId;
             delete item.dataset.pageButtonId;
             delete item.dataset.screenButtonId;
             delete item.dataset.buttonType;
+            delete item.dataset.customScreenNumber;
         });
         
         // Load saved state
@@ -190,10 +193,18 @@ class ScreenManager {
                     if (cellData.buttonType) {
                         gridItem.dataset.buttonType = cellData.buttonType;
                     }
+                    if (cellData.customScreenNumber) {
+                        gridItem.dataset.customScreenNumber = cellData.customScreenNumber;
+                    }
                     
                     // Restore visual content
                     if (cellData.innerHTML) {
                         gridItem.innerHTML = cellData.innerHTML;
+                    }
+                    
+                    // Restore edit button for screen buttons
+                    if (cellData.buttonType === 'screen' && cellData.screenButtonId && window.addEditButtonToGridItem) {
+                        window.addEditButtonToGridItem(gridItem, cellData.screenButtonId);
                     }
                 }
             });

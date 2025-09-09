@@ -898,6 +898,11 @@ function selectSpecialButton(buttonId) {
         
         gridItem.dataset.buttonType = buttonType;
         
+        // Add edit button overlay for screen buttons
+        if (buttonType === 'screen') {
+            addEditButtonToGridItem(gridItem, buttonId);
+        }
+        
         // Save to screen manager if available
         if (window.screenManager) {
             window.screenManager.saveCurrentGridState();
@@ -957,6 +962,249 @@ function closeProductSelector() {
     currentGridPosition = null;
 }
 
+// Function to add edit button overlay to grid item for screen buttons
+function addEditButtonToGridItem(gridItem, buttonId) {
+    // Remove any existing edit button first
+    const existingEditBtn = gridItem.querySelector('.grid-edit-btn');
+    if (existingEditBtn) {
+        existingEditBtn.remove();
+    }
+    
+    // Create edit button overlay
+    const editButton = document.createElement('button');
+    editButton.className = 'grid-edit-btn';
+    editButton.innerHTML = '✏️';
+    editButton.style.cssText = `
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 18px;
+        height: 18px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    `;
+    
+    editButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        editPlacedScreenButtonScreenNumber(buttonId, gridItem);
+    });
+    
+    // Add hover effects
+    editButton.addEventListener('mouseenter', () => {
+        editButton.style.background = '#0056b3';
+        editButton.style.transform = 'scale(1.1)';
+    });
+    
+    editButton.addEventListener('mouseleave', () => {
+        editButton.style.background = '#007bff';
+        editButton.style.transform = 'scale(1)';
+    });
+    
+    // Ensure the grid item has relative positioning
+    gridItem.style.position = 'relative';
+    
+    // Add the edit button to the grid item
+    gridItem.appendChild(editButton);
+}
+
+// Function to edit screen button's ScreenNumber for a placed button in the grid
+function editPlacedScreenButtonScreenNumber(buttonId, gridItem) {
+    // Find the screen button
+    const screenButton = screenButtons.find(b => b.id === buttonId);
+    if (!screenButton) {
+        alert('Screen button not found!');
+        return;
+    }
+    
+    // Find the current ScreenNumber value
+    let currentScreenNumber = '';
+    if (screenButton.actions && screenButton.actions.length > 0) {
+        const showScreenAction = screenButton.actions.find(action => 
+            action.workflow === 'WF_ShowScreen' || action.workflow === 'WF_ShowFloatScreen'
+        );
+        if (showScreenAction && showScreenAction.params && showScreenAction.params.ScreenNumber) {
+            currentScreenNumber = showScreenAction.params.ScreenNumber;
+        }
+    }
+    
+    // Create modal for editing
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+    `;
+    
+    modal.innerHTML = `
+        <div style="
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+        ">
+            <h3 style="margin: 0 0 15px 0; color: #333;">Edit Screen Number</h3>
+            <p style="margin: 0 0 15px 0; color: #666;">
+                Button: <strong>${screenButton.title.replace(/\\n/g, ' ')}</strong>
+            </p>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Screen Number:</label>
+                <input type="number" id="placed-screen-number-input" value="${currentScreenNumber}" 
+                    style="
+                        width: 100%;
+                        padding: 8px;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                        font-size: 14px;
+                    "
+                    min="1"
+                    max="999"
+                    placeholder="Enter screen number (e.g., 306)"
+                >
+            </div>
+            <div style="text-align: right; gap: 10px; display: flex; justify-content: flex-end;">
+                <button id="cancel-placed-edit" style="
+                    padding: 8px 16px;
+                    background: #6c757d;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                ">Cancel</button>
+                <button id="save-placed-edit" style="
+                    padding: 8px 16px;
+                    background: #007bff;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                ">Save</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Focus the input
+    const input = document.getElementById('placed-screen-number-input');
+    input.focus();
+    input.select();
+    
+    // Handle cancel
+    document.getElementById('cancel-placed-edit').addEventListener('click', () => {
+        document.body.removeChild(modal);
+    });
+    
+    // Handle save
+    document.getElementById('save-placed-edit').addEventListener('click', () => {
+        const newScreenNumber = input.value.trim();
+        
+        // Validate input
+        if (!newScreenNumber) {
+            alert('Please enter a screen number.');
+            return;
+        }
+        
+        const screenNum = parseInt(newScreenNumber);
+        if (isNaN(screenNum) || screenNum < 1 || screenNum > 999) {
+            alert('Please enter a valid screen number between 1 and 999.');
+            return;
+        }
+        
+        // Update the screen button's ScreenNumber
+        updatePlacedScreenButtonScreenNumber(buttonId, newScreenNumber, gridItem);
+        
+        document.body.removeChild(modal);
+    });
+    
+    // Handle Enter key
+    input.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('save-placed-edit').click();
+        }
+    });
+    
+    // Handle Escape key
+    modal.addEventListener('keyup', (e) => {
+        if (e.key === 'Escape') {
+            document.getElementById('cancel-placed-edit').click();
+        }
+    });
+}
+
+// Function to update screen button's ScreenNumber parameter for placed button
+function updatePlacedScreenButtonScreenNumber(buttonId, newScreenNumber, gridItem) {
+    // Find and update the screen button
+    const screenButton = screenButtons.find(b => b.id === buttonId);
+    if (!screenButton) {
+        alert('Screen button not found!');
+        return;
+    }
+    
+    // Update the ScreenNumber in the actions array
+    if (screenButton.actions && screenButton.actions.length > 0) {
+        const showScreenAction = screenButton.actions.find(action => 
+            action.workflow === 'WF_ShowScreen' || action.workflow === 'WF_ShowFloatScreen'
+        );
+        if (showScreenAction && showScreenAction.params) {
+            showScreenAction.params.ScreenNumber = newScreenNumber;
+            console.log(`Updated placed screen button ${buttonId} ScreenNumber to: ${newScreenNumber}`);
+            
+            // Store the custom screen number on the grid item
+            gridItem.dataset.customScreenNumber = newScreenNumber;
+            
+            // Save to screen manager if available
+            if (window.screenManager) {
+                window.screenManager.saveCurrentGridState();
+            }
+            
+            // Show success message
+            const successMsg = document.createElement('div');
+            successMsg.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #28a745;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 4px;
+                z-index: 10001;
+                font-family: Arial, sans-serif;
+            `;
+            successMsg.textContent = `Screen number updated to ${newScreenNumber}`;
+            document.body.appendChild(successMsg);
+            
+            setTimeout(() => {
+                if (document.body.contains(successMsg)) {
+                    document.body.removeChild(successMsg);
+                }
+            }, 3000);
+        } else {
+            alert('Could not find ScreenNumber parameter to update.');
+        }
+    } else {
+        alert('No actions found for this screen button.');
+    }
+}
+
 // Initialize product selector when DOM is ready
 function initializeProductSelector() {
     loadProductsData();
@@ -969,3 +1217,6 @@ window.openProductSelector = openProductSelector;
 window.closeProductSelector = closeProductSelector;
 window.selectProduct = selectProduct;
 window.initializeProductSelector = initializeProductSelector;
+window.addEditButtonToGridItem = addEditButtonToGridItem;
+window.editPlacedScreenButtonScreenNumber = editPlacedScreenButtonScreenNumber;
+window.updatePlacedScreenButtonScreenNumber = updatePlacedScreenButtonScreenNumber;
