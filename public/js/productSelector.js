@@ -1,24 +1,21 @@
 // Product Selector functionality
 let productsData = [];
+let specialButtons = [];
+let numberButtons = [];
+let pageButtons = [];
 let currentGridPosition = null;
 
-// Function to load special buttons data from screen.xml
-async function loadSpecialButtonsFromScreen() {
+// Function to load all data from products.json
+async function loadProductsData() {
     try {
         const response = await fetch('/products.json');
         const data = await response.json();
         productsData = data.products || [];
+        specialButtons = data.specialButtons || [];
+        numberButtons = data.numberButtons || [];
+        pageButtons = data.pageButtons || [];
         
-        // Load and integrate special buttons from screen.xml
-        const screenSpecialButtons = await loadSpecialButtonsFromScreen();
-        
-        // Add screen-extracted buttons to the beginning of specialButtons array
-        if (screenSpecialButtons.length > 0) {
-            specialButtons.unshift(...screenSpecialButtons);
-            console.log(`Added ${screenSpecialButtons.length} special buttons from screen.xml`);
-        }
-        
-        console.log(`Loaded ${productsData.length} products and ${specialButtons.length} total special buttons`);
+        console.log(`Loaded ${productsData.length} products, ${specialButtons.length} special buttons, ${numberButtons.length} number buttons, ${pageButtons.length} page buttons`);
         initializeGrid();
     } catch (error) {
         console.error('Error loading products data:', error);
@@ -141,64 +138,6 @@ async function loadSpecialButtonsFromScreen() {
     }
 }
 
-// Special buttons data with authentic POS styling and workflows
-const specialButtons = [
-    // COD Lanes
-    { id: 'cod1', title: 'COD\n1', bitmap: 'G1_COD1.png', workflow: 'WF_ButtonCOD', params: { COD: '1' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    { id: 'cod2', title: 'COD\n2', bitmap: 'G1_COD2.png', workflow: 'WF_ButtonCOD', params: { COD: '2' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    
-    // Multi Order & Recall Functions
-    { id: 'multiorder', title: 'Multi\nOrder', bitmap: 'G1_MLTORDOFF.png', workflow: 'WF_MultiOrder', colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    { id: 'imagerecall', title: 'Image\nRecall', bitmap: 'G1_IMRCL.png', workflow: 'WF_DoRecallByPreview', colors: { bgup: 'SILVER', textup: 'BLACK' } },
-    { id: 'recallbynumber', title: 'Recall\nBy\nNumber', bitmap: 'RecallNum.png', workflow: 'WF_DoRecallByNumber', colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    
-    // System Functions
-    { id: 'grill', title: 'Grill', bitmap: 'G1_GRLL.png', workflow: 'WF_DoGrillStart', colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    { id: 'manager', title: 'Manager\nMenu', bitmap: 'R1_MGR.png', workflow: 'WF_ShowManagerMenu', colors: { bgup: 'ROYALBLUE', textup: 'SNOW' } },
-    { id: 'mymcdonalds', title: 'Loyalty\nOffers', bitmap: 'MyMcD_Rewards_Revised_r1.png', workflow: 'WF_ShowMobileRecallScreen', colors: { bgup: 'LIGHTRED', textup: 'BRIGHTWHITE' } },
-    { id: 'specialfunctions', title: 'Special\nFunctions', bitmap: '', workflow: 'WF_ShowScreen', params: { ScreenNumber: '201' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    
-    // Order Modifiers
-    { id: 'clearchoice', title: 'Clear\nChoice', bitmap: 'Modifiers_ClearChoice.png', workflow: 'WF_DoClearChoiceEx', colors: { bgup: 'DARKRED', textup: 'WHITE' } },
-    { id: 'sidechoice', title: 'Side\nChoice', bitmap: 'Modifiers_SideChoice.png', workflow: 'WF_ShowFloatScreenEx', params: { ScreenNumber: '652' }, colors: { bgup: 'GREEN', textup: 'WHITE' } },
-    { id: 'voidline', title: 'Void\nLine', bitmap: 'Modifiers_VoidLine.png', workflow: 'WF_DoVoidLine', colors: { bgup: 'DARKRED', textup: 'WHITE' } },
-    { id: 'alacarte', title: 'Ala Carte\nShow Prices', bitmap: '', workflow: 'WF_ShowScreen', params: { ScreenNumber: '304' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    { id: 'takeouttotal', title: 'Take Out\nTotal', bitmap: '', workflow: 'WF_TakeOutTotal', colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    
-    // Number Buttons
-    { id: 'num0', title: '0', bitmap: '0.png', workflow: 'WF_DoQuantum', params: { Quantity: '0' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    { id: 'num1', title: '1', bitmap: '1.png', workflow: 'WF_DoQuantum', params: { Quantity: '1' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    { id: 'num2', title: '2', bitmap: '2.png', workflow: 'WF_DoQuantum', params: { Quantity: '2' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    { id: 'num3', title: '3', bitmap: '3.png', workflow: 'WF_DoQuantum', params: { Quantity: '3' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    { id: 'num4', title: '4', bitmap: '4.png', workflow: 'WF_DoQuantum', params: { Quantity: '4' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    { id: 'num5', title: '5', bitmap: '5.png', workflow: 'WF_DoQuantum', params: { Quantity: '5' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    { id: 'num6', title: '6', bitmap: '6.png', workflow: 'WF_DoQuantum', params: { Quantity: '6' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    { id: 'num7', title: '7', bitmap: '7.png', workflow: 'WF_DoQuantum', params: { Quantity: '7' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    { id: 'num8', title: '8', bitmap: '8.png', workflow: 'WF_DoQuantum', params: { Quantity: '8' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    { id: 'num9', title: '9', bitmap: '9.png', workflow: 'WF_DoQuantum', params: { Quantity: '9' }, colors: { bgup: 'WHITE', textup: 'BLACK' } },
-    
-    // Size Buttons
-    { id: 'sizexs', title: 'XS', bitmap: '', workflow: 'WF_SizeSelection', params: { Size: '0' }, colors: { bgup: 'GOLD', textup: 'BLACK' } },
-    { id: 'sizes', title: 'Small', bitmap: 'Y1_SMLL.png', workflow: 'WF_SizeSelection', params: { Size: '1' }, colors: { bgup: 'GOLD', textup: 'BLACK' } },
-    { id: 'sizem', title: 'Medium', bitmap: 'Y1_MEDM.png', workflow: 'WF_SizeSelection', params: { Size: '2' }, colors: { bgup: 'GOLD', textup: 'BLACK' } },
-    { id: 'sizel', title: 'Large', bitmap: 'Y1_LARGE.png', workflow: 'WF_SizeSelection', params: { Size: '3' }, colors: { bgup: 'GOLD', textup: 'BLACK' } },
-    { id: 'sizexl', title: 'XL', bitmap: '', workflow: 'WF_SizeSelection', params: { Size: '4' }, colors: { bgup: 'GOLD', textup: 'BLACK' } },
-    { id: 'sizesr', title: 'SR', bitmap: '', workflow: 'WF_SizeSelection', params: { Size: '5' }, colors: { bgup: 'GOLD', textup: 'BLACK' } }
-];
-
-// Load products data from JSON
-async function loadProductsData() {
-    try {
-        const response = await fetch('/products.json');
-        const data = await response.json();
-        productsData = data.products || [];
-        console.log(`Loaded ${productsData.length} products`);
-        initializeGrid();
-    } catch (error) {
-        console.error('Error loading products data:', error);
-    }
-}
-
 // Initialize grid with click handlers
 function initializeGrid() {
     const gridItems = document.querySelectorAll('.grid-item');
@@ -259,7 +198,7 @@ function openProductSelector(gridIndex) {
     
     header.innerHTML = `
         <h2 style="margin: 0 0 15px 0; font-family: Arial, sans-serif;">Select Item for Grid Position ${gridIndex + 1}</h2>
-        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
             <button id="products-tab" class="tab-button active" style="
                 padding: 10px 20px;
                 background: #007bff;
@@ -269,6 +208,15 @@ function openProductSelector(gridIndex) {
                 font-family: Arial, sans-serif;
                 border-radius: 4px;
             ">Products</button>
+            <button id="numbers-tab" class="tab-button" style="
+                padding: 10px 20px;
+                background: #6c757d;
+                color: white;
+                border: none;
+                cursor: pointer;
+                font-family: Arial, sans-serif;
+                border-radius: 4px;
+            ">Numbers</button>
             <button id="special-tab" class="tab-button" style="
                 padding: 10px 20px;
                 background: #6c757d;
@@ -278,6 +226,15 @@ function openProductSelector(gridIndex) {
                 font-family: Arial, sans-serif;
                 border-radius: 4px;
             ">Special Buttons</button>
+            <button id="pages-tab" class="tab-button" style="
+                padding: 10px 20px;
+                background: #6c757d;
+                color: white;
+                border: none;
+                cursor: pointer;
+                font-family: Arial, sans-serif;
+                border-radius: 4px;
+            ">Pages</button>
         </div>
         <div style="display: flex; gap: 10px; align-items: center;">
             <input type="text" id="product-search" placeholder="Search products..." style="
@@ -316,36 +273,46 @@ function openProductSelector(gridIndex) {
     const searchInput = document.getElementById('product-search');
     const closeBtn = document.getElementById('close-selector-btn');
     const productsTab = document.getElementById('products-tab');
+    const numbersTab = document.getElementById('numbers-tab');
     const specialTab = document.getElementById('special-tab');
+    const pagesTab = document.getElementById('pages-tab');
     
     let currentTab = 'products';
     
     // Tab functionality
-    productsTab.addEventListener('click', function() {
-        currentTab = 'products';
-        productsTab.classList.add('active');
-        specialTab.classList.remove('active');
-        productsTab.style.backgroundColor = '#007bff';
-        specialTab.style.backgroundColor = '#6c757d';
-        searchInput.style.display = 'block';
+    function setActiveTab(tabName) {
+        // Reset all tabs
+        [productsTab, numbersTab, specialTab, pagesTab].forEach(tab => {
+            tab.classList.remove('active');
+            tab.style.backgroundColor = '#6c757d';
+        });
+        
+        // Set active tab
+        currentTab = tabName;
+        const activeTab = document.getElementById(`${tabName}-tab`);
+        activeTab.classList.add('active');
+        activeTab.style.backgroundColor = '#007bff';
+        
+        // Show/hide search based on tab
+        searchInput.style.display = (tabName === 'products') ? 'block' : 'none';
+        
         renderCurrentTab();
-    });
+    }
     
-    specialTab.addEventListener('click', function() {
-        currentTab = 'special';
-        specialTab.classList.add('active');
-        productsTab.classList.remove('active');
-        specialTab.style.backgroundColor = '#007bff';
-        productsTab.style.backgroundColor = '#6c757d';
-        searchInput.style.display = 'none';
-        renderCurrentTab();
-    });
+    productsTab.addEventListener('click', () => setActiveTab('products'));
+    numbersTab.addEventListener('click', () => setActiveTab('numbers'));
+    specialTab.addEventListener('click', () => setActiveTab('special'));
+    pagesTab.addEventListener('click', () => setActiveTab('pages'));
     
     function renderCurrentTab() {
         if (currentTab === 'products') {
             renderProductsList(searchInput.value);
-        } else {
+        } else if (currentTab === 'numbers') {
+            renderNumberButtonsList();
+        } else if (currentTab === 'special') {
             renderSpecialButtonsList();
+        } else if (currentTab === 'pages') {
+            renderPageButtonsList();
         }
     }
 
@@ -420,8 +387,8 @@ function renderSpecialButtonsList() {
         `;
         
         // Convert colors from screen.xml format to CSS
-        const bgColor = convertPOSColor(button.colors.bgup);
-        const textColor = convertPOSColor(button.colors.textup);
+        const bgColor = convertPOSColor(button.bgup || 'WHITE');
+        const textColor = convertPOSColor(button.textup || 'BLACK');
         
         return `
             <div class="special-button-card" data-button-id="${button.id}" style="
@@ -508,6 +475,131 @@ function convertPOSColor(posColor) {
         'DARKBLUE': '#00008B'
     };
     return colorMap[posColor] || '#FFFFFF';
+}
+
+// Render number buttons list
+function renderNumberButtonsList() {
+    const container = document.getElementById('products-container');
+    if (!container) return;
+    
+    renderButtonCategory(numberButtons, container, 'number');
+}
+
+// Render page buttons list  
+function renderPageButtonsList() {
+    const container = document.getElementById('products-container');
+    if (!container) return;
+    
+    renderButtonCategory(pageButtons, container, 'page');
+}
+
+// Generic function to render any button category
+function renderButtonCategory(buttons, container, buttonType) {
+    // Create buttons grid
+    const buttonsHtml = buttons.map(button => {
+        const imageUrl = button.bitmap ? `/NP6-Images/${button.bitmap}` : null;
+        const imageHtml = imageUrl 
+            ? `<img src="${imageUrl}" alt="${button.title}" style="
+                width: 100%;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 4px;
+                margin-bottom: 5px;
+            " onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`
+            : '';
+        
+        const placeholderHtml = `
+            <div style="
+                width: 100%;
+                height: 80px;
+                background: #f8f9fa;
+                border: 1px solid #dee2e6;
+                display: ${imageUrl ? 'none' : 'flex'};
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                color: #6c757d;
+                text-align: center;
+                border-radius: 4px;
+                margin-bottom: 5px;
+            ">
+                ${buttonType} Button
+            </div>
+        `;
+        
+        // Convert colors from screen.xml format to CSS
+        const bgColor = convertPOSColor(button.colors?.bgup || button.bgup || 'WHITE');
+        const textColor = convertPOSColor(button.colors?.textup || button.textup || 'BLACK');
+        
+        return `
+            <div class="${buttonType}-button-card" data-button-id="${button.id}" style="
+                border: 2px solid #333;
+                padding: 10px;
+                cursor: pointer;
+                transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+                background: ${bgColor};
+                color: ${textColor};
+                text-align: center;
+                font-weight: bold;
+                font-family: Arial, sans-serif;
+            ">
+                ${imageHtml}
+                ${placeholderHtml}
+                <div style="font-size: 12px; line-height: 1.2;">
+                    ${button.title.replace(/\\n/g, '<br>')}
+                </div>
+                <div style="margin-top: 8px;">
+                    <button class="select-${buttonType}-btn" style="
+                        padding: 6px 12px;
+                        background: #28a745;
+                        color: white;
+                        border: none;
+                        cursor: pointer;
+                        border-radius: 3px;
+                        font-size: 11px;
+                    ">Select</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    container.innerHTML = `
+        <div style="
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+        ">
+            ${buttonsHtml}
+        </div>
+    `;
+    
+    // Add event listeners for button selection
+    const buttonCards = container.querySelectorAll(`.${buttonType}-button-card`);
+    buttonCards.forEach(card => {
+        const buttonId = card.getAttribute('data-button-id');
+        
+        // Hover effects
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+            this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = 'none';
+        });
+        
+        // Select button functionality
+        const selectBtn = card.querySelector(`.select-${buttonType}-btn`);
+        if (selectBtn) {
+            selectBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log(`${buttonType} button selected:`, buttonId);
+                selectSpecialButton(buttonId);
+            });
+        }
+    });
 }
 
 // Render products list
@@ -651,7 +743,11 @@ function renderProductsList(searchTerm = '') {
 
 // Select a special button for the current grid position
 function selectSpecialButton(buttonId) {
-    const button = specialButtons.find(b => b.id === buttonId);
+    // Search for button across all categories
+    let button = specialButtons.find(b => b.id === buttonId);
+    if (!button) button = numberButtons.find(b => b.id === buttonId);
+    if (!button) button = pageButtons.find(b => b.id === buttonId);
+    
     if (!button || currentGridPosition === null) return;
     
     // Update grid item
@@ -661,8 +757,8 @@ function selectSpecialButton(buttonId) {
     if (gridItem) {
         // Create image element if bitmap exists
         const imageUrl = button.bitmap ? `/NP6-Images/${button.bitmap}` : null;
-        const bgColor = convertPOSColor(button.colors.bgup);
-        const textColor = convertPOSColor(button.colors.textup);
+        const bgColor = convertPOSColor(button.bgup || button.colors?.bgup || 'WHITE');
+        const textColor = convertPOSColor(button.textup || button.colors?.textup || 'BLACK');
         
         if (imageUrl) {
             // Show only the image, filling the entire grid cell

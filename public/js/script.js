@@ -32,8 +32,8 @@ function initializeApp() {
     checkScreenWidth();
     
     // Initialize product selector when the page loads
-    if (typeof initializeProductSelector === 'function') {
-        initializeProductSelector();
+    if (typeof loadProductsData === 'function') {
+        loadProductsData();
     }
 }
 

@@ -94,6 +94,13 @@ async function generateProductsJson() {
     // Extract button styling from screen.xml
     const buttonStyling = new Map();
     const specialButtonsFromScreen = [];
+    const numbersFromScreen = [];
+    const pagesFromScreen = [];
+    
+    // Use Maps to track unique buttons and avoid duplicates
+    const uniqueSpecialButtons = new Map();
+    const uniqueNumberButtons = new Map();
+    const uniquePageButtons = new Map();
     
     if (screenDb && screenDb.Screens && screenDb.Screens.Screen) {
         const screens = Array.isArray(screenDb.Screens.Screen) 
@@ -107,6 +114,22 @@ async function generateProductsJson() {
                     : [screen.Button];
                 
                 buttons.forEach(button => {
+                    // Filter out unwanted test/demo buttons early
+                    const excludedButtons = [
+                        '*tag*', 'ice', 'ford', 'bmw', 'chrysler', 'infinity', 'jeep', 
+                        'audi', 'buick', 'toyota', 'tesla', 'honda', 'lexus', 
+                        'volkswagon', 'dodge', 'nissan', 'subaru', 'lincon', 'lincoln', 'chevy'
+                    ];
+                    
+                    const buttonTitleLower = (button.title || '').toLowerCase().replace(/\s+/g, '');
+                    const shouldExclude = excludedButtons.some(excluded => 
+                        buttonTitleLower.includes(excluded.toLowerCase())
+                    );
+                    
+                    if (shouldExclude) {
+                        return; // Skip this button entirely
+                    }
+                    
                     if (button && button.productCode) {
                         // Product buttons
                         const productCode = button.productCode.toString();
@@ -141,8 +164,14 @@ async function generateProductsJson() {
                             };
                         });
                         
+                        // Create unique key based on title, bitmap, and primary workflow
+                        const primaryWorkflow = extractedActions.find(a => a.type === 'onclick')?.workflow || 
+                                             extractedActions[0]?.workflow || '';
+                        const uniqueKey = `${button.title || 'untitled'}_${button.bitmap || 'nobitmap'}_${primaryWorkflow}`;
+                        
                         // Create special button object
                         const specialButton = {
+                            id: uniqueKey.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase(),
                             screenNumber: screen.number,
                             buttonNumber: button.number,
                             title: button.title || '',
@@ -159,15 +188,35 @@ async function generateProductsJson() {
                             actions: extractedActions
                         };
                         
-                        specialButtonsFromScreen.push(specialButton);
+                        // Categorize the button and add to appropriate unique collection
+                        const buttonTitle = (button.title || '').trim();
+                        const isNumberButton = /^[0-9]$/.test(buttonTitle);
+                        const hasShowScreenAction = extractedActions.some(action => 
+                            action.workflow === 'WF_ShowScreen' && action.params.ScreenNumber
+                        );
+                        
+                        if (isNumberButton) {
+                            uniqueNumberButtons.set(uniqueKey, specialButton);
+                        } else if (hasShowScreenAction) {
+                            uniquePageButtons.set(uniqueKey, specialButton);
+                        } else {
+                            uniqueSpecialButtons.set(uniqueKey, specialButton);
+                        }
                     }
                 });
             }
         });
     }
     
+    // Convert Maps to arrays
+    specialButtonsFromScreen.push(...Array.from(uniqueSpecialButtons.values()));
+    numbersFromScreen.push(...Array.from(uniqueNumberButtons.values()));
+    pagesFromScreen.push(...Array.from(uniquePageButtons.values()));
+    
     console.log(`Extracted styling for ${buttonStyling.size} products from screen.xml`);
-    console.log(`Extracted ${specialButtonsFromScreen.length} special buttons from screen.xml`);
+    console.log(`Extracted ${specialButtonsFromScreen.length} unique special buttons from screen.xml`);
+    console.log(`Extracted ${numbersFromScreen.length} unique number buttons from screen.xml`);
+    console.log(`Extracted ${pagesFromScreen.length} unique page buttons from screen.xml`);
     
     // Create lookup map for product names (English only)
     const nameMap = new Map();
@@ -222,6 +271,22 @@ async function generateProductsJson() {
             if (product && product.ProductCode) {
                 const productCode = product.ProductCode.toString();
                 const nameInfo = nameMap.get(productCode) || {};
+
+                // Filter out unwanted test/demo products early
+                const excludedProducts = [
+                    '*tag*', 'ice', 'ford', 'bmw', 'chrysler', 'infinity', 'jeep', 
+                    'audi', 'buick', 'toyota', 'tesla', 'honda', 'lexus', 
+                    'volkswagon', 'dodge', 'nissan', 'subaru', 'lincon', 'lincoln', 'chevy'
+                ];
+                
+                const productName = (nameInfo.shortName || nameInfo.longName || nameInfo.csoName || '').toLowerCase().replace(/\s+/g, '');
+                const shouldExcludeProduct = excludedProducts.some(excluded => 
+                    productName.includes(excluded.toLowerCase())
+                );
+                
+                if (shouldExcludeProduct) {
+                    return; // Skip this product entirely
+                }
 
                 // Filter criteria for sellable products only
                 const isActualProduct = 
@@ -367,11 +432,15 @@ async function generateProductsJson() {
             generatedAt: new Date().toISOString(),
             totalProducts: products.length,
             totalSpecialButtons: specialButtonsFromScreen.length,
+            totalNumberButtons: numbersFromScreen.length,
+            totalPageButtons: pagesFromScreen.length,
             version: '1.0'
         },
         store: storeInfo,
         products: products,
-        specialButtons: specialButtonsFromScreen
+        specialButtons: specialButtonsFromScreen,
+        numberButtons: numbersFromScreen,
+        pageButtons: pagesFromScreen
     };
 
     // Write to file
