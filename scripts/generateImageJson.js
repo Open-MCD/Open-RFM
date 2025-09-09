@@ -11,6 +11,7 @@ const productDbPath = path.join(xmlDir, 'product-db.xml');
 const storeDbPath = path.join(xmlDir, 'store-db.xml');
 const screenDbPath = path.join(xmlDir, 'screen.xml');
 const specialButtonsPath = path.join(xmlDir, 'special-buttons.xml');
+const numberButtonsPath = path.join(xmlDir, 'number-buttons.xml');
 
 // Parse XML to JavaScript object
 async function parseXmlFile(filePath) {
@@ -187,6 +188,119 @@ async function parseSpecialButtonsXml() {
     return specialButtonsFromManual;
 }
 
+// Function to parse number buttons from manual XML file
+async function parseNumberButtonsXml() {
+    const numberButtonsFromManual = [];
+    
+    try {
+        if (!fs.existsSync(numberButtonsPath)) {
+            console.log('number-buttons.xml not found, skipping manual number buttons');
+            return numberButtonsFromManual;
+        }
+        
+        const numberButtonsContent = fs.readFileSync(numberButtonsPath, 'utf8');
+        const parser = new xml2js.Parser({ 
+            explicitArray: false,
+            mergeAttrs: true 
+        });
+        
+        const numberButtonsData = await parser.parseStringPromise(numberButtonsContent);
+        
+        // Handle both simple format and full Button format
+        let buttons = [];
+        
+        if (numberButtonsData && numberButtonsData.buttons) {
+            if (numberButtonsData.buttons.button) {
+                // Simple format: <buttons><button>
+                buttons = Array.isArray(numberButtonsData.buttons.button) 
+                    ? numberButtonsData.buttons.button 
+                    : [numberButtonsData.buttons.button];
+            } else if (numberButtonsData.buttons.Button) {
+                // Full format: <buttons><Button>
+                buttons = Array.isArray(numberButtonsData.buttons.Button) 
+                    ? numberButtonsData.buttons.Button 
+                    : [numberButtonsData.buttons.Button];
+            }
+        }
+        
+        buttons.forEach(button => {
+            if (button && (button.name || button.title)) {
+                let numberButton;
+                
+                if (button.name) {
+                    // Simple format
+                    numberButton = {
+                        id: `number_${button.name}`,
+                        name: button.name,
+                        action: button.action || 'ADD_NUMBER',
+                        parameter: button.parameter || button.name,
+                        image: button.image || `img/${button.name}.png`,
+                        title: button.name,
+                        textup: 'BLACK',
+                        textdn: 'WHITE',
+                        bgup: 'WHITE',
+                        bgdn: 'BLACK'
+                    };
+                } else {
+                    // Full Button format - match special buttons structure exactly
+                    const title = button.title || '';
+                    
+                    // Extract actions from Action elements
+                    const extractedActions = [];
+                    if (button.Action) {
+                        const actions = Array.isArray(button.Action) ? button.Action : [button.Action];
+                        
+                        actions.forEach(action => {
+                            const params = {};
+                            if (action.Parameter) {
+                                const parameters = Array.isArray(action.Parameter) ? action.Parameter : [action.Parameter];
+                                parameters.forEach(param => {
+                                    if (param.name && param.value !== undefined) {
+                                        params[param.name] = param.value;
+                                    }
+                                });
+                            }
+                            extractedActions.push({
+                                type: action.type || 'onclick',
+                                workflow: action.workflow || 'WF_DoQuantum',
+                                params: params
+                            });
+                        });
+                    }
+                    
+                    // Create number button object matching special buttons format exactly
+                    numberButton = {
+                        id: `number_${title}`,
+                        screenNumber: button.number || '0',
+                        buttonNumber: button.number || '0',
+                        title: title,
+                        bitmap: button.bitmap || `${title}.png`,
+                        keyscan: button.keyscan || '1',
+                        keyshift: button.keyshift || '1',
+                        textup: button.textup || 'BLACK',
+                        textdn: button.textdn || 'WHITE',
+                        bgup: button.bgup || 'WHITE',
+                        bgdn: button.bgdn || 'BLACK',
+                        v: button.v || '1',
+                        h: button.h || '1',
+                        outageModeButtonDisabled: button.outageModeButtonDisabled || 'true',
+                        actions: extractedActions
+                    };
+                }
+                
+                numberButtonsFromManual.push(numberButton);
+            }
+        });
+        
+        console.log(`Loaded ${numberButtonsFromManual.length} number buttons from number-buttons.xml`);
+        
+    } catch (error) {
+        console.error('Error parsing number-buttons.xml:', error.message);
+    }
+    
+    return numberButtonsFromManual;
+}
+
 // Convert XML data to consolidated JSON
 async function generateProductsJson() {
     console.log('Starting XML to JSON conversion...');
@@ -206,16 +320,15 @@ async function generateProductsJson() {
 
     console.log('XML files parsed successfully');
     
-    // Load special buttons from manual XML file
+    // Load special buttons and number buttons from manual XML files
     const specialButtonsFromScreen = await parseSpecialButtonsXml();
+    const numbersFromManual = await parseNumberButtonsXml();
     
     // Extract button styling from screen.xml
     const buttonStyling = new Map();
-    const numbersFromScreen = [];
     const pagesFromScreen = [];
     
-    // Use Maps to track unique buttons and avoid duplicates
-    const uniqueNumberButtons = new Map();
+    // Use Map to track unique page buttons and avoid duplicates
     const uniquePageButtons = new Map();
     
     if (screenDb && screenDb.Screens && screenDb.Screens.Screen) {
@@ -307,18 +420,16 @@ async function generateProductsJson() {
                             actions: extractedActions
                         };
                         
-                        // Only categorize numbers and pages, skip special buttons
+                        // Only extract pages, skip number and special buttons (they come from manual files)
                         const buttonTitle = (button.title || '').trim();
-                        const isNumberButton = /^[0-9]$/.test(buttonTitle);
                         const hasShowScreenAction = extractedActions.some(action => 
                             action.workflow === 'WF_ShowScreen' && action.params.ScreenNumber
                         );
                         
-                        if (isNumberButton) {
-                            uniqueNumberButtons.set(uniqueKey, buttonObj);
-                        } else if (hasShowScreenAction) {
+                        if (hasShowScreenAction) {
                             uniquePageButtons.set(uniqueKey, buttonObj);
                         }
+                        // Skip number buttons - they come from manual file
                         // Skip special buttons - they come from manual file
                     }
                 });
@@ -326,13 +437,12 @@ async function generateProductsJson() {
         });
     }
     
-    // Convert Maps to arrays (special buttons already loaded from manual file)
-    numbersFromScreen.push(...Array.from(uniqueNumberButtons.values()));
+    // Convert Map to array (numbers come from manual file, special buttons already loaded from manual file)
     pagesFromScreen.push(...Array.from(uniquePageButtons.values()));
     
     console.log(`Extracted styling for ${buttonStyling.size} products from screen.xml`);
     console.log(`Loaded ${specialButtonsFromScreen.length} special buttons from manual XML`);
-    console.log(`Extracted ${numbersFromScreen.length} unique number buttons from screen.xml`);
+    console.log(`Loaded ${numbersFromManual.length} number buttons from manual XML`);
     console.log(`Extracted ${pagesFromScreen.length} unique page buttons from screen.xml`);
     
     // Create lookup map for product names (English only)
@@ -551,14 +661,14 @@ async function generateProductsJson() {
             generatedAt: new Date().toISOString(),
             totalProducts: products.length,
             totalSpecialButtons: specialButtonsFromScreen.length,
-            totalNumberButtons: numbersFromScreen.length,
+            totalNumberButtons: numbersFromManual.length,
             totalPageButtons: pagesFromScreen.length,
             version: '1.0'
         },
         store: storeInfo,
         products: products,
         specialButtons: specialButtonsFromScreen,
-        numberButtons: numbersFromScreen,
+        numberButtons: numbersFromManual,
         pageButtons: pagesFromScreen
     };
 

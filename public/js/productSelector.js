@@ -874,9 +874,27 @@ function selectSpecialButton(buttonId) {
             `;
         }
         
-        // Store special button data on the grid item
-        gridItem.dataset.specialButtonId = buttonId;
-        gridItem.dataset.buttonType = 'special';
+        // Store button data on the grid item with correct type
+        let buttonType = 'special'; // default
+        if (specialButtons.find(b => b.id === buttonId)) {
+            buttonType = 'special';
+            gridItem.dataset.specialButtonId = buttonId;
+        } else if (numberButtons.find(b => b.id === buttonId)) {
+            buttonType = 'number';
+            gridItem.dataset.numberButtonId = buttonId;
+            console.log('Storing number button:', buttonId, 'with type:', buttonType);
+        } else if (pageButtons.find(b => b.id === buttonId)) {
+            buttonType = 'page';
+            gridItem.dataset.pageButtonId = buttonId;
+        }
+        
+        gridItem.dataset.buttonType = buttonType;
+        console.log('Final grid item datasets:', {
+            buttonType: gridItem.dataset.buttonType,
+            specialButtonId: gridItem.dataset.specialButtonId,
+            numberButtonId: gridItem.dataset.numberButtonId,
+            pageButtonId: gridItem.dataset.pageButtonId
+        });
         
         // Save to screen manager if available
         if (window.screenManager) {

@@ -133,6 +133,8 @@ class ScreenManager {
                 index: index,
                 productCode: item.dataset.productCode || null,
                 specialButtonId: item.dataset.specialButtonId || null,
+                numberButtonId: item.dataset.numberButtonId || null,
+                pageButtonId: item.dataset.pageButtonId || null,
                 buttonType: item.dataset.buttonType || null,
                 innerHTML: item.innerHTML || ''
             };
@@ -156,6 +158,8 @@ class ScreenManager {
             item.style.backgroundColor = '';
             delete item.dataset.productCode;
             delete item.dataset.specialButtonId;
+            delete item.dataset.numberButtonId;
+            delete item.dataset.pageButtonId;
             delete item.dataset.buttonType;
         });
         
@@ -171,6 +175,12 @@ class ScreenManager {
                     }
                     if (cellData.specialButtonId) {
                         gridItem.dataset.specialButtonId = cellData.specialButtonId;
+                    }
+                    if (cellData.numberButtonId) {
+                        gridItem.dataset.numberButtonId = cellData.numberButtonId;
+                    }
+                    if (cellData.pageButtonId) {
+                        gridItem.dataset.pageButtonId = cellData.pageButtonId;
                     }
                     if (cellData.buttonType) {
                         gridItem.dataset.buttonType = cellData.buttonType;

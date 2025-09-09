@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buttons>
+    <!-- Number buttons for manual configuration -->
+
+    <Button number="11" category="1" title="0" keyscan="1" keyshift="1" bitmap="0.png"
+        bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+        outageModeButtonDisabled="true">
+        <Action type="onclick" workflow="WF_DoQuantum">
+            <Parameter name="Quantity" value="0" />
+        </Action>
+        <Language code="en_US" name="English" parent="en">
+            <title>0</title>
+            <bitmap>0.png</bitmap>
+        </Language>
+    </Button>
+
+    <Button number="12" category="1" title="1" keyscan="1" keyshift="1" bitmap="1.png"
+        bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+        outageModeButtonDisabled="true">
+        <Action type="onclick" workflow="WF_DoQuantum">
+            <Parameter name="Quantity" value="1" />
+        </Action>
+        <Language code="en_US" name="English" parent="en">
+            <title>1</title>
+            <bitmap>1.png</bitmap>
+        </Language>
+    </Button>
+
+    <Button number="13" category="1" title="2" keyscan="1" keyshift="1" bitmap="2.png"
+        bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+        outageModeButtonDisabled="true">
+        <Action type="onclick" workflow="WF_DoQuantum">
+            <Parameter name="Quantity" value="2" />
+        </Action>
+        <Language code="en_US" name="English" parent="en">
+            <title>2</title>
+            <bitmap>2.png</bitmap>
+        </Language>
+    </Button>
+
+    <Button number="14" category="1" title="3" keyscan="1" keyshift="1" bitmap="3.png"
+        bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+        outageModeButtonDisabled="true">
+        <Action type="onclick" workflow="WF_DoQuantum">
+            <Parameter name="Quantity" value="3" />
+        </Action>
+        <Language code="en_US" name="English" parent="en">
+            <title>3</title>
+            <bitmap>3.png</bitmap>
+        </Language>
+    </Button>
+
+    <Button number="15" category="1" title="4" keyscan="1" keyshift="1" bitmap="4.png"
+        bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+        outageModeButtonDisabled="true">
+        <Action type="onclick" workflow="WF_DoQuantum">
+            <Parameter name="Quantity" value="4" />
+        </Action>
+        <Language code="en_US" name="English" parent="en">
+            <title>4</title>
+            <bitmap>4.png</bitmap>
+        </Language>
+    </Button>
+
+    <Button number="16" category="1" title="5" keyscan="1" keyshift="1" bitmap="5.png"
+        bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+        outageModeButtonDisabled="true">
+        <Action type="onclick" workflow="WF_DoQuantum">
+            <Parameter name="Quantity" value="5" />
+        </Action>
+        <Language code="en_US" name="English" parent="en">
+            <title>5</title>
+            <bitmap>5.png</bitmap>
+        </Language>
+    </Button>
+
+    <Button number="17" category="1" title="6" keyscan="1" keyshift="1" bitmap="6.png"
+        bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+        outageModeButtonDisabled="true">
+        <Action type="onclick" workflow="WF_DoQuantum">
+            <Parameter name="Quantity" value="6" />
+        </Action>
+        <Language code="en_US" name="English" parent="en">
+            <title>6</title>
+            <bitmap>6.png</bitmap>
+        </Language>
+    </Button>
+
+    <Button number="18" category="1" title="7" keyscan="1" keyshift="1" bitmap="7.png"
+        bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+        outageModeButtonDisabled="true">
+        <Action type="onclick" workflow="WF_DoQuantum">
+            <Parameter name="Quantity" value="7" />
+        </Action>
+        <Language code="en_US" name="English" parent="en">
+            <title>7</title>
+            <bitmap>7.png</bitmap>
+        </Language>
+    </Button>
+
+    <Button number="19" category="1" title="8" keyscan="1" keyshift="1" bitmap="8.png"
+        bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+        outageModeButtonDisabled="true">
+        <Action type="onclick" workflow="WF_DoQuantum">
+            <Parameter name="Quantity" value="8" />
+        </Action>
+        <Language code="en_US" name="English" parent="en">
+            <title>8</title>
+            <bitmap>8.png</bitmap>
+        </Language>
+    </Button>
+    
+    <Button number="20" category="1" title="9" keyscan="1" keyshift="1" bitmap="9.png"
+        bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+        outageModeButtonDisabled="true">
+        <Action type="onclick" workflow="WF_DoQuantum">
+            <Parameter name="Quantity" value="9" />
+        </Action>
+        <Language code="en_US" name="English" parent="en">
+            <title>9</title>
+            <bitmap>9.png</bitmap>
+        </Language>
+    </Button>
+
+</buttons>

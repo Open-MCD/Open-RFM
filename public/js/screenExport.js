@@ -132,6 +132,52 @@ ${actionsXML}            <Language code="en_US" name="English" parent="en">
         </Button>
 `;
                 }
+            } else if (cellData.numberButtonId && buttonType === 'number') {
+                // Number button
+                console.log('Processing number button:', cellData.numberButtonId);
+                console.log('Available numberButtons:', numberButtons.map(b => b.id));
+                const numberButton = numberButtons.find(b => b.id === cellData.numberButtonId);
+                console.log('Found numberButton:', numberButton);
+                if (numberButton) {
+                    const title = numberButton.title || numberButton.name || '';
+                    const bitmap = numberButton.bitmap || numberButton.image || `${title}.png`;
+                    const keyscan = numberButton.keyscan || '1';
+                    const keyshift = numberButton.keyshift || '1';
+                    const textup = numberButton.textup || 'BLACK';
+                    const textdn = numberButton.textdn || 'WHITE';
+                    const bgup = numberButton.bgup || 'WHITE';
+                    const bgdn = numberButton.bgdn || 'BLACK';
+                    const outageModeButtonDisabled = numberButton.outageModeButtonDisabled || 'true';
+                    const v = numberButton.v || '1';
+                    const h = numberButton.h || '1';
+                    
+                    // Build actions XML from the actions array
+                    let actionsXML = '';
+                    if (numberButton.actions && Array.isArray(numberButton.actions)) {
+                        numberButton.actions.forEach(action => {
+                            let actionParams = '';
+                            if (action.params) {
+                                Object.keys(action.params).forEach(key => {
+                                    actionParams += `                <Parameter name="${key}" value="${action.params[key]}" />
+`;
+                                });
+                            }
+                            actionsXML += `            <Action type="${action.type}" workflow="${action.workflow}">
+${actionParams}            </Action>
+`;
+                        });
+                    }
+                    
+                    xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmap="${bitmap}"
+            bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}" bgdn="${bgdn}" v="${v}" h="${h}"
+            outageModeButtonDisabled="${outageModeButtonDisabled}">
+${actionsXML}            <Language code="en_US" name="English" parent="en">
+                <title>${title}</title>
+                <bitmap>${bitmap}</bitmap>
+            </Language>
+        </Button>
+`;
+                }
             }
             
             buttonNumber++;
@@ -245,6 +291,29 @@ ${onClickParams}            </Action>`;
             bitmap="${bitmap}" bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}"
             bgdn="${bgdn}" v="${v}" h="${h}" outageModeButtonDisabled="${outageModeButtonDisabled}">
 ${actionsXML}
+            <Language code="en_US" name="English" parent="en">
+                <title>${title}</title>
+                <bitmap>${bitmap}</bitmap>
+            </Language>
+        </Button>
+`;
+            }
+        } else if (item.dataset.numberButtonId && buttonType === 'number') {
+            // Number button
+            const numberButton = numberButtons.find(b => b.id === item.dataset.numberButtonId);
+            if (numberButton) {
+                const title = numberButton.name;
+                const bitmap = numberButton.image || `${numberButton.name}.png`;
+                const keyscan = '1';
+                const keyshift = '1';
+                const outageModeButtonDisabled = 'true';
+                
+                xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmap="${bitmap}"
+            bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+            outageModeButtonDisabled="${outageModeButtonDisabled}">
+            <Action type="onclick" workflow="WF_DoQuantum">
+                <Parameter name="Quantity" value="${numberButton.parameter}" />
+            </Action>
             <Language code="en_US" name="English" parent="en">
                 <title>${title}</title>
                 <bitmap>${bitmap}</bitmap>
