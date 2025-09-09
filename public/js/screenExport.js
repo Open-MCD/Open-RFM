@@ -1,5 +1,17 @@
 // Screen Export functionality - Export configured grid as screen.xml
 
+// Function to export a single screen's data
+function exportScreenData(screen) {
+    const screenNumber = screen.id;
+    const screenTitle = (screen.name || `Screen ${screenNumber}`).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    
+    let xmlContent = `    <Screen number="${screenNumber}" timeout="false" type="1000" title="${screenTitle}" bgimage="BckGround01.png">
+        <Action type="onactivate" workflow="DoNothing"></Action>
+        <Action type="oncomplete" workflow="WF_ShowPrice">
+            <Parameter name="floatScreen" value="false" />
+        </Action>
+`;
+
 // Function to export all screens as screen.xml
 function exportScreenXML() {
     // Check if screen manager is available
