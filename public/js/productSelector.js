@@ -1257,6 +1257,10 @@ function goToScreen(screenNumber) {
     if (window.screenManager.screens.has(targetScreenId)) {
         // Switch to the target screen
         window.screenManager.switchToScreen(targetScreenId);
+        
+        // Scroll to the screen in the list
+        window.screenManager.scrollToScreenInList(targetScreenId);
+        
         showNotificationMessage(`Switched to Screen ${targetScreenId}`, '#28a745');
     } else {
         // Show error message

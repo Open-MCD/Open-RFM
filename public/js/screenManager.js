@@ -612,6 +612,11 @@ class ScreenManager {
         // Re-render screen list to show updated name
         this.renderScreenList();
         
+        // Update the title bar if we're currently on this screen
+        if (this.currentScreenId === screenId) {
+            this.updateScreenInfoDisplay();
+        }
+        
         console.log(`Screen ${screenId} name updated to "${newName}"`);
         return true;
     }
@@ -833,7 +838,7 @@ class ScreenManager {
                             font-weight: ${isActive ? 'bold' : 'normal'};
                             color: ${isActive ? '#1976d2' : '#333'};
                         ">
-                            ${screen.name}
+                            ${screen.id} - ${screen.name}
                         </span>
                         ${isActive ? '<span style="margin-left: 8px; color: #2196f3; font-size: 11px;">(Active)</span>' : ''}
                     </div>
@@ -1002,10 +1007,34 @@ class ScreenManager {
         if (screenInfoElement) {
             const currentScreen = this.screens.get(this.currentScreenId);
             if (currentScreen) {
-                screenInfoElement.textContent = `Current Screen ID: ${this.currentScreenId}, Current Screen Name: ${currentScreen.name}`;
+                screenInfoElement.textContent = `Current Screen: ${this.currentScreenId} - ${currentScreen.name}`;
             } else {
-                screenInfoElement.textContent = `Current Screen ID: ${this.currentScreenId}, Current Screen Name: Unknown`;
+                screenInfoElement.textContent = `Current Screen: ${this.currentScreenId} - Unknown`;
             }
+        }
+    }
+    
+    scrollToScreenInList(screenId) {
+        const container = document.getElementById('screen-list-container');
+        if (!container) return;
+        
+        const screenItem = container.querySelector(`[data-screen-id="${screenId}"]`);
+        if (screenItem) {
+            // Scroll the screen item into view with smooth animation
+            screenItem.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'nearest'
+            });
+            
+            // Add a brief highlight effect
+            const originalBackground = screenItem.style.background;
+            screenItem.style.background = '#ffeb3b';
+            screenItem.style.transition = 'background-color 0.5s ease';
+            
+            setTimeout(() => {
+                screenItem.style.background = originalBackground;
+            }, 1000);
         }
     }
 }
