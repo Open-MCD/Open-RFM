@@ -149,7 +149,7 @@ async function generateProductsJson() {
                 buttons.forEach(button => {
                     // Filter out unwanted test/demo buttons early
                     const excludedButtons = [
-                        '*tag*', 'ice', 'ford', 'bmw', 'chrysler', 'infinity', 'jeep', 
+                        'tag', '*tag*', 'ice', 'ford', 'bmw', 'chrysler', 'infinity', 'jeep', 
                         'audi', 'buick', 'toyota', 'tesla', 'honda', 'lexus', 
                         'volkswagon', 'dodge', 'nissan', 'subaru', 'lincon', 'lincoln', 'chevy'
                     ];
@@ -307,7 +307,7 @@ async function generateProductsJson() {
 
                 // Filter out unwanted test/demo products early
                 const excludedProducts = [
-                    '*tag*', 'ice', 'ford', 'bmw', 'chrysler', 'infinity', 'jeep', 
+                    'tag', '*tag*', 'ice', 'ford', 'bmw', 'chrysler', 'infinity', 'jeep', 
                     'audi', 'buick', 'toyota', 'tesla', 'honda', 'lexus', 
                     'volkswagon', 'dodge', 'nissan', 'subaru', 'lincon', 'lincoln', 'chevy'
                 ];
