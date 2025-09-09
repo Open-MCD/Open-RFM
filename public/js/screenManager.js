@@ -741,6 +741,11 @@ class ScreenManager {
                         gridItem.innerHTML = cellData.innerHTML;
                     }
                     
+                    // Add delete button for all filled items
+                    if (cellData.buttonType && window.addDeleteButtonToGridItem) {
+                        window.addDeleteButtonToGridItem(gridItem);
+                    }
+                    
                     // Restore edit button for screen buttons
                     if (cellData.buttonType === 'screen' && cellData.screenButtonId && window.addEditButtonToGridItem) {
                         window.addEditButtonToGridItem(gridItem, cellData.screenButtonId);

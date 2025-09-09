@@ -394,9 +394,37 @@ function parseButtonData(buttonElement) {
             const screenParam = action.querySelector('Parameter[name="ScreenNumber"]');
             if (screenParam) {
                 const targetScreen = screenParam.getAttribute('value');
+                const buttonId = `screen-${targetScreen}`;
+                
+                // Create screen button object and add to screenButtons array if not already exists
+                if (window.screenButtons && !window.screenButtons.find(b => b.id === buttonId)) {
+                    const screenButtonObj = {
+                        id: buttonId,
+                        title: displayTitle.replace(/\\n/g, '\\n'), // Ensure proper escaping
+                        bitmap: bitmap,
+                        bgup: buttonElement.getAttribute('bgup') || 'WHITE',
+                        textup: buttonElement.getAttribute('textup') || 'BLACK',
+                        bgdn: buttonElement.getAttribute('bgdn') || 'BLACK',
+                        textdn: buttonElement.getAttribute('textdn') || 'WHITE',
+                        keyscan: buttonElement.getAttribute('keyscan') || '0',
+                        keyshift: buttonElement.getAttribute('keyshift') || '0',
+                        actions: [{
+                            type: 'onclick',
+                            workflow: workflow,
+                            params: {
+                                ScreenNumber: targetScreen
+                            }
+                        }]
+                    };
+                    window.screenButtons.push(screenButtonObj);
+                    console.log(`Added screen button ${buttonId} to screenButtons array`);
+                } else {
+                    console.log(`Screen button ${buttonId} already exists`);
+                }
+                
                 return {
                     index: parseInt(buttonElement.getAttribute('number')) - 1,
-                    screenButtonId: `screen-${targetScreen}`,
+                    screenButtonId: buttonId,
                     buttonType: 'screen',
                     customScreenNumber: targetScreen,
                     originalXML: originalXML,

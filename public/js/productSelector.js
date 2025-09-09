@@ -898,6 +898,32 @@ function selectSpecialButton(buttonId) {
         
         gridItem.dataset.buttonType = buttonType;
         
+        // For screen buttons, extract and set the default screen number
+        if (buttonType === 'screen') {
+            // Find the default screen number from the button's actions
+            let defaultScreenNumber = null;
+            if (button.actions && button.actions.length > 0) {
+                const showScreenAction = button.actions.find(action => 
+                    action.workflow === 'WF_ShowScreen' || action.workflow === 'WF_ShowFloatScreen'
+                );
+                if (showScreenAction && showScreenAction.params && showScreenAction.params.ScreenNumber) {
+                    defaultScreenNumber = showScreenAction.params.ScreenNumber;
+                }
+            }
+            
+            // Set the custom screen number to the default value
+            if (defaultScreenNumber) {
+                gridItem.dataset.customScreenNumber = defaultScreenNumber;
+                console.log(`Set default screen number ${defaultScreenNumber} for screen button ${buttonId}`);
+                
+                // Create the go-to button with the default screen number
+                updateGoToButton(gridItem, defaultScreenNumber);
+            }
+        }
+        
+        // Add delete button overlay for all button types
+        addDeleteButtonToGridItem(gridItem);
+        
         // Add edit button overlay for screen buttons
         if (buttonType === 'screen') {
             addEditButtonToGridItem(gridItem, buttonId);
@@ -944,6 +970,9 @@ function selectProduct(productCode) {
         gridItem.dataset.productCode = productCode;
         gridItem.dataset.buttonType = 'product';
         
+        // Add delete button overlay for products
+        addDeleteButtonToGridItem(gridItem);
+        
         // Save to screen manager if available
         if (window.screenManager) {
             window.screenManager.saveCurrentGridState();
@@ -962,6 +991,149 @@ function closeProductSelector() {
     currentGridPosition = null;
 }
 
+// Function to update or create the go-to button for a screen button
+function updateGoToButton(gridItem, targetScreenNumber) {
+    // Remove existing go-to button
+    const existingGoToBtn = gridItem.querySelector('.grid-goto-btn');
+    if (existingGoToBtn) {
+        existingGoToBtn.remove();
+    }
+    
+    // Create new go-to button if we have a valid screen number
+    if (targetScreenNumber) {
+        const goToButton = document.createElement('button');
+        goToButton.className = 'grid-goto-btn';
+        goToButton.innerHTML = '➤';
+        goToButton.title = `Go to Screen ${targetScreenNumber}`;
+        goToButton.style.cssText = `
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        `;
+
+        goToButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            goToScreen(targetScreenNumber);
+        });
+
+        // Add hover effects
+        goToButton.addEventListener('mouseenter', () => {
+            goToButton.style.background = '#218838';
+            goToButton.style.transform = 'scale(1.1)';
+        });
+
+        goToButton.addEventListener('mouseleave', () => {
+            goToButton.style.background = '#28a745';
+            goToButton.style.transform = 'scale(1)';
+        });
+        
+        // Ensure grid item has relative positioning
+        gridItem.style.position = 'relative';
+        
+        // Add the button
+        gridItem.appendChild(goToButton);
+    }
+}
+
+// Function to add delete button overlay to any filled grid item
+function addDeleteButtonToGridItem(gridItem) {
+    // Remove any existing delete button first
+    const existingDeleteBtn = gridItem.querySelector('.grid-delete-btn');
+    if (existingDeleteBtn) {
+        existingDeleteBtn.remove();
+    }
+    
+    // Create delete button overlay (bottom-right)
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'grid-delete-btn';
+    deleteButton.innerHTML = '🗑️';
+    deleteButton.title = 'Delete item';
+    deleteButton.style.cssText = `
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 18px;
+        height: 18px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    `;
+    
+    deleteButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        deleteGridItem(gridItem);
+    });
+    
+    // Add hover effects for delete button
+    deleteButton.addEventListener('mouseenter', () => {
+        deleteButton.style.background = '#c82333';
+        deleteButton.style.transform = 'scale(1.1)';
+    });
+    
+    deleteButton.addEventListener('mouseleave', () => {
+        deleteButton.style.background = '#dc3545';
+        deleteButton.style.transform = 'scale(1)';
+    });
+    
+    // Ensure the grid item has relative positioning
+    gridItem.style.position = 'relative';
+    
+    // Add delete button to the grid item
+    gridItem.appendChild(deleteButton);
+}
+
+// Function to delete a grid item
+function deleteGridItem(gridItem) {
+    // Confirm deletion
+    if (!confirm('Are you sure you want to delete this item?')) {
+        return;
+    }
+    
+    // Clear all data attributes
+    delete gridItem.dataset.productCode;
+    delete gridItem.dataset.specialButtonId;
+    delete gridItem.dataset.numberButtonId;
+    delete gridItem.dataset.screenButtonId;
+    delete gridItem.dataset.pageButtonId;
+    delete gridItem.dataset.buttonType;
+    delete gridItem.dataset.customScreenNumber;
+    
+    // Clear the grid item content and styling
+    gridItem.innerHTML = `<div style="font-size: 10px; color: #666; text-align: center;">Click to<br>select product</div>`;
+    gridItem.style.backgroundColor = '';
+    gridItem.style.position = '';
+    
+    // Save to screen manager if available
+    if (window.screenManager) {
+        window.screenManager.saveCurrentGridState();
+    }
+    
+    console.log('Grid item deleted');
+}
+
 // Function to add edit button overlay to grid item for screen buttons
 function addEditButtonToGridItem(gridItem, buttonId) {
     // Remove any existing edit and go-to buttons first
@@ -977,48 +1149,54 @@ function addEditButtonToGridItem(gridItem, buttonId) {
     // Get the screen number from the grid item data
     const targetScreenNumber = gridItem.dataset.customScreenNumber;
     
-    // Create "Go To" button (top-left)
-    const goToButton = document.createElement('button');
-    goToButton.className = 'grid-goto-btn';
-    goToButton.innerHTML = '➤';
-    goToButton.title = `Go to Screen ${targetScreenNumber}`;
-    goToButton.style.cssText = `
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        width: 18px;
-        height: 18px;
-        background: #28a745;
-        color: white;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-        font-size: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 100;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    `;
+    // Create "Go To" button only if we have a valid screen number
+    if (targetScreenNumber) {
+        // Create "Go To" button (top-left)
+        const goToButton = document.createElement('button');
+        goToButton.className = 'grid-goto-btn';
+        goToButton.innerHTML = '➤';
+        goToButton.title = `Go to Screen ${targetScreenNumber}`;
+        goToButton.style.cssText = `
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        `;
+
+        goToButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            goToScreen(targetScreenNumber);
+        });
+
+        // Add hover effects for go-to button
+        goToButton.addEventListener('mouseenter', () => {
+            goToButton.style.background = '#218838';
+            goToButton.style.transform = 'scale(1.1)';
+        });
+
+        goToButton.addEventListener('mouseleave', () => {
+            goToButton.style.background = '#28a745';
+            goToButton.style.transform = 'scale(1)';
+        });
+        
+        // Add the go-to button to the grid item
+        gridItem.appendChild(goToButton);
+    }
     
-    goToButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        goToScreen(targetScreenNumber);
-    });
-    
-    // Add hover effects for go-to button
-    goToButton.addEventListener('mouseenter', () => {
-        goToButton.style.background = '#218838';
-        goToButton.style.transform = 'scale(1.1)';
-    });
-    
-    goToButton.addEventListener('mouseleave', () => {
-        goToButton.style.background = '#28a745';
-        goToButton.style.transform = 'scale(1)';
-    });
-    
-    // Create edit button overlay (top-right)
+    // Create edit button overlay (top-right) - always create this for screen buttons
     const editButton = document.createElement('button');
     editButton.className = 'grid-edit-btn';
     editButton.innerHTML = '✏️';
@@ -1062,8 +1240,7 @@ function addEditButtonToGridItem(gridItem, buttonId) {
     // Ensure the grid item has relative positioning
     gridItem.style.position = 'relative';
     
-    // Add both buttons to the grid item
-    gridItem.appendChild(goToButton);
+    // Add the edit button (always)
     gridItem.appendChild(editButton);
 }
 
@@ -1115,8 +1292,12 @@ function showNotificationMessage(message, backgroundColor) {
 
 // Function to edit screen button's ScreenNumber for a placed button in the grid
 function editPlacedScreenButtonScreenNumber(buttonId, gridItem) {
-    // Find the screen button
-    const screenButton = screenButtons.find(b => b.id === buttonId);
+    // Find the screen button - search in the global window.screenButtons first, then fallback to local
+    let screenButton = window.screenButtons ? window.screenButtons.find(b => b.id === buttonId) : null;
+    if (!screenButton) {
+        screenButton = screenButtons.find(b => b.id === buttonId);
+    }
+    
     if (!screenButton) {
         alert('Screen button not found!');
         return;
@@ -1248,8 +1429,12 @@ function editPlacedScreenButtonScreenNumber(buttonId, gridItem) {
 
 // Function to update screen button's ScreenNumber parameter for placed button
 function updatePlacedScreenButtonScreenNumber(buttonId, newScreenNumber, gridItem) {
-    // Find and update the screen button
-    const screenButton = screenButtons.find(b => b.id === buttonId);
+    // Find and update the screen button - search in global window.screenButtons first, then fallback to local
+    let screenButton = window.screenButtons ? window.screenButtons.find(b => b.id === buttonId) : null;
+    if (!screenButton) {
+        screenButton = screenButtons.find(b => b.id === buttonId);
+    }
+    
     if (!screenButton) {
         alert('Screen button not found!');
         return;
@@ -1266,6 +1451,9 @@ function updatePlacedScreenButtonScreenNumber(buttonId, newScreenNumber, gridIte
             
             // Store the custom screen number on the grid item
             gridItem.dataset.customScreenNumber = newScreenNumber;
+            
+            // Update just the go-to button with the new screen number
+            updateGoToButton(gridItem, newScreenNumber);
             
             // Save to screen manager if available
             if (window.screenManager) {
@@ -1314,5 +1502,13 @@ window.closeProductSelector = closeProductSelector;
 window.selectProduct = selectProduct;
 window.initializeProductSelector = initializeProductSelector;
 window.addEditButtonToGridItem = addEditButtonToGridItem;
+window.addDeleteButtonToGridItem = addDeleteButtonToGridItem;
+window.deleteGridItem = deleteGridItem;
 window.editPlacedScreenButtonScreenNumber = editPlacedScreenButtonScreenNumber;
 window.updatePlacedScreenButtonScreenNumber = updatePlacedScreenButtonScreenNumber;
+window.updateGoToButton = updateGoToButton;
+
+// Export arrays for access by other modules
+window.screenButtons = screenButtons;
+window.specialButtons = specialButtons;
+window.numberButtons = numberButtons;
