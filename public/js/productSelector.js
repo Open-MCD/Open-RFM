@@ -964,16 +964,65 @@ function closeProductSelector() {
 
 // Function to add edit button overlay to grid item for screen buttons
 function addEditButtonToGridItem(gridItem, buttonId) {
-    // Remove any existing edit button first
+    // Remove any existing edit and go-to buttons first
     const existingEditBtn = gridItem.querySelector('.grid-edit-btn');
+    const existingGoToBtn = gridItem.querySelector('.grid-goto-btn');
     if (existingEditBtn) {
         existingEditBtn.remove();
     }
+    if (existingGoToBtn) {
+        existingGoToBtn.remove();
+    }
     
-    // Create edit button overlay
+    // Get the screen number from the grid item data
+    const targetScreenNumber = gridItem.dataset.customScreenNumber;
+    
+    // Create "Go To" button (top-left)
+    const goToButton = document.createElement('button');
+    goToButton.className = 'grid-goto-btn';
+    goToButton.innerHTML = '➤';
+    goToButton.title = `Go to Screen ${targetScreenNumber}`;
+    goToButton.style.cssText = `
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 18px;
+        height: 18px;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    `;
+    
+    goToButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        goToScreen(targetScreenNumber);
+    });
+    
+    // Add hover effects for go-to button
+    goToButton.addEventListener('mouseenter', () => {
+        goToButton.style.background = '#218838';
+        goToButton.style.transform = 'scale(1.1)';
+    });
+    
+    goToButton.addEventListener('mouseleave', () => {
+        goToButton.style.background = '#28a745';
+        goToButton.style.transform = 'scale(1)';
+    });
+    
+    // Create edit button overlay (top-right)
     const editButton = document.createElement('button');
     editButton.className = 'grid-edit-btn';
     editButton.innerHTML = '✏️';
+    editButton.title = 'Edit screen number';
     editButton.style.cssText = `
         position: absolute;
         top: 2px;
@@ -999,7 +1048,7 @@ function addEditButtonToGridItem(gridItem, buttonId) {
         editPlacedScreenButtonScreenNumber(buttonId, gridItem);
     });
     
-    // Add hover effects
+    // Add hover effects for edit button
     editButton.addEventListener('mouseenter', () => {
         editButton.style.background = '#0056b3';
         editButton.style.transform = 'scale(1.1)';
@@ -1013,8 +1062,55 @@ function addEditButtonToGridItem(gridItem, buttonId) {
     // Ensure the grid item has relative positioning
     gridItem.style.position = 'relative';
     
-    // Add the edit button to the grid item
+    // Add both buttons to the grid item
+    gridItem.appendChild(goToButton);
     gridItem.appendChild(editButton);
+}
+
+// Function to navigate to a specific screen
+function goToScreen(screenNumber) {
+    if (!window.screenManager) {
+        showNotificationMessage('Screen manager not available', '#dc3545');
+        return;
+    }
+    
+    const targetScreenId = parseInt(screenNumber);
+    
+    // Check if the screen exists
+    if (window.screenManager.screens.has(targetScreenId)) {
+        // Switch to the target screen
+        window.screenManager.switchToScreen(targetScreenId);
+        showNotificationMessage(`Switched to Screen ${targetScreenId}`, '#28a745');
+    } else {
+        // Show error message
+        showNotificationMessage(`No screen with ID ${targetScreenId} found`, '#dc3545');
+    }
+}
+
+// Function to show notification messages (similar to import success messages)
+function showNotificationMessage(message, backgroundColor) {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${backgroundColor};
+        color: white;
+        padding: 12px 20px;
+        border-radius: 4px;
+        z-index: 10001;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    `;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        if (document.body.contains(notification)) {
+            document.body.removeChild(notification);
+        }
+    }, 3000);
 }
 
 // Function to edit screen button's ScreenNumber for a placed button in the grid
