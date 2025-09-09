@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2025-09-09T05:36:56.479Z",
+    "generatedAt": "2025-09-09T06:19:00.700Z",
     "totalProducts": 73,
     "totalSpecialButtons": 25,
     "totalNumberButtons": 10,
@@ -25539,6 +25539,224 @@
   ],
   "specialButtons": [
     {
+      "id": "sr_nsenior",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Sr\\nSenior",
+      "bitmap": "Y1_SNR.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "GOLD",
+      "bgup": "GOLD",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_SizeSelection",
+          "params": {
+            "persists": "true",
+            "Size": "6"
+          }
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_ActivateSelection",
+          "params": {
+            "IsFloat": "false",
+            "Size": "6"
+          }
+        }
+      ]
+    },
+    {
+      "id": "c_nchild",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "C\\nChild",
+      "bitmap": "Y1_CHILD.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "GOLD",
+      "bgup": "GOLD",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_SizeSelection",
+          "params": {
+            "persists": "true",
+            "Size": "5"
+          }
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_ActivateSelection",
+          "params": {
+            "IsFloat": "false",
+            "Size": "5"
+          }
+        }
+      ]
+    },
+    {
+      "id": "small",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Small",
+      "bitmap": "Y1_SMLL.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "GOLD",
+      "bgup": "GOLD",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_SizeSelection",
+          "params": {
+            "persists": "true",
+            "Size": "1"
+          }
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_ActivateSelection",
+          "params": {
+            "IsFloat": "false",
+            "Size": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "medium",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Medium",
+      "bitmap": "Y1_MEDM.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "GOLD",
+      "bgup": "GOLD",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_SizeSelection",
+          "params": {
+            "persists": "true",
+            "Size": "2"
+          }
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_ActivateSelection",
+          "params": {
+            "IsFloat": "false",
+            "Size": "2"
+          }
+        }
+      ]
+    },
+    {
+      "id": "large",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Large",
+      "bitmap": "Y1_LARGE.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "GOLD",
+      "bgup": "GOLD",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_SizeSelection",
+          "params": {
+            "persists": "true",
+            "Size": "3"
+          }
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_ActivateSelection",
+          "params": {
+            "IsFloat": "false",
+            "Size": "3"
+          }
+        }
+      ]
+    },
+    {
+      "id": "loyalty__noffers",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Loyalty \\nOffers",
+      "bitmap": "MyMcD_Rewards_Revised_r1.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BRIGHTWHITE",
+      "textdn": "LIGHTRED",
+      "bgup": "LIGHTRED",
+      "bgdn": "BRIGHTWHITE",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowMobileRecallScreen",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "product_nbuild",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Product\\nBuild",
+      "bitmap": "Show Product Build.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BLACK",
+      "textdn": "WHITE",
+      "bgup": "WHITE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreenJS",
+          "params": {
+            "ScreenNumber": "324"
+          }
+        }
+      ]
+    },
+    {
       "id": "cod_n1",
       "screenNumber": "0",
       "buttonNumber": "0",
@@ -25823,29 +26041,6 @@
       ]
     },
     {
-      "id": "loyalty__noffers",
-      "screenNumber": "0",
-      "buttonNumber": "0",
-      "title": "Loyalty \\nOffers",
-      "bitmap": "MyMcD_Rewards_Revised_r1.png",
-      "keyscan": "1",
-      "keyshift": "1",
-      "textup": "BRIGHTWHITE",
-      "textdn": "LIGHTRED",
-      "bgup": "LIGHTRED",
-      "bgdn": "BRIGHTWHITE",
-      "v": "1",
-      "h": "1",
-      "outageModeButtonDisabled": "true",
-      "actions": [
-        {
-          "type": "onclick",
-          "workflow": "WF_ShowMobileRecallScreen",
-          "params": {}
-        }
-      ]
-    },
-    {
       "id": "employee_nmenu",
       "screenNumber": "0",
       "buttonNumber": "0",
@@ -25866,40 +26061,6 @@
           "workflow": "WF_ShowScreenEx",
           "params": {
             "ScreenNumber": "201"
-          }
-        }
-      ]
-    },
-    {
-      "id": "c_nchild",
-      "screenNumber": "0",
-      "buttonNumber": "0",
-      "title": "C\\nChild",
-      "bitmap": "Y1_CHILD.png",
-      "keyscan": "1",
-      "keyshift": "1",
-      "textup": "BLACK",
-      "textdn": "GOLD",
-      "bgup": "GOLD",
-      "bgdn": "BLACK",
-      "v": "1",
-      "h": "1",
-      "outageModeButtonDisabled": "false",
-      "actions": [
-        {
-          "type": "onclick",
-          "workflow": "WF_SizeSelection",
-          "params": {
-            "persists": "true",
-            "Size": "5"
-          }
-        },
-        {
-          "type": "onactivate",
-          "workflow": "WF_ActivateSelection",
-          "params": {
-            "IsFloat": "false",
-            "Size": "5"
           }
         }
       ]
@@ -25958,40 +26119,6 @@
       ]
     },
     {
-      "id": "small",
-      "screenNumber": "0",
-      "buttonNumber": "0",
-      "title": "Small",
-      "bitmap": "Y1_SMLL.png",
-      "keyscan": "1",
-      "keyshift": "1",
-      "textup": "BLACK",
-      "textdn": "GOLD",
-      "bgup": "GOLD",
-      "bgdn": "BLACK",
-      "v": "1",
-      "h": "1",
-      "outageModeButtonDisabled": "false",
-      "actions": [
-        {
-          "type": "onclick",
-          "workflow": "WF_SizeSelection",
-          "params": {
-            "persists": "true",
-            "Size": "1"
-          }
-        },
-        {
-          "type": "onactivate",
-          "workflow": "WF_ActivateSelection",
-          "params": {
-            "IsFloat": "false",
-            "Size": "1"
-          }
-        }
-      ]
-    },
-    {
       "id": "clear_nchoice",
       "screenNumber": "0",
       "buttonNumber": "0",
@@ -26022,40 +26149,6 @@
       ]
     },
     {
-      "id": "medium",
-      "screenNumber": "0",
-      "buttonNumber": "0",
-      "title": "Medium",
-      "bitmap": "Y1_MEDM.png",
-      "keyscan": "1",
-      "keyshift": "1",
-      "textup": "BLACK",
-      "textdn": "GOLD",
-      "bgup": "GOLD",
-      "bgdn": "BLACK",
-      "v": "1",
-      "h": "1",
-      "outageModeButtonDisabled": "false",
-      "actions": [
-        {
-          "type": "onclick",
-          "workflow": "WF_SizeSelection",
-          "params": {
-            "persists": "true",
-            "Size": "2"
-          }
-        },
-        {
-          "type": "onactivate",
-          "workflow": "WF_ActivateSelection",
-          "params": {
-            "IsFloat": "false",
-            "Size": "2"
-          }
-        }
-      ]
-    },
-    {
       "id": "side_nchoice",
       "screenNumber": "0",
       "buttonNumber": "0",
@@ -26081,40 +26174,6 @@
       ]
     },
     {
-      "id": "large",
-      "screenNumber": "0",
-      "buttonNumber": "0",
-      "title": "Large",
-      "bitmap": "Y1_LARGE.png",
-      "keyscan": "1",
-      "keyshift": "1",
-      "textup": "BLACK",
-      "textdn": "GOLD",
-      "bgup": "GOLD",
-      "bgdn": "BLACK",
-      "v": "1",
-      "h": "1",
-      "outageModeButtonDisabled": "false",
-      "actions": [
-        {
-          "type": "onclick",
-          "workflow": "WF_SizeSelection",
-          "params": {
-            "persists": "true",
-            "Size": "3"
-          }
-        },
-        {
-          "type": "onactivate",
-          "workflow": "WF_ActivateSelection",
-          "params": {
-            "IsFloat": "false",
-            "Size": "3"
-          }
-        }
-      ]
-    },
-    {
       "id": "void_nitem",
       "screenNumber": "0",
       "buttonNumber": "0",
@@ -26134,31 +26193,6 @@
           "type": "onclick",
           "workflow": "WF_DoVoidLineEx",
           "params": {}
-        }
-      ]
-    },
-    {
-      "id": "product_nbuild",
-      "screenNumber": "0",
-      "buttonNumber": "0",
-      "title": "Product\\nBuild",
-      "bitmap": "Show Product Build.png",
-      "keyscan": "0",
-      "keyshift": "0",
-      "textup": "BLACK",
-      "textdn": "WHITE",
-      "bgup": "WHITE",
-      "bgdn": "BLACK",
-      "v": "1",
-      "h": "1",
-      "outageModeButtonDisabled": "true",
-      "actions": [
-        {
-          "type": "onclick",
-          "workflow": "WF_ShowScreenJS",
-          "params": {
-            "ScreenNumber": "324"
-          }
         }
       ]
     },
@@ -26192,40 +26226,6 @@
           "params": {
             "ButtonNumber": "0",
             "POD": "DRIVE_THRU"
-          }
-        }
-      ]
-    },
-    {
-      "id": "sr_nsenior",
-      "screenNumber": "0",
-      "buttonNumber": "0",
-      "title": "Sr\\nSenior",
-      "bitmap": "Y1_SNR.png",
-      "keyscan": "1",
-      "keyshift": "1",
-      "textup": "BLACK",
-      "textdn": "GOLD",
-      "bgup": "GOLD",
-      "bgdn": "BLACK",
-      "v": "1",
-      "h": "1",
-      "outageModeButtonDisabled": "false",
-      "actions": [
-        {
-          "type": "onclick",
-          "workflow": "WF_SizeSelection",
-          "params": {
-            "persists": "true",
-            "Size": "6"
-          }
-        },
-        {
-          "type": "onactivate",
-          "workflow": "WF_ActivateSelection",
-          "params": {
-            "IsFloat": "false",
-            "Size": "6"
           }
         }
       ]
