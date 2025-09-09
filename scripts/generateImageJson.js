@@ -10,6 +10,7 @@ const namesDbPath = path.join(xmlDir, 'names-db.xml');
 const productDbPath = path.join(xmlDir, 'product-db.xml');
 const storeDbPath = path.join(xmlDir, 'store-db.xml');
 const screenDbPath = path.join(xmlDir, 'screen.xml');
+const specialButtonsPath = path.join(xmlDir, 'special-buttons.xml');
 
 // Parse XML to JavaScript object
 async function parseXmlFile(filePath) {
@@ -105,6 +106,87 @@ function isIngredientOrComponent(nameInfo, productCode) {
     return hasExcludePattern || isIngredientCode;
 }
 
+// Function to parse special buttons from manual XML file
+async function parseSpecialButtonsXml() {
+    const specialButtonsFromManual = [];
+    
+    try {
+        if (!fs.existsSync(specialButtonsPath)) {
+            console.log('special-buttons.xml not found, skipping manual special buttons');
+            return specialButtonsFromManual;
+        }
+        
+        const specialButtonsContent = fs.readFileSync(specialButtonsPath, 'utf8');
+        const parser = new xml2js.Parser({ 
+            explicitArray: false,
+            mergeAttrs: true 
+        });
+        
+        const specialButtonsData = await parser.parseStringPromise(specialButtonsContent);
+        
+        if (specialButtonsData && specialButtonsData.SpecialButtons && specialButtonsData.SpecialButtons.Button) {
+            const buttons = Array.isArray(specialButtonsData.SpecialButtons.Button) 
+                ? specialButtonsData.SpecialButtons.Button 
+                : [specialButtonsData.SpecialButtons.Button];
+            
+            buttons.forEach(button => {
+                if (button && button.title) {
+                    // Extract actions if they exist
+                    const extractedActions = [];
+                    if (button.Action) {
+                        const actions = Array.isArray(button.Action) ? button.Action : [button.Action];
+                        
+                        actions.forEach(action => {
+                            const params = {};
+                            if (action.Parameter) {
+                                const parameters = Array.isArray(action.Parameter) ? action.Parameter : [action.Parameter];
+                                parameters.forEach(param => {
+                                    if (param.name && param.value !== undefined) {
+                                        params[param.name] = param.value;
+                                    }
+                                });
+                            }
+                            extractedActions.push({
+                                type: action.type,
+                                workflow: action.workflow,
+                                params: params
+                            });
+                        });
+                    }
+                    
+                    // Create special button object
+                    const specialButton = {
+                        id: (button.title || '').replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase(),
+                        screenNumber: button.screenNumber || '0',
+                        buttonNumber: button.buttonNumber || '0',
+                        title: button.title || '',
+                        bitmap: button.bitmap || '',
+                        keyscan: button.keyscan || '0',
+                        keyshift: button.keyshift || '0',
+                        textup: button.textup || 'BLACK',
+                        textdn: button.textdn || 'WHITE',
+                        bgup: button.bgup || 'WHITE',
+                        bgdn: button.bgdn || 'BLACK',
+                        v: button.v || '1',
+                        h: button.h || '1',
+                        outageModeButtonDisabled: button.outageModeButtonDisabled || 'false',
+                        actions: extractedActions
+                    };
+                    
+                    specialButtonsFromManual.push(specialButton);
+                }
+            });
+        }
+        
+        console.log(`Loaded ${specialButtonsFromManual.length} special buttons from special-buttons.xml`);
+        
+    } catch (error) {
+        console.error('Error parsing special-buttons.xml:', error.message);
+    }
+    
+    return specialButtonsFromManual;
+}
+
 // Convert XML data to consolidated JSON
 async function generateProductsJson() {
     console.log('Starting XML to JSON conversion...');
@@ -124,14 +206,15 @@ async function generateProductsJson() {
 
     console.log('XML files parsed successfully');
     
+    // Load special buttons from manual XML file
+    const specialButtonsFromScreen = await parseSpecialButtonsXml();
+    
     // Extract button styling from screen.xml
     const buttonStyling = new Map();
-    const specialButtonsFromScreen = [];
     const numbersFromScreen = [];
     const pagesFromScreen = [];
     
     // Use Maps to track unique buttons and avoid duplicates
-    const uniqueSpecialButtons = new Map();
     const uniqueNumberButtons = new Map();
     const uniquePageButtons = new Map();
     
@@ -176,7 +259,7 @@ async function generateProductsJson() {
                             outageModeButtonDisabled: button.outageModeButtonDisabled || 'false'
                         });
                     } else if (button && button.Action && !button.productCode) {
-                        // Special buttons without productCode
+                        // Extract only numbers and pages, special buttons come from manual file
                         const actions = Array.isArray(button.Action) ? button.Action : [button.Action];
                         
                         // Extract all actions and parameters
@@ -197,13 +280,16 @@ async function generateProductsJson() {
                             };
                         });
                         
-                        // Create unique key based on title, bitmap, and primary workflow
-                        const primaryWorkflow = extractedActions.find(a => a.type === 'onclick')?.workflow || 
-                                             extractedActions[0]?.workflow || '';
-                        const uniqueKey = `${button.title || 'untitled'}_${button.bitmap || 'nobitmap'}_${primaryWorkflow}`;
+                        // Create unique key based on normalized title
+                        const normalizedTitle = (button.title || '').toLowerCase()
+                            .replace(/\\n/g, ' ')
+                            .replace(/\s+/g, ' ')
+                            .trim();
                         
-                        // Create special button object
-                        const specialButton = {
+                        const uniqueKey = normalizedTitle || 'untitled';
+                        
+                        // Create button object
+                        const buttonObj = {
                             id: uniqueKey.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase(),
                             screenNumber: screen.number,
                             buttonNumber: button.number,
@@ -221,7 +307,7 @@ async function generateProductsJson() {
                             actions: extractedActions
                         };
                         
-                        // Categorize the button and add to appropriate unique collection
+                        // Only categorize numbers and pages, skip special buttons
                         const buttonTitle = (button.title || '').trim();
                         const isNumberButton = /^[0-9]$/.test(buttonTitle);
                         const hasShowScreenAction = extractedActions.some(action => 
@@ -229,25 +315,23 @@ async function generateProductsJson() {
                         );
                         
                         if (isNumberButton) {
-                            uniqueNumberButtons.set(uniqueKey, specialButton);
+                            uniqueNumberButtons.set(uniqueKey, buttonObj);
                         } else if (hasShowScreenAction) {
-                            uniquePageButtons.set(uniqueKey, specialButton);
-                        } else {
-                            uniqueSpecialButtons.set(uniqueKey, specialButton);
+                            uniquePageButtons.set(uniqueKey, buttonObj);
                         }
+                        // Skip special buttons - they come from manual file
                     }
                 });
             }
         });
     }
     
-    // Convert Maps to arrays
-    specialButtonsFromScreen.push(...Array.from(uniqueSpecialButtons.values()));
+    // Convert Maps to arrays (special buttons already loaded from manual file)
     numbersFromScreen.push(...Array.from(uniqueNumberButtons.values()));
     pagesFromScreen.push(...Array.from(uniquePageButtons.values()));
     
     console.log(`Extracted styling for ${buttonStyling.size} products from screen.xml`);
-    console.log(`Extracted ${specialButtonsFromScreen.length} unique special buttons from screen.xml`);
+    console.log(`Loaded ${specialButtonsFromScreen.length} special buttons from manual XML`);
     console.log(`Extracted ${numbersFromScreen.length} unique number buttons from screen.xml`);
     console.log(`Extracted ${pagesFromScreen.length} unique page buttons from screen.xml`);
     

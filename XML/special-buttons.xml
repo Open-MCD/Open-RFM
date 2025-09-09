@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SpecialButtons>
+    <!-- Paste your special button XML blocks here -->
+    <!-- Each button should be separated by a blank line -->
+    <!-- Example format: -->
+    
+    <Button number="70" category="1" title="VOID\nITEM" keyscan="0" keyshift="0"
+        bitmap="Modifiers_VoidLine.png" bitmapdn="" textup="WHITE" textdn="LIGHTRED"
+        bgup="LIGHTRED" bgdn="WHITE" v="1" h="1" outageModeButtonDisabled="false">
+        <Action type="onclick" workflow="WF_DoVoidLineEx"></Action>
+        <Language code="en_US" name="English" parent="en">
+            <title>VOID\nITEM</title>
+            <bitmap>Modifiers_VoidLine.png</bitmap>
+        </Language>
+    </Button>
+
+    <Button number="4" category="1" title="Multi\nOrder" keyscan="0" keyshift="0"
+        bitmap="G1_MLTORDOFF.png" bitmapdn="G1_MLTORDON.png" textup="BLACK" textdn="WHITE"
+        bgup="WHITE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+        <Action type="onclick" workflow="WF_MultiOrder"></Action>
+        <Action type="onactivate" workflow="WF_ShowBtnMultiOrd">
+            <Parameter name="ButtonNumber" value="0" />
+        </Action>
+        <Language code="en_US" name="English" parent="en">
+            <title>Multi\nOrder</title>
+            <bitmap>G1_MLTORDOFF.png</bitmap>
+            <bitmapdn>G1_MLTORDON.png</bitmapdn>
+        </Language>
+    </Button>
+
+    <Button number="9" category="1" title="Grill" keyscan="1" keyshift="1" bitmap="G1_GRLL.png"
+        bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+        outageModeButtonDisabled="false">
+        <Action type="onclick" workflow="WF_DoGrillStart">
+            <Parameter name="ScreenNumber" value="199" />
+        </Action>
+        <Language code="en_US" name="English" parent="en">
+            <title>Grill</title>
+            <bitmap>G1_GRLL.png</bitmap>
+        </Language>
+    </Button>
+
+    <!-- Add more buttons here, separated by blank lines -->
+
+</SpecialButtons>
