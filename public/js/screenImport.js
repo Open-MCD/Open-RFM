@@ -318,13 +318,20 @@ function parseButtonData(buttonElement) {
     const bitmap = buttonElement.getAttribute('bitmap') || '';
     const productCode = buttonElement.getAttribute('productCode');
     
+    // Get the title from Language section if available, otherwise use main title
+    let displayTitle = title;
+    const languageElement = buttonElement.querySelector('Language[code="en_US"] title, Language title');
+    if (languageElement) {
+        displayTitle = languageElement.textContent || title;
+    }
+    
     // Check if it's a product button
     if (productCode) {
         return {
             index: parseInt(buttonElement.getAttribute('number')) - 1,
             productCode: productCode,
             buttonType: 'product',
-            innerHTML: createProductButtonHTML(title, bitmap, productCode)
+            innerHTML: createProductButtonHTML(displayTitle, bitmap, productCode)
         };
     }
     
@@ -341,7 +348,7 @@ function parseButtonData(buttonElement) {
                     screenButtonId: `screen-${targetScreen}`,
                     buttonType: 'screen',
                     customScreenNumber: targetScreen,
-                    innerHTML: createScreenButtonHTML(title, bitmap, targetScreen)
+                    innerHTML: createScreenButtonHTML(displayTitle, bitmap, targetScreen)
                 };
             }
         }
@@ -352,7 +359,7 @@ function parseButtonData(buttonElement) {
         index: parseInt(buttonElement.getAttribute('number')) - 1,
         specialButtonId: `imported-${Date.now()}-${Math.random()}`,
         buttonType: 'special',
-        innerHTML: createGenericButtonHTML(title, bitmap)
+        innerHTML: createGenericButtonHTML(displayTitle, bitmap)
     };
 }
 
@@ -368,12 +375,16 @@ function createProductButtonHTML(title, bitmap, productCode) {
     const displayImage = product ? product.image : bitmap;
     
     if (displayImage) {
-        // If we have an image, use the same format as working products
+        // If we have an image, use the same format as working products but with fallback text
         return `<img src="/NP6-Images/${displayImage}" alt="${displayTitle}" style="
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
-                " onerror="this.style.display='none'; this.parentElement.style.backgroundColor='#f8f8f8';">`;
+                " onerror="
+                    this.style.display='none'; 
+                    this.parentElement.style.backgroundColor='#f8f8f8';
+                    this.parentElement.innerHTML='<div style=\\'width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-color: #f8f8f8; color: #333; font-size: 10px; text-align: center; line-height: 1.2; padding: 4px; box-sizing: border-box;\\'>${displayTitle.replace(/\\n/g, '<br>')}</div>';
+                ">`;
     } else {
         // If no image, show text directly
         return `<div style="
@@ -498,17 +509,6 @@ function createGenericButtonHTML(title, bitmap) {
                     ${title.replace(/\\n/g, '<br>')}
                 </div>
             `}
-            <div style="
-                position: absolute;
-                top: 2px;
-                right: 2px;
-                background: rgba(255, 255, 255, 0.2);
-                color: white;
-                font-size: 8px;
-                padding: 1px 3px;
-                border-radius: 2px;
-                z-index: 1;
-            ">IMP</div>
         </div>
     `;
 }
