@@ -877,6 +877,11 @@ function selectSpecialButton(buttonId) {
         // Store special button data on the grid item
         gridItem.dataset.specialButtonId = buttonId;
         gridItem.dataset.buttonType = 'special';
+        
+        // Save to screen manager if available
+        if (window.screenManager) {
+            window.screenManager.saveCurrentGridState();
+        }
     }
     
     closeProductSelector();
@@ -913,6 +918,11 @@ function selectProduct(productCode) {
         // Store product data on the grid item
         gridItem.dataset.productCode = productCode;
         gridItem.dataset.buttonType = 'product';
+        
+        // Save to screen manager if available
+        if (window.screenManager) {
+            window.screenManager.saveCurrentGridState();
+        }
     }
     
     closeProductSelector();
