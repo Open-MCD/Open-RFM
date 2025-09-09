@@ -59,10 +59,10 @@ function exportScreenXML() {
             if (button) {
                 const title = button.title.replace(/\n/g, ' ').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
                 const bitmap = button.bitmap || '';
-                const bgup = button.colors.bgup;
-                const textup = button.colors.textup;
-                const bgdn = button.colors.bgdn || 'BLACK';
-                const textdn = button.colors.textdn || 'WHITE';
+                const bgup = button.bgup || 'WHITE';
+                const textup = button.textup || 'BLACK';
+                const bgdn = button.bgdn || 'BLACK';
+                const textdn = button.textdn || 'WHITE';
                 const keyscan = button.keyscan || '1';
                 const keyshift = button.keyshift || '1';
                 const outageModeButtonDisabled = button.outageModeButtonDisabled || 'true';

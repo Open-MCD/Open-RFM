@@ -382,9 +382,8 @@ function renderSpecialButtonsList(searchTerm = '') {
         const imageHtml = imageUrl 
             ? `<img src="${imageUrl}" alt="${button.title}" style="
                 width: 100%;
-                height: 80px;
+                height: 100%;
                 object-fit: cover;
-                border-radius: 4px;
                 margin-bottom: 5px;
             " onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`
             : '';
@@ -392,7 +391,7 @@ function renderSpecialButtonsList(searchTerm = '') {
         const placeholderHtml = `
             <div style="
                 width: 100%;
-                height: 80px;
+                height: 100%;
                 background: #f8f9fa;
                 border: 1px solid #dee2e6;
                 display: ${imageUrl ? 'none' : 'flex'};
@@ -401,7 +400,6 @@ function renderSpecialButtonsList(searchTerm = '') {
                 font-size: 12px;
                 color: #6c757d;
                 text-align: center;
-                border-radius: 4px;
                 margin-bottom: 5px;
             ">
                 Special Button
@@ -424,8 +422,25 @@ function renderSpecialButtonsList(searchTerm = '') {
                 font-weight: bold;
                 font-family: Arial, sans-serif;
             ">
-                ${imageHtml}
-                ${placeholderHtml}
+                <div style="
+                    width: 100%;
+                    height: 0;
+                    padding-bottom: 75%;
+                    position: relative;
+                    margin-bottom: 10px;
+                    overflow: hidden;
+                ">
+                    <div style="
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                    ">
+                        ${imageHtml}
+                        ${placeholderHtml}
+                    </div>
+                </div>
                 <div style="font-size: 12px; line-height: 1.2;">
                     ${button.title.replace(/\\n/g, '<br>')}
                 </div>
@@ -446,7 +461,7 @@ function renderSpecialButtonsList(searchTerm = '') {
     }).join('');
     
     container.innerHTML = `
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px;">
             ${specialButtonsHtml}
         </div>
         ${filteredButtons.length === 0 ? '<p style="text-align: center; color: #666; font-family: Arial, sans-serif; margin-top: 50px;">No special buttons found matching your search.</p>' : ''}
@@ -546,9 +561,8 @@ function renderButtonCategory(buttons, container, buttonType, searchTerm = '') {
         const imageHtml = imageUrl 
             ? `<img src="${imageUrl}" alt="${button.title}" style="
                 width: 100%;
-                height: 80px;
+                height: 100%;
                 object-fit: cover;
-                border-radius: 4px;
                 margin-bottom: 5px;
             " onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`
             : '';
@@ -556,7 +570,7 @@ function renderButtonCategory(buttons, container, buttonType, searchTerm = '') {
         const placeholderHtml = `
             <div style="
                 width: 100%;
-                height: 80px;
+                height: 100%;
                 background: #f8f9fa;
                 border: 1px solid #dee2e6;
                 display: ${imageUrl ? 'none' : 'flex'};
@@ -565,7 +579,6 @@ function renderButtonCategory(buttons, container, buttonType, searchTerm = '') {
                 font-size: 12px;
                 color: #6c757d;
                 text-align: center;
-                border-radius: 4px;
                 margin-bottom: 5px;
             ">
                 ${buttonType} Button
@@ -588,8 +601,25 @@ function renderButtonCategory(buttons, container, buttonType, searchTerm = '') {
                 font-weight: bold;
                 font-family: Arial, sans-serif;
             ">
-                ${imageHtml}
-                ${placeholderHtml}
+                <div style="
+                    width: 100%;
+                    height: 0;
+                    padding-bottom: 75%;
+                    position: relative;
+                    margin-bottom: 10px;
+                    overflow: hidden;
+                ">
+                    <div style="
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                    ">
+                        ${imageHtml}
+                        ${placeholderHtml}
+                    </div>
+                </div>
                 <div style="font-size: 12px; line-height: 1.2;">
                     ${button.title.replace(/\\n/g, '<br>')}
                 </div>
@@ -611,7 +641,7 @@ function renderButtonCategory(buttons, container, buttonType, searchTerm = '') {
     container.innerHTML = `
         <div style="
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            grid-template-columns: repeat(7, 1fr);
             gap: 15px;
         ">
             ${buttonsHtml}
@@ -678,7 +708,6 @@ function renderProductsList(searchTerm = '') {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
-                border-radius: 4px;
             " onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`
             : '';
         
@@ -694,7 +723,6 @@ function renderProductsList(searchTerm = '') {
                 font-size: 12px;
                 color: #6c757d;
                 text-align: center;
-                border-radius: 4px;
             ">
                 ${imageUrl ? 'Image not found' : 'No Image'}<br>
                 <small>${product.productCode}</small>
@@ -711,13 +739,22 @@ function renderProductsList(searchTerm = '') {
             ">
                 <div style="
                     width: 100%;
-                    height: 100px;
+                    height: 0;
+                    padding-bottom: 75%;
                     position: relative;
                     margin-bottom: 10px;
                     overflow: hidden;
                 ">
-                    ${imageHtml}
-                    ${placeholderHtml}
+                    <div style="
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                    ">
+                        ${imageHtml}
+                        ${placeholderHtml}
+                    </div>
                 </div>
                 <h4 style="margin: 0 0 5px 0; font-size: 14px; font-family: Arial, sans-serif;">
                     ${product.longName || product.shortName || 'Unnamed Product'}
@@ -743,7 +780,7 @@ function renderProductsList(searchTerm = '') {
     }).join('');
     
     container.innerHTML = `
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;">
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px;">
             ${productsHtml}
         </div>
         ${filteredProducts.length === 0 ? '<p style="text-align: center; color: #666; font-family: Arial, sans-serif; margin-top: 50px;">No products found matching your search.</p>' : ''}
