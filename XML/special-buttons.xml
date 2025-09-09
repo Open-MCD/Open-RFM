@@ -2,44 +2,376 @@
 <SpecialButtons>
     <!-- Paste your special button XML blocks here -->
     <!-- Each button should be separated by a blank line -->
-    <!-- Example format: -->
     
-    <Button number="70" category="1" title="VOID\nITEM" keyscan="0" keyshift="0"
-        bitmap="Modifiers_VoidLine.png" bitmapdn="" textup="WHITE" textdn="LIGHTRED"
-        bgup="LIGHTRED" bgdn="WHITE" v="1" h="1" outageModeButtonDisabled="false">
-        <Action type="onclick" workflow="WF_DoVoidLineEx"></Action>
-        <Language code="en_US" name="English" parent="en">
-            <title>VOID\nITEM</title>
-            <bitmap>Modifiers_VoidLine.png</bitmap>
-        </Language>
-    </Button>
+        <Button number="1" category="1" title="COD\n1" keyscan="0" keyshift="0" bitmap="G1_COD1.png"
+            bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+            outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_ButtonCOD">
+                <Parameter name="COD" value="1" />
+                <Parameter name="ProductCode" value="1" />
+                <Parameter name="ScreenNumber" value="301" />
+            </Action>
+            <Action type="onactivate" workflow="WF_OnActivate_ChangeButtonCOD">
+                <Parameter name="bitmap" />
+                <Parameter name="bitmapdn" />
+                <Parameter name="ButtonNumber" value="1" />
+                <Parameter name="COD" value="1" />
+                <Parameter name="POD" value="DRIVE_THRU" />
+                <Parameter name="workingMode" value="orderTaker|both" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>COD\n1</title>
+                <bitmap>G1_COD1.png</bitmap>
+            </Language>
+        </Button>
 
-    <Button number="4" category="1" title="Multi\nOrder" keyscan="0" keyshift="0"
-        bitmap="G1_MLTORDOFF.png" bitmapdn="G1_MLTORDON.png" textup="BLACK" textdn="WHITE"
-        bgup="WHITE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
-        <Action type="onclick" workflow="WF_MultiOrder"></Action>
-        <Action type="onactivate" workflow="WF_ShowBtnMultiOrd">
-            <Parameter name="ButtonNumber" value="0" />
-        </Action>
-        <Language code="en_US" name="English" parent="en">
-            <title>Multi\nOrder</title>
-            <bitmap>G1_MLTORDOFF.png</bitmap>
-            <bitmapdn>G1_MLTORDON.png</bitmapdn>
-        </Language>
-    </Button>
+        <Button number="2" category="1" title="COD\n2" keyscan="0" keyshift="0" bitmap="G1_COD2.png"
+            bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+            outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_ButtonCOD">
+                <Parameter name="COD" value="2" />
+                <Parameter name="ProductCode" value="1" />
+                <Parameter name="ScreenNumber" value="301" />
+            </Action>
+            <Action type="onactivate" workflow="WF_OnActivate_ChangeButtonCOD">
+                <Parameter name="bitmap" />
+                <Parameter name="bitmapdn" />
+                <Parameter name="ButtonNumber" value="2" />
+                <Parameter name="COD" value="2" />
+                <Parameter name="POD" value="DRIVE_THRU" />
+                <Parameter name="workingMode" value="orderTaker|both" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>COD\n2</title>
+                <bitmap>G1_COD2.png</bitmap>
+            </Language>
+        </Button>
 
-    <Button number="9" category="1" title="Grill" keyscan="1" keyshift="1" bitmap="G1_GRLL.png"
-        bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
-        outageModeButtonDisabled="false">
-        <Action type="onclick" workflow="WF_DoGrillStart">
-            <Parameter name="ScreenNumber" value="199" />
-        </Action>
-        <Language code="en_US" name="English" parent="en">
-            <title>Grill</title>
-            <bitmap>G1_GRLL.png</bitmap>
-        </Language>
-    </Button>
+        <Button number="3" category="1" title="Image\nRecall" keyscan="1" keyshift="1"
+            bitmap="G1_IMRCL.png" bitmapdn="" textup="BLACK" textdn="WHITE" bgup="SILVER"
+            bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_DoRecallByPreview"></Action>
+            <Action type="onactivate" workflow="WF_HideButtonIfDoesntMatchDTProperties">
+                <Parameter name="ButtonNumber" value="0" />
+                <Parameter name="POD" value="DRIVE_THRU" />
+                <Parameter name="workingMode" value="cashier|both" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Image\nRecall</title>
+                <bitmap>G1_IMRCL.png</bitmap>
+            </Language>
+        </Button>
 
-    <!-- Add more buttons here, separated by blank lines -->
+        <Button number="4" category="1" title="Multi\nOrder" keyscan="0" keyshift="0"
+            bitmap="G1_MLTORDOFF.png" bitmapdn="G1_MLTORDON.png" textup="BLACK" textdn="WHITE"
+            bgup="WHITE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_MultiOrder"></Action>
+            <Action type="onactivate" workflow="WF_ShowBtnMultiOrd">
+                <Parameter name="ButtonNumber" value="0" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Multi\nOrder</title>
+                <bitmap>G1_MLTORDOFF.png</bitmap>
+                <bitmapdn>G1_MLTORDON.png</bitmapdn>
+            </Language>
+        </Button>
+
+        <Button number="5" category="1" title="Recall\nBy\nNumber" keyscan="0" keyshift="0"
+            bitmap="RecallNum.png" bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE"
+            bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_DoRecallByNumber"></Action>
+            <Action type="onactivate" workflow="WF_ShowButtonRecallByList">
+                <Parameter name="ButtonNumber" value="0" />
+                <Parameter name="POD" value="WALK_THRU|FRONT_COUNTER" />
+                <Parameter name="workingMode" value="cashier|both" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Recall\nBy\nNumber</title>
+                <bitmap>RecallNum.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="6" category="1" title="Recall\nBy Preview\n" keyscan="0" keyshift="0"
+            bitmap="R1_RBPreview.png" bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE"
+            bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_DoRecallByPreview"></Action>
+            <Action type="onactivate" workflow="WF_ShowButtonRecallByList">
+                <Parameter name="ButtonNumber" value="0" />
+                <Parameter name="POD" value="WALK_THRU|FRONT_COUNTER" />
+                <Parameter name="workingMode" value="cashier|both" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Recall\nBy Preview\n</title>
+                <bitmap>R1_RBPreview.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="7" category="1" title="Recall\nNext\nOrder" keyscan="1" keyshift="1"
+            bitmap="B1_Recall.png" bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE"
+            bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_DoRecallNextOrder"></Action>
+            <Action type="onactivate" workflow="WF_HideButtonIfDoesntMatchDTProperties">
+                <Parameter name="ButtonNumber" value="0" />
+                <Parameter name="POD" value="DRIVE_THRU" />
+                <Parameter name="workingMode" value="cashier|both" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Recall\nNext\nOrder</title>
+                <bitmap>B1_Recall.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="9" category="1" title="Grill" keyscan="1" keyshift="1" bitmap="G1_GRLL.png"
+            bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+            outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_DoGrillStart">
+                <Parameter name="ScreenNumber" value="199" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Grill</title>
+                <bitmap>G1_GRLL.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="10" category="1" title="Manager\nMenu" keyscan="1" keyshift="1"
+            bitmap="R1_MGR.png" bitmapdn="" textup="SNOW" textdn="WHITE" bgup="ROYALBLUE"
+            bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_ShowManagerMenu">
+                <Parameter name="Level" value="manager" />
+                <Parameter name="ScreenNumber" value="900" />
+                <Parameter name="SingleSignOn" value="false" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Manager\nMenu</title>
+                <bitmap>R1_MGR.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="20" category="1" title="Loyalty \nOffers" keyscan="1" keyshift="1"
+            bitmap="MyMcD_Rewards_Revised_r1.png" bitmapdn="" textup="BRIGHTWHITE" textdn="LIGHTRED"
+            bgup="LIGHTRED" bgdn="BRIGHTWHITE" v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_ShowMobileRecallScreen">
+                <Parameter name="orderType" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Loyalty \nOffers</title>
+                <bitmap>MyMcD_Rewards_Revised_r1.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="30" category="1" title="Employee\nMenu" keyscan="1" keyshift="1"
+            bitmap="R1_SPCFN.png" bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE"
+            bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreenEx">
+                <Parameter name="ScreenNumber" value="201" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Employee\nMenu</title>
+                <bitmap>R1_SPCFN.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="31" category="1" title="C\nChild" keyscan="1" keyshift="1"
+            bitmap="Y1_CHILD.png" bitmapdn="" textup="BLACK" textdn="GOLD" bgup="GOLD" bgdn="BLACK"
+            v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_SizeSelection">
+                <Parameter name="persists" value="true" />
+                <Parameter name="Size" value="5" />
+            </Action>
+            <Action type="onactivate" workflow="WF_ActivateSelection">
+                <Parameter name="IsFloat" value="false" />
+                <Parameter name="Size" value="5" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>C\nChild</title>
+                <bitmap>Y1_CHILD.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="39" category="1" title="Make\nChange\nMeal" keyscan="0" keyshift="0"
+            bitmap="SimplifyEVM_MakeMeal.png" bitmapdn="" textup="WHITE" textdn="BLACK" bgup="BLACK"
+            bgdn="WHITE" v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_ShowFloatScreenEx">
+                <Parameter name="ScreenNumber" value="650" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Make\nChange\nMeal</title>
+                <bitmap>SimplifyEVM_MakeMeal.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="40" category="1" title="PROMO\nITEM" keyscan="1" keyshift="1"
+            bitmap="Modifiers_PromoItem.png" bitmapdn="" textup="WHITE" textdn="WHITE"
+            bgup="DARKRED" bgdn="TOMATO" v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_DoPromoItemEx">
+                <Parameter name="PromoType" />
+            </Action>
+            <Action type="onactivate" workflow="WF_HideButtonOnlyWhenAtWaste"></Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>PROMO\nITEM</title>
+                <bitmap>Modifiers_PromoItem.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="41" category="1" title="Small" keyscan="1" keyshift="1" bitmap="Y1_SMLL.png"
+            bitmapdn="" textup="BLACK" textdn="GOLD" bgup="GOLD" bgdn="BLACK" v="1" h="1"
+            outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_SizeSelection">
+                <Parameter name="persists" value="true" />
+                <Parameter name="Size" value="1" />
+            </Action>
+            <Action type="onactivate" workflow="WF_ActivateSelection">
+                <Parameter name="IsFloat" value="false" />
+                <Parameter name="Size" value="1" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Small</title>
+                <bitmap>Y1_SMLL.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="50" category="1" title="Clear\nChoice" keyscan="1" keyshift="1"
+            bitmap="Modifiers_ClearChoice.png" bitmapdn="" textup="WHITE" textdn="WHITE"
+            bgup="DARKRED" bgdn="TOMATO" v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_DoClearChoiceEx"></Action>
+            <Action type="onactivate" workflow="WF_HideMeOnlyWhenAtSpecialTrn">
+                <Parameter name="ButtonNumber" value="0" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Clear\nChoice</title>
+                <bitmap>Modifiers_ClearChoice.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="51" category="1" title="Medium" keyscan="1" keyshift="1"
+            bitmap="Y1_MEDM.png" bitmapdn="" textup="BLACK" textdn="GOLD" bgup="GOLD" bgdn="BLACK"
+            v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_SizeSelection">
+                <Parameter name="persists" value="true" />
+                <Parameter name="Size" value="2" />
+            </Action>
+            <Action type="onactivate" workflow="WF_ActivateSelection">
+                <Parameter name="IsFloat" value="false" />
+                <Parameter name="Size" value="2" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Medium</title>
+                <bitmap>Y1_MEDM.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="60" category="1" title="Side\nChoice" keyscan="0" keyshift="0"
+            bitmap="Modifiers_SideChoice.png" bitmapdn="" textup="WHITE" textdn="GREEN" bgup="GREEN"
+            bgdn="WHITE" v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_ShowFloatScreenEx">
+                <Parameter name="ScreenNumber" value="652" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Side\nChoice</title>
+                <bitmap>Modifiers_SideChoice.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="61" category="1" title="Large" keyscan="1" keyshift="1"
+            bitmap="Y1_LARGE.png" bitmapdn="" textup="BLACK" textdn="GOLD" bgup="GOLD" bgdn="BLACK"
+            v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_SizeSelection">
+                <Parameter name="persists" value="true" />
+                <Parameter name="Size" value="3" />
+            </Action>
+            <Action type="onactivate" workflow="WF_ActivateSelection">
+                <Parameter name="IsFloat" value="false" />
+                <Parameter name="Size" value="3" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Large</title>
+                <bitmap>Y1_LARGE.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="70" category="1" title="VOID\nITEM" keyscan="0" keyshift="0"
+            bitmap="Modifiers_VoidLine.png" bitmapdn="" textup="WHITE" textdn="LIGHTRED"
+            bgup="LIGHTRED" bgdn="WHITE" v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_DoVoidLineEx"></Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>VOID\nITEM</title>
+                <bitmap>Modifiers_VoidLine.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="79" category="1" title="Product\nBuild" keyscan="0" keyshift="0"
+            bitmap="Show Product Build.png" bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE"
+            bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_ShowScreenJS">
+                <Parameter name="ScreenNumber" value="324" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Product\nBuild</title>
+                <bitmap>Show Product Build.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="80" category="1" title="Eat\nIn\nTotal" keyscan="1" keyshift="1"
+            bitmap="BL_EITOT.png" bitmapdn="" textup="BLACK" textdn="WHITE" bgup="LIME" bgdn="BLACK"
+            v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_DoTotalBySaleType">
+                <Parameter name="SaleType" value="0" />
+                <Parameter name="ScreenNumber" value="53" />
+            </Action>
+            <Action type="onactivate" workflow="WF_OnActivate_EatInTotal">
+                <Parameter name="ButtonNumber" value="0" />
+                <Parameter name="POD" value="DRIVE_THRU" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Eat\nIn\nTotal</title>
+                <bitmap>BL_EITOT.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="81" category="1" title="Sr\nSenior" keyscan="1" keyshift="1"
+            bitmap="Y1_SNR.png" bitmapdn="" textup="BLACK" textdn="GOLD" bgup="GOLD" bgdn="BLACK"
+            v="1" h="1" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_SizeSelection">
+                <Parameter name="persists" value="true" />
+                <Parameter name="Size" value="6" />
+            </Action>
+            <Action type="onactivate" workflow="WF_ActivateSelection">
+                <Parameter name="IsFloat" value="false" />
+                <Parameter name="Size" value="6" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Sr\nSenior</title>
+                <bitmap>Y1_SNR.png</bitmap>
+            </Language>
+        </Button>
+
+        <Button number="89" category="1" title="Show\nPrices" keyscan="0" keyshift="0"
+            bitmap="showPricesOff.PNG" bitmapdn="showPricesOn.PNG" textup="RED" textdn="BLACK"
+            bgup="BLACK" bgdn="RED" v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onactivate" workflow="WF_SetShowPriceButton"></Action>
+            <Action type="onclick" workflow="WF_SetShowPrice"></Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Show\nPrices</title>
+                <bitmap>showPricesOff.PNG</bitmap>
+                <bitmapdn>showPricesOn.PNG</bitmapdn>
+            </Language>
+        </Button>
+
+        <Button number="90" category="1" title="Take\nOut\nTotal" keyscan="1" keyshift="1"
+            bitmap="BL_TOTOT.png" bitmapdn="" textup="BLACK" textdn="WHITE" bgup="LIME" bgdn="BLACK"
+            v="1" h="1" outageModeButtonDisabled="true">
+            <Action type="onclick" workflow="WF_DoTotalBySaleType">
+                <Parameter name="SaleType" value="1" />
+                <Parameter name="ScreenNumber" value="53" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Take\nOut\nTotal</title>
+                <bitmap>BL_TOTOT.png</bitmap>
+            </Language>
+        </Button>
+
+
+
+
 
 </SpecialButtons>

@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "generatedAt": "2025-09-09T03:22:40.249Z",
+    "generatedAt": "2025-09-09T03:31:59.091Z",
     "totalProducts": 73,
-    "totalSpecialButtons": 3,
+    "totalSpecialButtons": 25,
     "totalNumberButtons": 10,
     "totalPageButtons": 58,
     "version": "1.0"
@@ -25539,6 +25539,582 @@
   ],
   "specialButtons": [
     {
+      "id": "cod_n1",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "COD\\n1",
+      "bitmap": "G1_COD1.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BLACK",
+      "textdn": "WHITE",
+      "bgup": "WHITE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ButtonCOD",
+          "params": {
+            "COD": "1",
+            "ProductCode": "1",
+            "ScreenNumber": "301"
+          }
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_OnActivate_ChangeButtonCOD",
+          "params": {
+            "ButtonNumber": "1",
+            "COD": "1",
+            "POD": "DRIVE_THRU",
+            "workingMode": "orderTaker|both"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cod_n2",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "COD\\n2",
+      "bitmap": "G1_COD2.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BLACK",
+      "textdn": "WHITE",
+      "bgup": "WHITE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ButtonCOD",
+          "params": {
+            "COD": "2",
+            "ProductCode": "1",
+            "ScreenNumber": "301"
+          }
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_OnActivate_ChangeButtonCOD",
+          "params": {
+            "ButtonNumber": "2",
+            "COD": "2",
+            "POD": "DRIVE_THRU",
+            "workingMode": "orderTaker|both"
+          }
+        }
+      ]
+    },
+    {
+      "id": "image_nrecall",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Image\\nRecall",
+      "bitmap": "G1_IMRCL.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "WHITE",
+      "bgup": "SILVER",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_DoRecallByPreview",
+          "params": {}
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_HideButtonIfDoesntMatchDTProperties",
+          "params": {
+            "ButtonNumber": "0",
+            "POD": "DRIVE_THRU",
+            "workingMode": "cashier|both"
+          }
+        }
+      ]
+    },
+    {
+      "id": "multi_norder",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Multi\\nOrder",
+      "bitmap": "G1_MLTORDOFF.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BLACK",
+      "textdn": "WHITE",
+      "bgup": "WHITE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_MultiOrder",
+          "params": {}
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_ShowBtnMultiOrd",
+          "params": {
+            "ButtonNumber": "0"
+          }
+        }
+      ]
+    },
+    {
+      "id": "recall_nby_nnumber",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Recall\\nBy\\nNumber",
+      "bitmap": "RecallNum.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BLACK",
+      "textdn": "WHITE",
+      "bgup": "WHITE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_DoRecallByNumber",
+          "params": {}
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_ShowButtonRecallByList",
+          "params": {
+            "ButtonNumber": "0",
+            "POD": "WALK_THRU|FRONT_COUNTER",
+            "workingMode": "cashier|both"
+          }
+        }
+      ]
+    },
+    {
+      "id": "recall_nby_preview_n",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Recall\\nBy Preview\\n",
+      "bitmap": "R1_RBPreview.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "BLACK",
+      "textdn": "WHITE",
+      "bgup": "WHITE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_DoRecallByPreview",
+          "params": {}
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_ShowButtonRecallByList",
+          "params": {
+            "ButtonNumber": "0",
+            "POD": "WALK_THRU|FRONT_COUNTER",
+            "workingMode": "cashier|both"
+          }
+        }
+      ]
+    },
+    {
+      "id": "recall_nnext_norder",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Recall\\nNext\\nOrder",
+      "bitmap": "B1_Recall.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "WHITE",
+      "bgup": "WHITE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_DoRecallNextOrder",
+          "params": {}
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_HideButtonIfDoesntMatchDTProperties",
+          "params": {
+            "ButtonNumber": "0",
+            "POD": "DRIVE_THRU",
+            "workingMode": "cashier|both"
+          }
+        }
+      ]
+    },
+    {
+      "id": "grill",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Grill",
+      "bitmap": "G1_GRLL.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "WHITE",
+      "bgup": "WHITE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_DoGrillStart",
+          "params": {
+            "ScreenNumber": "199"
+          }
+        }
+      ]
+    },
+    {
+      "id": "manager_nmenu",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Manager\\nMenu",
+      "bitmap": "R1_MGR.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "SNOW",
+      "textdn": "WHITE",
+      "bgup": "ROYALBLUE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowManagerMenu",
+          "params": {
+            "Level": "manager",
+            "ScreenNumber": "900",
+            "SingleSignOn": "false"
+          }
+        }
+      ]
+    },
+    {
+      "id": "loyalty__noffers",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Loyalty \\nOffers",
+      "bitmap": "MyMcD_Rewards_Revised_r1.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BRIGHTWHITE",
+      "textdn": "LIGHTRED",
+      "bgup": "LIGHTRED",
+      "bgdn": "BRIGHTWHITE",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowMobileRecallScreen",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "employee_nmenu",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Employee\\nMenu",
+      "bitmap": "R1_SPCFN.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "WHITE",
+      "bgup": "WHITE",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowScreenEx",
+          "params": {
+            "ScreenNumber": "201"
+          }
+        }
+      ]
+    },
+    {
+      "id": "c_nchild",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "C\\nChild",
+      "bitmap": "Y1_CHILD.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "GOLD",
+      "bgup": "GOLD",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_SizeSelection",
+          "params": {
+            "persists": "true",
+            "Size": "5"
+          }
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_ActivateSelection",
+          "params": {
+            "IsFloat": "false",
+            "Size": "5"
+          }
+        }
+      ]
+    },
+    {
+      "id": "make_nchange_nmeal",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Make\\nChange\\nMeal",
+      "bitmap": "SimplifyEVM_MakeMeal.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "WHITE",
+      "textdn": "BLACK",
+      "bgup": "BLACK",
+      "bgdn": "WHITE",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowFloatScreenEx",
+          "params": {
+            "ScreenNumber": "650"
+          }
+        }
+      ]
+    },
+    {
+      "id": "promo_nitem",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "PROMO\\nITEM",
+      "bitmap": "Modifiers_PromoItem.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "WHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKRED",
+      "bgdn": "TOMATO",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_DoPromoItemEx",
+          "params": {}
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_HideButtonOnlyWhenAtWaste",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "small",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Small",
+      "bitmap": "Y1_SMLL.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "GOLD",
+      "bgup": "GOLD",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_SizeSelection",
+          "params": {
+            "persists": "true",
+            "Size": "1"
+          }
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_ActivateSelection",
+          "params": {
+            "IsFloat": "false",
+            "Size": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "clear_nchoice",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Clear\\nChoice",
+      "bitmap": "Modifiers_ClearChoice.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "WHITE",
+      "textdn": "WHITE",
+      "bgup": "DARKRED",
+      "bgdn": "TOMATO",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_DoClearChoiceEx",
+          "params": {}
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_HideMeOnlyWhenAtSpecialTrn",
+          "params": {
+            "ButtonNumber": "0"
+          }
+        }
+      ]
+    },
+    {
+      "id": "medium",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Medium",
+      "bitmap": "Y1_MEDM.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "GOLD",
+      "bgup": "GOLD",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_SizeSelection",
+          "params": {
+            "persists": "true",
+            "Size": "2"
+          }
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_ActivateSelection",
+          "params": {
+            "IsFloat": "false",
+            "Size": "2"
+          }
+        }
+      ]
+    },
+    {
+      "id": "side_nchoice",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Side\\nChoice",
+      "bitmap": "Modifiers_SideChoice.png",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "WHITE",
+      "textdn": "GREEN",
+      "bgup": "GREEN",
+      "bgdn": "WHITE",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_ShowFloatScreenEx",
+          "params": {
+            "ScreenNumber": "652"
+          }
+        }
+      ]
+    },
+    {
+      "id": "large",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Large",
+      "bitmap": "Y1_LARGE.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "GOLD",
+      "bgup": "GOLD",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "false",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_SizeSelection",
+          "params": {
+            "persists": "true",
+            "Size": "3"
+          }
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_ActivateSelection",
+          "params": {
+            "IsFloat": "false",
+            "Size": "3"
+          }
+        }
+      ]
+    },
+    {
       "id": "void_nitem",
       "screenNumber": "0",
       "buttonNumber": "0",
@@ -25562,11 +26138,11 @@
       ]
     },
     {
-      "id": "multi_norder",
+      "id": "product_nbuild",
       "screenNumber": "0",
       "buttonNumber": "0",
-      "title": "Multi\\nOrder",
-      "bitmap": "G1_MLTORDOFF.png",
+      "title": "Product\\nBuild",
+      "bitmap": "Show Product Build.png",
       "keyscan": "0",
       "keyshift": "0",
       "textup": "BLACK",
@@ -25575,33 +26151,62 @@
       "bgdn": "BLACK",
       "v": "1",
       "h": "1",
-      "outageModeButtonDisabled": "false",
+      "outageModeButtonDisabled": "true",
       "actions": [
         {
           "type": "onclick",
-          "workflow": "WF_MultiOrder",
-          "params": {}
-        },
-        {
-          "type": "onactivate",
-          "workflow": "WF_ShowBtnMultiOrd",
+          "workflow": "WF_ShowScreenJS",
           "params": {
-            "ButtonNumber": "0"
+            "ScreenNumber": "324"
           }
         }
       ]
     },
     {
-      "id": "grill",
+      "id": "eat_nin_ntotal",
       "screenNumber": "0",
       "buttonNumber": "0",
-      "title": "Grill",
-      "bitmap": "G1_GRLL.png",
+      "title": "Eat\\nIn\\nTotal",
+      "bitmap": "BL_EITOT.png",
       "keyscan": "1",
       "keyshift": "1",
       "textup": "BLACK",
       "textdn": "WHITE",
-      "bgup": "WHITE",
+      "bgup": "LIME",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_DoTotalBySaleType",
+          "params": {
+            "SaleType": "0",
+            "ScreenNumber": "53"
+          }
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_OnActivate_EatInTotal",
+          "params": {
+            "ButtonNumber": "0",
+            "POD": "DRIVE_THRU"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sr_nsenior",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Sr\\nSenior",
+      "bitmap": "Y1_SNR.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "GOLD",
+      "bgup": "GOLD",
       "bgdn": "BLACK",
       "v": "1",
       "h": "1",
@@ -25609,9 +26214,72 @@
       "actions": [
         {
           "type": "onclick",
-          "workflow": "WF_DoGrillStart",
+          "workflow": "WF_SizeSelection",
           "params": {
-            "ScreenNumber": "199"
+            "persists": "true",
+            "Size": "6"
+          }
+        },
+        {
+          "type": "onactivate",
+          "workflow": "WF_ActivateSelection",
+          "params": {
+            "IsFloat": "false",
+            "Size": "6"
+          }
+        }
+      ]
+    },
+    {
+      "id": "show_nprices",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Show\\nPrices",
+      "bitmap": "showPricesOff.PNG",
+      "keyscan": "0",
+      "keyshift": "0",
+      "textup": "RED",
+      "textdn": "BLACK",
+      "bgup": "BLACK",
+      "bgdn": "RED",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onactivate",
+          "workflow": "WF_SetShowPriceButton",
+          "params": {}
+        },
+        {
+          "type": "onclick",
+          "workflow": "WF_SetShowPrice",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "take_nout_ntotal",
+      "screenNumber": "0",
+      "buttonNumber": "0",
+      "title": "Take\\nOut\\nTotal",
+      "bitmap": "BL_TOTOT.png",
+      "keyscan": "1",
+      "keyshift": "1",
+      "textup": "BLACK",
+      "textdn": "WHITE",
+      "bgup": "LIME",
+      "bgdn": "BLACK",
+      "v": "1",
+      "h": "1",
+      "outageModeButtonDisabled": "true",
+      "actions": [
+        {
+          "type": "onclick",
+          "workflow": "WF_DoTotalBySaleType",
+          "params": {
+            "SaleType": "1",
+            "ScreenNumber": "53"
           }
         }
       ]
