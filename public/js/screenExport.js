@@ -1,6 +1,26 @@
 // Screen Export functionality - Export configured grid as screen.xml
 
-// Function to export all screens as screen.xml
+// Global XML helper functions
+function escapeXML(str) {
+    if (!str) return str;
+    return str.toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+}
+
+function escapeXMLAttribute(str) {
+    if (!str) return str;
+    return str.toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+// Function to export all screens to XML format
 function exportScreenXML() {
     // Check if screen manager is available
     if (!window.screenManager) {
@@ -41,22 +61,180 @@ function exportScreenXML() {
 // Function to export a single screen's data
 function exportScreenData(screen) {
     const screenNumber = screen.id;
-    const screenTitle = screen.name || `Screen ${screenNumber}`;
+    let screenTitle = screen.name || `Screen ${screenNumber}`;
     
-    let xmlContent = `    <Screen number="${screenNumber}" timeout="false" type="1000" title="${screenTitle}" bgimage="BckGround01.png">
-        <Action type="onactivate" workflow="DoNothing"></Action>
+    // Use original screen attributes if available (for imported screens)
+    let screenAttribs = '';
+    if (screen.originalAttributes) {
+        const attrs = screen.originalAttributes;
+        screenAttribs = `number="${escapeXMLAttribute(attrs.number)}" timeout="${escapeXMLAttribute(attrs.timeout)}" type="${escapeXMLAttribute(attrs.type)}" title="${escapeXMLAttribute(attrs.title)}" bgimage="${escapeXMLAttribute(attrs.bgimage)}"`;
+        screenTitle = attrs.title; // Use original title for consistency
+    } else {
+        // Default attributes for manually created screens
+        screenAttribs = `number="${screenNumber}" timeout="false" type="1000" title="${escapeXMLAttribute(screenTitle)}" bgimage="BckGround01.png"`;
+    }
+    
+    let xmlContent = `    <Screen ${screenAttribs}>
+`;
+
+    // Add screen-level actions
+    if (screen.originalActions && screen.originalActions.length > 0) {
+        screen.originalActions.forEach(action => {
+            let actionParams = '';
+            if (action.params) {
+                Object.keys(action.params).forEach(key => {
+                    actionParams += `            <Parameter name="${escapeXMLAttribute(key)}" value="${escapeXMLAttribute(action.params[key])}" />
+`;
+                });
+            }
+            xmlContent += `        <Action type="${escapeXMLAttribute(action.type)}" workflow="${escapeXMLAttribute(action.workflow)}">
+${actionParams}        </Action>
+`;
+        });
+    } else {
+        // Default actions for manually created screens
+        xmlContent += `        <Action type="onactivate" workflow="DoNothing"></Action>
         <Action type="oncomplete" workflow="WF_ShowPrice">
             <Parameter name="floatScreen" value="false" />
         </Action>
 `;
+    }
 
-    let buttonNumber = 1;
-    
-    // Process each grid cell in the screen
-    if (screen.gridState && screen.gridState.length > 0) {
+    // Use allButtons if available (for imported screens with hidden buttons), otherwise use gridState
+    if (screen.allButtons && screen.allButtons.length > 0) {
+        // Export all buttons including hidden ones (for imported screens)
+        screen.allButtons.forEach(buttonData => {
+            const cellData = buttonData.cellData;
+            const buttonNumber = buttonData.buttonNumber;
+            
+            if (!cellData) return;
+            
+            // If we have original XML, use it directly for perfect preservation
+            if (cellData.originalXML) {
+                // Update the button number in the original XML to maintain proper numbering
+                let originalXML = cellData.originalXML;
+                originalXML = originalXML.replace(/number="\d+"/, `number="${buttonNumber}"`);
+                
+                // Add proper indentation to the XML
+                const indentedXML = originalXML
+                    .split('\n')
+                    .map(line => line.trim() ? '        ' + line : line)
+                    .join('\n');
+                
+                xmlContent += indentedXML + '\n';
+                return;
+            }
+            
+            // Fallback to manual generation for buttons without original XML
+            const productCode = cellData.productCode;
+            const specialButtonId = cellData.specialButtonId;
+            const buttonType = cellData.buttonType;
+            
+            if (productCode && buttonType !== 'special') {
+                // Regular product button
+                const product = window.products ? window.products.find(p => p.code === productCode) : null;
+                if (product) {
+                    const title = escapeXMLAttribute(product.displayTitle || product.shortName || 'Product');
+                    const bitmap = escapeXMLAttribute(product.image || 'default.png');
+                    
+                    xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="0" keyshift="0" bitmap="${bitmap}"
+            bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+            productCode="${escapeXMLAttribute(productCode)}" outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_DoSale">
+                <Parameter name="ProductCode" value="${escapeXMLAttribute(productCode)}" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>${escapeXML(product.displayTitle || product.shortName || 'Product')}</title>
+                <bitmap>${escapeXML(product.image || 'default.png')}</bitmap>
+            </Language>
+        </Button>
+`;
+                }
+            } else if (specialButtonId && buttonType === 'special') {
+                // Special button
+                const button = window.specialButtons ? window.specialButtons.find(b => b.id === specialButtonId) : null;
+                if (button) {
+                    const title = escapeXMLAttribute(button.title.replace(/\\n/g, '\n'));
+                    const keyscan = escapeXMLAttribute(button.keyscan || '0');
+                    const keyshift = escapeXMLAttribute(button.keyshift || '0');
+                    const bitmap = escapeXMLAttribute(button.bitmap || '');
+                    
+                    xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}"
+            bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+            outageModeButtonDisabled="false">
+            <Language code="en_US" name="English" parent="en">
+                <title>${escapeXML(button.title.replace(/\\n/g, '\n'))}</title>
+                <bitmap>${escapeXML(button.bitmap || '')}</bitmap>
+            </Language>
+        </Button>
+`;
+                }
+            } else if (buttonType === 'number') {
+                // Number button
+                const numberButtonId = cellData.numberButtonId;
+                if (numberButtonId && window.numberButtons) {
+                    const numberButton = window.numberButtons.find(b => b.id === numberButtonId);
+                    if (numberButton) {
+                        const title = numberButton.title || '';
+                        const keyscan = numberButton.keyscan || '0';
+                        const keyshift = numberButton.keyshift || '0';
+                        const bitmap = numberButton.bitmap || '';
+                        
+                        xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmap="${bitmap}"
+            bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+            outageModeButtonDisabled="false">
+            <Language code="en_US" name="English" parent="en">
+                <title>${title}</title>
+                <bitmap>${bitmap}</bitmap>
+            </Language>
+        </Button>
+`;
+                    }
+                }
+            } else if (buttonType === 'screen') {
+                // Screen button
+                const customScreenNumber = cellData.customScreenNumber || '301';
+                xmlContent += `        <Button number="${buttonNumber}" category="1" title="Screen ${customScreenNumber}" keyscan="0" keyshift="0"
+            bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
+            outageModeButtonDisabled="false">
+            <Action type="onclick" workflow="WF_ShowScreen">
+                <Parameter name="ScreenNumber" value="${customScreenNumber}" />
+            </Action>
+            <Language code="en_US" name="English" parent="en">
+                <title>Screen ${customScreenNumber}</title>
+                <bitmap></bitmap>
+            </Language>
+        </Button>
+`;
+            }
+        });
+    } else {
+        // Standard export for manually created screens (existing logic)
+        let buttonNumber = 1;
+        
+        // Process each grid cell in the screen
+        if (screen.gridState && screen.gridState.length > 0) {
         screen.gridState.forEach((cellData, index) => {
             if (!cellData) return;
             
+            // If we have original XML, use it directly for perfect preservation
+            if (cellData.originalXML) {
+                // Update the button number in the original XML to maintain proper numbering
+                let originalXML = cellData.originalXML;
+                originalXML = originalXML.replace(/number="\d+"/, `number="${buttonNumber}"`);
+                
+                // Add proper indentation to the XML
+                const indentedXML = originalXML
+                    .split('\n')
+                    .map(line => line.trim() ? '        ' + line : line)
+                    .join('\n');
+                
+                xmlContent += indentedXML + '\n';
+                buttonNumber++;
+                return;
+            }
+            
+            // Fallback to manual generation for buttons without original XML
             const productCode = cellData.productCode;
             const specialButtonId = cellData.specialButtonId;
             const buttonType = cellData.buttonType;
@@ -230,6 +408,7 @@ ${actionsXML}            <Language code="en_US" name="English" parent="en">
             
             buttonNumber++;
         });
+        }
     }
     
     xmlContent += `    </Screen>

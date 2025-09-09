@@ -275,40 +275,87 @@ function importSingleScreen(screenElement) {
     const screenTitle = screenElement.getAttribute('title') || `Screen ${screenNumber}`;
     const isDefault = screenNumber === 301;
     
+    // Store the complete screen XML attributes and actions for export
+    const screenAttribs = {
+        number: screenElement.getAttribute('number'),
+        timeout: screenElement.getAttribute('timeout') || 'false',
+        type: screenElement.getAttribute('type') || '1000',
+        title: screenElement.getAttribute('title') || `Screen ${screenNumber}`,
+        bgimage: screenElement.getAttribute('bgimage') || 'BckGround01.png'
+    };
+    
+    // Store screen-level actions
+    const screenActions = Array.from(screenElement.querySelectorAll(':scope > Action')).map(action => {
+        const actionData = {
+            type: action.getAttribute('type'),
+            workflow: action.getAttribute('workflow')
+        };
+        
+        // Store parameters
+        const params = {};
+        action.querySelectorAll('Parameter').forEach(param => {
+            params[param.getAttribute('name')] = param.getAttribute('value');
+        });
+        if (Object.keys(params).length > 0) {
+            actionData.params = params;
+        }
+        
+        return actionData;
+    });
+    
     // Create or update screen in screen manager
     if (window.screenManager.screens.has(screenNumber)) {
         // Update existing screen
         const existingScreen = window.screenManager.screens.get(screenNumber);
         existingScreen.name = screenTitle;
         existingScreen.gridState = new Array(90).fill(null); // Clear existing state
+        existingScreen.originalAttributes = screenAttribs;
+        existingScreen.originalActions = screenActions;
     } else {
         // Create new screen
         window.screenManager.createScreen(screenNumber, isDefault);
         const screen = window.screenManager.screens.get(screenNumber);
         screen.name = screenTitle;
+        screen.originalAttributes = screenAttribs;
+        screen.originalActions = screenActions;
     }
     
     // Parse buttons from the screen
     const buttons = screenElement.querySelectorAll('Button');
     const gridState = new Array(90).fill(null);
+    const allButtons = []; // Store all buttons including those beyond grid
     
     buttons.forEach(button => {
         const buttonNumber = parseInt(button.getAttribute('number'));
         const gridIndex = buttonNumber - 1; // Convert to 0-based index
+        const cellData = parseButtonData(button);
         
+        // Store all buttons in the allButtons array
+        allButtons.push({
+            buttonNumber: buttonNumber,
+            cellData: cellData
+        });
+        
+        // Only add to gridState if it fits in the 9x10 grid (positions 1-90)
         if (gridIndex >= 0 && gridIndex < 90) {
-            const cellData = parseButtonData(button);
             gridState[gridIndex] = cellData;
         }
     });
     
-    // Update screen's grid state
+    // Update screen's grid state and store all buttons for export
     const screen = window.screenManager.screens.get(screenNumber);
     screen.gridState = gridState;
+    screen.allButtons = allButtons; // Store all buttons including hidden ones
     
     // Update nextScreenId if needed
     if (screenNumber >= window.screenManager.nextScreenId) {
         window.screenManager.nextScreenId = screenNumber + 1;
+    }
+    
+    // Log information about hidden buttons
+    const hiddenButtons = allButtons.filter(btn => btn.buttonNumber > 90);
+    if (hiddenButtons.length > 0) {
+        console.log(`Screen ${screenNumber}: ${hiddenButtons.length} buttons beyond position 90 will be hidden but preserved for export`);
     }
 }
 
@@ -317,6 +364,9 @@ function parseButtonData(buttonElement) {
     const title = buttonElement.getAttribute('title') || '';
     const bitmap = buttonElement.getAttribute('bitmap') || '';
     const productCode = buttonElement.getAttribute('productCode');
+    
+    // Store the complete original XML structure for export
+    const originalXML = buttonElement.outerHTML;
     
     // Get the title from Language section if available, otherwise use main title
     let displayTitle = title;
@@ -331,6 +381,7 @@ function parseButtonData(buttonElement) {
             index: parseInt(buttonElement.getAttribute('number')) - 1,
             productCode: productCode,
             buttonType: 'product',
+            originalXML: originalXML,
             innerHTML: createProductButtonHTML(displayTitle, bitmap, productCode)
         };
     }
@@ -348,6 +399,7 @@ function parseButtonData(buttonElement) {
                     screenButtonId: `screen-${targetScreen}`,
                     buttonType: 'screen',
                     customScreenNumber: targetScreen,
+                    originalXML: originalXML,
                     innerHTML: createScreenButtonHTML(displayTitle, bitmap, targetScreen)
                 };
             }
@@ -359,6 +411,7 @@ function parseButtonData(buttonElement) {
         index: parseInt(buttonElement.getAttribute('number')) - 1,
         specialButtonId: `imported-${Date.now()}-${Math.random()}`,
         buttonType: 'special',
+        originalXML: originalXML,
         innerHTML: createGenericButtonHTML(displayTitle, bitmap)
     };
 }
