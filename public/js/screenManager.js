@@ -56,20 +56,386 @@ class ScreenManager {
     
     // Add a new screen with auto-generated ID
     addNewScreen() {
-        // Find next available screen ID
-        while (this.screens.has(this.nextScreenId)) {
-            this.nextScreenId++;
+        // Show modal to get screen number
+        this.showAddScreenModal();
+    }
+    
+    // Show modal for adding new screen with custom number
+    showAddScreenModal() {
+        // Find next available screen ID as default
+        let suggestedId = this.nextScreenId;
+        while (this.screens.has(suggestedId)) {
+            suggestedId++;
         }
         
-        const screenId = this.nextScreenId;
+        // Create modal for screen number input
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        `;
         
-        if (this.createScreen(screenId)) {
-            this.nextScreenId++;
-            this.renderScreenList();
+        modal.innerHTML = `
+            <div style="
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                max-width: 400px;
+                width: 90%;
+            ">
+                <h3 style="margin: 0 0 15px 0; color: #333;">Add New Screen</h3>
+                <p style="margin: 0 0 15px 0; color: #666;">
+                    Enter a screen number for the new screen. Screen 301 is reserved for the main screen.
+                </p>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Screen Number:</label>
+                    <input type="number" id="new-screen-number-input" value="${suggestedId}" 
+                        style="
+                            width: 100%;
+                            padding: 8px;
+                            border: 1px solid #ddd;
+                            border-radius: 4px;
+                            font-size: 14px;
+                        "
+                        min="302"
+                        max="999"
+                        placeholder="Enter screen number (e.g., 302)"
+                    >
+                    <small style="color: #666; margin-top: 5px; display: block;">
+                        Must be between 302-999 (301 is reserved)
+                    </small>
+                </div>
+                <div style="text-align: right; gap: 10px; display: flex; justify-content: flex-end;">
+                    <button id="cancel-add-screen" style="
+                        padding: 8px 16px;
+                        background: #6c757d;
+                        color: white;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    ">Cancel</button>
+                    <button id="create-new-screen" style="
+                        padding: 8px 16px;
+                        background: #28a745;
+                        color: white;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    ">Create Screen</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Focus the input
+        const input = document.getElementById('new-screen-number-input');
+        input.focus();
+        input.select();
+        
+        // Handle cancel
+        document.getElementById('cancel-add-screen').addEventListener('click', () => {
+            document.body.removeChild(modal);
+        });
+        
+        // Handle create
+        document.getElementById('create-new-screen').addEventListener('click', () => {
+            const screenNumber = input.value.trim();
             
-            // Optionally switch to the new screen
-            // this.switchToScreen(screenId);
+            // Validate input
+            if (!screenNumber) {
+                alert('Please enter a screen number.');
+                return;
+            }
+            
+            const screenNum = parseInt(screenNumber);
+            if (isNaN(screenNum)) {
+                alert('Please enter a valid number.');
+                return;
+            }
+            
+            if (screenNum === 301) {
+                alert('Screen 301 is reserved for the main screen. Please choose a different number.');
+                return;
+            }
+            
+            if (screenNum < 302 || screenNum > 999) {
+                alert('Screen number must be between 302 and 999.');
+                return;
+            }
+            
+            if (this.screens.has(screenNum)) {
+                alert(`Screen ${screenNum} already exists. Please choose a different number.`);
+                return;
+            }
+            
+            // Create the screen with custom number
+            if (this.createScreen(screenNum)) {
+                // Update nextScreenId if needed
+                if (screenNum >= this.nextScreenId) {
+                    this.nextScreenId = screenNum + 1;
+                }
+                
+                this.renderScreenList();
+                
+                // Show success message
+                const successMsg = document.createElement('div');
+                successMsg.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #28a745;
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 4px;
+                    z-index: 10001;
+                    font-family: Arial, sans-serif;
+                `;
+                successMsg.textContent = `Screen ${screenNum} created successfully`;
+                document.body.appendChild(successMsg);
+                
+                setTimeout(() => {
+                    if (document.body.contains(successMsg)) {
+                        document.body.removeChild(successMsg);
+                    }
+                }, 3000);
+            }
+            
+            document.body.removeChild(modal);
+        });
+        
+        // Handle Enter key
+        input.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('create-new-screen').click();
+            }
+        });
+        
+        // Handle Escape key
+        modal.addEventListener('keyup', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('cancel-add-screen').click();
+            }
+        });
+    }
+    
+    // Show modal for editing existing screen number
+    showEditScreenNumberModal(currentScreenId) {
+        const screen = this.screens.get(currentScreenId);
+        if (!screen || screen.isDefault) {
+            alert('Cannot edit the default screen number (301).');
+            return;
         }
+        
+        // Create modal for screen number editing
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        `;
+        
+        modal.innerHTML = `
+            <div style="
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                max-width: 400px;
+                width: 90%;
+            ">
+                <h3 style="margin: 0 0 15px 0; color: #333;">Edit Screen Number</h3>
+                <p style="margin: 0 0 15px 0; color: #666;">
+                    Change the screen number for "${screen.name}". Screen 301 is reserved for the main screen.
+                </p>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">New Screen Number:</label>
+                    <input type="number" id="edit-screen-number-input" value="${currentScreenId}" 
+                        style="
+                            width: 100%;
+                            padding: 8px;
+                            border: 1px solid #ddd;
+                            border-radius: 4px;
+                            font-size: 14px;
+                        "
+                        min="302"
+                        max="999"
+                        placeholder="Enter new screen number"
+                    >
+                    <small style="color: #666; margin-top: 5px; display: block;">
+                        Must be between 302-999 (301 is reserved)
+                    </small>
+                </div>
+                <div style="text-align: right; gap: 10px; display: flex; justify-content: flex-end;">
+                    <button id="cancel-edit-screen-number" style="
+                        padding: 8px 16px;
+                        background: #6c757d;
+                        color: white;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    ">Cancel</button>
+                    <button id="save-edit-screen-number" style="
+                        padding: 8px 16px;
+                        background: #007bff;
+                        color: white;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    ">Update Number</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Focus the input
+        const input = document.getElementById('edit-screen-number-input');
+        input.focus();
+        input.select();
+        
+        // Handle cancel
+        document.getElementById('cancel-edit-screen-number').addEventListener('click', () => {
+            document.body.removeChild(modal);
+        });
+        
+        // Handle save
+        document.getElementById('save-edit-screen-number').addEventListener('click', () => {
+            const newScreenNumber = input.value.trim();
+            
+            // Validate input
+            if (!newScreenNumber) {
+                alert('Please enter a screen number.');
+                return;
+            }
+            
+            const newScreenNum = parseInt(newScreenNumber);
+            if (isNaN(newScreenNum)) {
+                alert('Please enter a valid number.');
+                return;
+            }
+            
+            if (newScreenNum === 301) {
+                alert('Screen 301 is reserved for the main screen. Please choose a different number.');
+                return;
+            }
+            
+            if (newScreenNum < 302 || newScreenNum > 999) {
+                alert('Screen number must be between 302 and 999.');
+                return;
+            }
+            
+            if (newScreenNum === currentScreenId) {
+                alert('The screen number is already set to this value.');
+                document.body.removeChild(modal);
+                return;
+            }
+            
+            if (this.screens.has(newScreenNum)) {
+                alert(`Screen ${newScreenNum} already exists. Please choose a different number.`);
+                return;
+            }
+            
+            // Update the screen number
+            if (this.updateScreenNumber(currentScreenId, newScreenNum)) {
+                // Show success message
+                const successMsg = document.createElement('div');
+                successMsg.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #007bff;
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 4px;
+                    z-index: 10001;
+                    font-family: Arial, sans-serif;
+                `;
+                successMsg.textContent = `Screen number updated to ${newScreenNum}`;
+                document.body.appendChild(successMsg);
+                
+                setTimeout(() => {
+                    if (document.body.contains(successMsg)) {
+                        document.body.removeChild(successMsg);
+                    }
+                }, 3000);
+            }
+            
+            document.body.removeChild(modal);
+        });
+        
+        // Handle Enter key
+        input.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('save-edit-screen-number').click();
+            }
+        });
+        
+        // Handle Escape key
+        modal.addEventListener('keyup', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('cancel-edit-screen-number').click();
+            }
+        });
+    }
+    
+    // Update screen number (change screen ID)
+    updateScreenNumber(oldScreenId, newScreenId) {
+        const screen = this.screens.get(oldScreenId);
+        if (!screen || screen.isDefault) {
+            console.error(`Cannot update screen number for screen ${oldScreenId}`);
+            return false;
+        }
+        
+        if (this.screens.has(newScreenId)) {
+            console.error(`Screen ${newScreenId} already exists`);
+            return false;
+        }
+        
+        // Save current grid state before changing screen
+        this.saveCurrentGridState();
+        
+        // Remove old screen entry
+        this.screens.delete(oldScreenId);
+        
+        // Update screen data with new ID
+        screen.id = newScreenId;
+        screen.name = screen.name.replace(`Screen ${oldScreenId}`, `Screen ${newScreenId}`);
+        
+        // Add with new ID
+        this.screens.set(newScreenId, screen);
+        
+        // Update current screen ID if this was the active screen
+        if (this.currentScreenId === oldScreenId) {
+            this.currentScreenId = newScreenId;
+        }
+        
+        // Update nextScreenId if needed
+        if (newScreenId >= this.nextScreenId) {
+            this.nextScreenId = newScreenId + 1;
+        }
+        
+        // Re-render screen list
+        this.renderScreenList();
+        
+        console.log(`Screen ${oldScreenId} updated to ${newScreenId}`);
+        return true;
     }
     
     // Delete a screen (except default)
@@ -258,18 +624,28 @@ class ScreenManager {
                         </span>
                         ${isActive ? '<span style="margin-left: 8px; color: #2196f3; font-size: 11px;">(Active)</span>' : ''}
                     </div>
-                    ${!screen.isDefault ? `
-                        <button class="delete-screen-btn" data-screen-id="${screen.id}" style="
-                            padding: 4px 8px;
-                            background: #dc3545;
-                            color: white;
-                            border: none;
-                            border-radius: 3px;
-                            font-size: 11px;
-                            cursor: pointer;
-                            margin-left: 8px;
-                        ">Delete</button>
-                    ` : ''}
+                    <div style="display: flex; gap: 4px; align-items: center;">
+                        ${!screen.isDefault ? `
+                            <button class="edit-screen-number-btn" data-screen-id="${screen.id}" style="
+                                padding: 4px 8px;
+                                background: #007bff;
+                                color: white;
+                                border: none;
+                                border-radius: 3px;
+                                font-size: 11px;
+                                cursor: pointer;
+                            ">Edit #</button>
+                            <button class="delete-screen-btn" data-screen-id="${screen.id}" style="
+                                padding: 4px 8px;
+                                background: #dc3545;
+                                color: white;
+                                border: none;
+                                border-radius: 3px;
+                                font-size: 11px;
+                                cursor: pointer;
+                            ">Delete</button>
+                        ` : ''}
+                    </div>
                 </div>
             `;
         }).join('');
@@ -279,8 +655,9 @@ class ScreenManager {
             const screenId = parseInt(item.dataset.screenId);
             
             item.addEventListener('click', (e) => {
-                // Don't switch if clicking delete button
-                if (e.target.classList.contains('delete-screen-btn')) return;
+                // Don't switch if clicking delete button or edit button
+                if (e.target.classList.contains('delete-screen-btn') || 
+                    e.target.classList.contains('edit-screen-number-btn')) return;
                 
                 this.switchToScreen(screenId);
             });
@@ -308,6 +685,15 @@ class ScreenManager {
                 if (confirm(`Are you sure you want to delete Screen ${screenId}?`)) {
                     this.deleteScreen(screenId);
                 }
+            });
+        });
+        
+        // Add event listeners for edit screen number buttons
+        container.querySelectorAll('.edit-screen-number-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const screenId = parseInt(btn.dataset.screenId);
+                this.showEditScreenNumberModal(screenId);
             });
         });
     }
