@@ -329,8 +329,22 @@
         </div>
     </div>
     
-    <!-- Export Controls -->
-    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+    <!-- Export/Import Controls -->
+    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; gap: 10px; flex-direction: column;">
+        <button id="import-btn" onclick="openImportDialog()" style="
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: background-color 0.2s;
+        " onmouseover="this.style.backgroundColor='#0056b3'" onmouseout="this.style.backgroundColor='#007bff'">
+            📤 Import Screen XML
+        </button>
         <button id="export-btn" onclick="downloadScreenXML()" style="
             padding: 12px 24px;
             background: #28a745;
@@ -350,6 +364,7 @@
     <script src="/js/productSelector.js"></script>
     <script src="/js/screenManager.js"></script>
     <script src="/js/screenExport.js"></script>
+    <script src="/js/screenImport.js"></script>
     <script src="/js/script.js"></script>
 </body>
 </html>
