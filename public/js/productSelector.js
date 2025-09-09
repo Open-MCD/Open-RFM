@@ -660,35 +660,18 @@ function selectSpecialButton(buttonId) {
     
     if (gridItem) {
         // Create image element if bitmap exists
-        const imageUrl = button.bitmap ? `/KVS-Images/${button.bitmap}` : null;
+        const imageUrl = button.bitmap ? `/NP6-Images/${button.bitmap}` : null;
         const bgColor = convertPOSColor(button.colors.bgup);
         const textColor = convertPOSColor(button.colors.textup);
         
         if (imageUrl) {
-            // Show image with minimal text
+            // Show only the image, filling the entire grid cell
             gridItem.innerHTML = `
-                <div style="
-                    width: 100%; 
-                    height: 100%; 
-                    background: ${bgColor}; 
-                    color: ${textColor}; 
-                    display: flex; 
-                    flex-direction: column; 
-                    align-items: center; 
-                    justify-content: center;
-                    text-align: center;
-                    font-family: Arial, sans-serif;
-                    font-weight: bold;
-                    font-size: 8px;
-                ">
-                    <img src="${imageUrl}" alt="${button.title}" style="
-                        max-width: 90%;
-                        max-height: 70%;
-                        object-fit: contain;
-                        margin-bottom: 2px;
-                    " onerror="this.style.display='none';">
-                    <div style="line-height: 1;">${button.title.replace(/\\n/g, '<br>')}</div>
-                </div>
+                <img src="${imageUrl}" alt="${button.title}" style="
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                " onerror="this.style.display='none'; this.parentElement.style.backgroundColor='#f8f8f8';">
             `;
         } else {
             // Show text only
