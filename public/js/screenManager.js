@@ -17,6 +17,11 @@ class ScreenManager {
         
         // Render initial screen list
         this.renderScreenList();
+        
+        // Update screen info display
+        setTimeout(() => {
+            this.updateScreenInfoDisplay();
+        }, 100); // Small delay to ensure DOM is ready
     }
     
     setupEventListeners() {
@@ -649,6 +654,9 @@ class ScreenManager {
         // Update current screen ID
         this.currentScreenId = screenId;
         
+        // Update screen info display
+        this.updateScreenInfoDisplay();
+        
         // Load the new screen's grid state
         this.loadGridState(screenId);
         
@@ -657,6 +665,17 @@ class ScreenManager {
         
         console.log(`Switched to screen ${screenId}`);
         return true;
+    }
+    
+    // Update the screen info display in the yellow bar
+    updateScreenInfoDisplay() {
+        const screenInfoElement = document.getElementById('current-screen-info');
+        if (!screenInfoElement) return;
+        
+        const currentScreen = this.screens.get(this.currentScreenId);
+        const screenName = currentScreen ? currentScreen.name : 'Unknown';
+        
+        screenInfoElement.textContent = `Current Screen ID: ${this.currentScreenId}, Current Screen Name: ${screenName}`;
     }
     
     // Save current grid state to the current screen
@@ -976,6 +995,18 @@ class ScreenManager {
         this.loadGridState(this.currentScreenId);
         
         return true;
+    }
+    
+    updateScreenInfoDisplay() {
+        const screenInfoElement = document.getElementById('current-screen-info');
+        if (screenInfoElement) {
+            const currentScreen = this.screens.get(this.currentScreenId);
+            if (currentScreen) {
+                screenInfoElement.textContent = `Current Screen ID: ${this.currentScreenId}, Current Screen Name: ${currentScreen.name}`;
+            } else {
+                screenInfoElement.textContent = `Current Screen ID: ${this.currentScreenId}, Current Screen Name: Unknown`;
+            }
+        }
     }
 }
 
