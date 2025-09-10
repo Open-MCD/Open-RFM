@@ -692,18 +692,37 @@ class ScreenManager {
         const gridState = [];
         
         gridItems.forEach((item, index) => {
-            const cellData = {
-                index: index,
-                productCode: item.dataset.productCode || null,
-                specialButtonId: item.dataset.specialButtonId || null,
-                numberButtonId: item.dataset.numberButtonId || null,
-                pageButtonId: item.dataset.pageButtonId || null,
-                screenButtonId: item.dataset.screenButtonId || null,
-                buttonType: item.dataset.buttonType || null,
-                customScreenNumber: item.dataset.customScreenNumber || null,
-                innerHTML: item.innerHTML || ''
-            };
-            gridState.push(cellData);
+            // Check if this cell has any actual content (ignore placeholder text)
+            const hasContent = item.dataset.productCode || 
+                             item.dataset.specialButtonId || 
+                             item.dataset.numberButtonId || 
+                             item.dataset.pageButtonId || 
+                             item.dataset.screenButtonId || 
+                             item.dataset.buttonType;
+            
+            if (hasContent) {
+                const cellData = {
+                    index: index,
+                    productCode: item.dataset.productCode || null,
+                    specialButtonId: item.dataset.specialButtonId || null,
+                    numberButtonId: item.dataset.numberButtonId || null,
+                    pageButtonId: item.dataset.pageButtonId || null,
+                    screenButtonId: item.dataset.screenButtonId || null,
+                    buttonType: item.dataset.buttonType || null,
+                    customScreenNumber: item.dataset.customScreenNumber || null,
+                    innerHTML: item.innerHTML || ''
+                };
+                
+                // Preserve originalXML from existing gridState if it exists
+                if (screen.gridState && screen.gridState[index] && screen.gridState[index].originalXML) {
+                    cellData.originalXML = screen.gridState[index].originalXML;
+                }
+                
+                gridState[index] = cellData;
+            } else {
+                // Empty cells should be null, not empty objects
+                gridState[index] = null;
+            }
         });
         
         screen.gridState = gridState;

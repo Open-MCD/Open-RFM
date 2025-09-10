@@ -55,7 +55,23 @@ function formatXML(xmlString) {
 }
 
 // Function to export all screens to XML format
-function exportScreenXML() {
+async function exportScreenXML() {
+    // Ensure products data is loaded
+    if (!window.productsData || window.productsData.length === 0) {
+        console.log('Loading products data for export...');
+        try {
+            const response = await fetch('/products.json');
+            const data = await response.json();
+            window.productsData = data.products || [];
+            window.specialButtons = data.specialButtons || [];
+            window.numberButtons = data.numberButtons || [];
+            window.screenButtons = data.screenButtons || [];
+            console.log(`Loaded ${window.productsData.length} products, ${window.specialButtons.length} special buttons, ${window.numberButtons.length} number buttons, ${window.screenButtons.length} screen buttons for export`);
+        } catch (error) {
+            console.error('Error loading products data for export:', error);
+        }
+    }
+    
     // Check if screen manager is available
     if (!window.screenManager) {
         console.warn('Screen manager not available, exporting current screen only');
@@ -139,18 +155,20 @@ ${actionParams}</Action>
 `;
     }
 
-    // Use allButtons if available (for imported screens with hidden buttons), otherwise use gridState
-    if (screen.allButtons && screen.allButtons.length > 0) {
-        // Export all buttons including hidden ones (for imported screens)
-        screen.allButtons.forEach(buttonData => {
-            const cellData = buttonData.cellData;
-            const buttonNumber = buttonData.buttonNumber;
-            
+    // Always use gridState to ensure current modifications are preserved
+    // Don't use allButtons as it contains original imported data, not current state
+    
+    // Process each grid cell in the screen
+    if (screen.gridState && screen.gridState.length > 0) {
+        screen.gridState.forEach((cellData, index) => {
             if (!cellData) return;
+            
+            // Button number should be the grid position + 1 (1-indexed)
+            const buttonNumber = index + 1;
             
             // If we have original XML, use it directly for perfect preservation
             if (cellData.originalXML) {
-                // Update the button number in the original XML to maintain proper numbering
+                // Update the button number in the original XML to maintain proper grid positioning
                 let originalXML = cellData.originalXML;
                 originalXML = originalXML.replace(/number="\d+"/, `number="${buttonNumber}"`);
                 
@@ -168,284 +186,199 @@ ${actionParams}</Action>
             // Fallback to manual generation for buttons without original XML
             const productCode = cellData.productCode;
             const specialButtonId = cellData.specialButtonId;
+            const numberButtonId = cellData.numberButtonId;
+            const screenButtonId = cellData.screenButtonId;
             const buttonType = cellData.buttonType;
             
             if (productCode && buttonType !== 'special') {
-                // Regular product button
-                const product = window.products ? window.products.find(p => p.code === productCode) : null;
+                // Regular product button - search in all available product arrays
+                let product = null;
+                
+                // First try window.productsData (main array)
+                if (window.productsData) {
+                    product = window.productsData.find(p => p.productCode === productCode);
+                }
+                
+                // Fallback to window.products if available
+                if (!product && window.products) {
+                    product = window.products.find(p => p.code === productCode || p.productCode === productCode);
+                }
+                
                 if (product) {
-                    const title = escapeXMLAttribute(product.displayTitle || product.shortName || 'Product');
-                    const bitmap = escapeXMLAttribute(product.image || 'default.png');
+                    // Use the correct property names for the products.json structure
+                    const title = escapeXMLAttribute(product.displayTitle || product.csoName || product.longName || product.shortName || `Product ${productCode}`);
+                    const bitmap = escapeXMLAttribute(product.screenBitmap || product.imageName || product.image || 'default.png');
                     
-                    xmlContent += `<Button number="${buttonNumber}" category="1" title="${title}" keyscan="0" keyshift="0" bitmap="${bitmap}" bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1" productCode="${escapeXMLAttribute(productCode)}" outageModeButtonDisabled="false">
+                    // Use actual product button styling if available
+                    const buttonStyling = product.buttonStyling || {};
+                    const textup = buttonStyling.textup || 'BLACK';
+                    const textdn = buttonStyling.textdn || 'WHITE';
+                    const bgup = buttonStyling.bgup || 'WHITE';
+                    const bgdn = buttonStyling.bgdn || 'BLACK';
+                    const outageModeDisabled = buttonStyling.outageModeButtonDisabled || 'false';
+                    
+                    xmlContent += `<Button number="${buttonNumber}" category="1" title="${title}" keyscan="0" keyshift="0" bitmap="${bitmap}" bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}" bgdn="${bgdn}" v="1" h="1" productCode="${escapeXMLAttribute(productCode)}" outageModeButtonDisabled="${outageModeDisabled}">
 <Action type="onclick" workflow="WF_DoSale">
 <Parameter name="ProductCode" value="${escapeXMLAttribute(productCode)}" />
 </Action>
 <Language code="en_US" name="English" parent="en">
-<title>${escapeXML(product.displayTitle || product.shortName || 'Product')}</title>
-<bitmap>${escapeXML(product.image || 'default.png')}</bitmap>
+<title>${escapeXML(product.displayTitle || product.csoName || product.longName || product.shortName || `Product ${productCode}`)}</title>
+<bitmap>${escapeXML(product.screenBitmap || product.imageName || product.image || 'default.png')}</bitmap>
+</Language>
+</Button>
+`;
+                } else {
+                    // Product not found in any database - create button with basic info
+                    console.warn(`Product ${productCode} not found in products database`);
+                    const title = escapeXMLAttribute(`Product ${productCode}`);
+                    
+                    xmlContent += `<Button number="${buttonNumber}" category="1" title="${title}" keyscan="0" keyshift="0" bitmap="default.png" bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1" productCode="${escapeXMLAttribute(productCode)}" outageModeButtonDisabled="false">
+<Action type="onclick" workflow="WF_DoSale">
+<Parameter name="ProductCode" value="${escapeXMLAttribute(productCode)}" />
+</Action>
+<Language code="en_US" name="English" parent="en">
+<title>${escapeXML(`Product ${productCode}`)}</title>
+<bitmap>default.png</bitmap>
 </Language>
 </Button>
 `;
                 }
-            } else if (specialButtonId && buttonType === 'special') {
+            } else if (buttonType === 'special' || specialButtonId) {
                 // Special button
-                const button = window.specialButtons ? window.specialButtons.find(b => b.id === specialButtonId) : null;
+                const buttonId = specialButtonId || cellData.specialButtonId;
+                const button = window.specialButtons ? window.specialButtons.find(b => b.id === buttonId) : null;
                 if (button) {
                     const title = escapeXMLAttribute(button.title.replace(/\\n/g, '\n'));
                     const keyscan = escapeXMLAttribute(button.keyscan || '0');
                     const keyshift = escapeXMLAttribute(button.keyshift || '0');
                     const bitmap = escapeXMLAttribute(button.bitmap || '');
+                    const textup = button.textup || 'BLACK';
+                    const textdn = button.textdn || 'WHITE';
+                    const bgup = button.bgup || 'WHITE';
+                    const bgdn = button.bgdn || 'BLACK';
+                    const v = button.v || '1';
+                    const h = button.h || '1';
+                    const outageModeDisabled = button.outageModeButtonDisabled || 'false';
                     
-                    xmlContent += `<Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1" outageModeButtonDisabled="false">
-<Language code="en_US" name="English" parent="en">
+                    let buttonXML = `<Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmap="${bitmap}" bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}" bgdn="${bgdn}" v="${v}" h="${h}" outageModeButtonDisabled="${outageModeDisabled}">`;
+                    
+                    // Add actions if they exist
+                    if (button.actions && button.actions.length > 0) {
+                        for (const action of button.actions) {
+                            buttonXML += `\n<Action type="${action.type}" workflow="${action.workflow}">`;
+                            if (action.params) {
+                                for (const [paramName, paramValue] of Object.entries(action.params)) {
+                                    buttonXML += `\n<Parameter name="${escapeXMLAttribute(paramName)}" value="${escapeXMLAttribute(paramValue)}" />`;
+                                }
+                            }
+                            buttonXML += `\n</Action>`;
+                        }
+                    }
+                    
+                    buttonXML += `\n<Language code="en_US" name="English" parent="en">
 <title>${escapeXML(button.title.replace(/\\n/g, '\n'))}</title>
 <bitmap>${escapeXML(button.bitmap || '')}</bitmap>
 </Language>
 </Button>
 `;
+                    xmlContent += buttonXML;
                 }
-            } else if (buttonType === 'number') {
+            } else if (buttonType === 'number' || cellData.numberButtonId) {
                 // Number button
                 const numberButtonId = cellData.numberButtonId;
                 if (numberButtonId && window.numberButtons) {
                     const numberButton = window.numberButtons.find(b => b.id === numberButtonId);
                     if (numberButton) {
-                        const title = numberButton.title || '';
-                        const keyscan = numberButton.keyscan || '0';
-                        const keyshift = numberButton.keyshift || '0';
-                        const bitmap = numberButton.bitmap || '';
+                        const title = escapeXMLAttribute(numberButton.title || '');
+                        const keyscan = escapeXMLAttribute(numberButton.keyscan || '0');
+                        const keyshift = escapeXMLAttribute(numberButton.keyshift || '0');
+                        const bitmap = escapeXMLAttribute(numberButton.bitmap || '');
+                        const textup = numberButton.textup || 'BLACK';
+                        const textdn = numberButton.textdn || 'WHITE';
+                        const bgup = numberButton.bgup || 'WHITE';
+                        const bgdn = numberButton.bgdn || 'BLACK';
+                        const v = numberButton.v || '1';
+                        const h = numberButton.h || '1';
+                        const outageModeDisabled = numberButton.outageModeButtonDisabled || 'false';
                         
-                        xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmap="${bitmap}"
-            bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
-            outageModeButtonDisabled="false">
-            <Language code="en_US" name="English" parent="en">
-                <title>${title}</title>
-                <bitmap>${bitmap}</bitmap>
-            </Language>
-        </Button>
-`;
-                    }
-                }
-            } else if (buttonType === 'screen') {
-                // Screen button
-                const customScreenNumber = cellData.customScreenNumber || '301';
-                xmlContent += `        <Button number="${buttonNumber}" category="1" title="Screen ${customScreenNumber}" keyscan="0" keyshift="0"
-            bitmapdn="" textup="BLACK" textdn="WHITE" bgup="WHITE" bgdn="BLACK" v="1" h="1"
-            outageModeButtonDisabled="false">
-            <Action type="onclick" workflow="WF_ShowScreen">
-                <Parameter name="ScreenNumber" value="${customScreenNumber}" />
-            </Action>
-            <Language code="en_US" name="English" parent="en">
-                <title>Screen ${customScreenNumber}</title>
-                <bitmap></bitmap>
-            </Language>
-        </Button>
-`;
-            }
-        });
-    } else {
-        // Standard export for manually created screens (existing logic)
-        let buttonNumber = 1;
-        
-        // Process each grid cell in the screen
-        if (screen.gridState && screen.gridState.length > 0) {
-        screen.gridState.forEach((cellData, index) => {
-            if (!cellData) return;
-            
-            // If we have original XML, use it directly for perfect preservation
-            if (cellData.originalXML) {
-                // Update the button number in the original XML to maintain proper numbering
-                let originalXML = cellData.originalXML;
-                originalXML = originalXML.replace(/number="\d+"/, `number="${buttonNumber}"`);
-                
-                // Just clean up extra whitespace but preserve line structure
-                const cleanedXML = originalXML
-                    .split('\n')
-                    .map(line => line.trim())
-                    .filter(line => line)
-                    .join('\n');
-                
-                xmlContent += cleanedXML + '\n';
-                buttonNumber++;
-                return;
-            }
-            
-            // Fallback to manual generation for buttons without original XML
-            const productCode = cellData.productCode;
-            const specialButtonId = cellData.specialButtonId;
-            const buttonType = cellData.buttonType;
-            
-            if (productCode && buttonType !== 'special') {
-                // Regular product button
-                const product = productsData.find(p => p.productCode === productCode);
-                if (product) {
-                    const title = (product.displayTitle || product.shortName || 'Product').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                    const bitmap = product.screenBitmap || product.imageName || '';
-                    
-                    const styling = product.buttonStyling || {};
-                    const textup = styling.textup || 'BLACK';
-                    const textdn = styling.textdn || 'WHITE';
-                    const bgup = styling.bgup || 'WHITE';
-                    const bgdn = styling.bgdn || 'BLACK';
-                    const outageModeButtonDisabled = styling.outageModeButtonDisabled || 'false';
-                    
-                    xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="0" keyshift="0" bitmap="${bitmap}"
-            bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}" bgdn="${bgdn}" v="1" h="1"
-            productCode="${productCode}" outageModeButtonDisabled="${outageModeButtonDisabled}">
-            <Action type="onclick" workflow="WF_DoSale">
-                <Parameter name="ProductCode" value="${productCode}" />
-            </Action>
-            <Language code="en_US" name="English" parent="en">
-                <title>${title}</title>
-                <bitmap>${bitmap}</bitmap>
-            </Language>
-        </Button>
-`;
-                }
-            } else if (specialButtonId && buttonType === 'special') {
-                // Special button
-                const button = specialButtons.find(b => b.id === specialButtonId);
-                if (button) {
-                    const title = button.title.replace(/\\n/g, '\n').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                    const bitmap = button.bitmap || '';
-                    const bgup = button.bgup || 'WHITE';
-                    const textup = button.textup || 'BLACK';
-                    const bgdn = button.bgdn || 'BLACK';
-                    const textdn = button.textdn || 'WHITE';
-                    const keyscan = button.keyscan || '1';
-                    const keyshift = button.keyshift || '1';
-                    const outageModeButtonDisabled = button.outageModeButtonDisabled || 'true';
-                    const v = button.v || '1';
-                    const h = button.h || '1';
-                    
-                    // Build all actions XML from the actions array
-                    let actionsXML = '';
-                    
-                    if (button.actions && Array.isArray(button.actions)) {
-                        button.actions.forEach(action => {
-                            let actionParams = '';
-                            if (action.params) {
-                                Object.keys(action.params).forEach(key => {
-                                    actionParams += `                <Parameter name="${key}" value="${action.params[key]}" />
-`;
-                                });
-                            }
-                            actionsXML += `            <Action type="${action.type}" workflow="${action.workflow}">
-${actionParams}            </Action>
-`;
-                        });
-                    }
-                    
-                    xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}"
-            bitmap="${bitmap}" bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}"
-            bgdn="${bgdn}" v="${v}" h="${h}" outageModeButtonDisabled="${outageModeButtonDisabled}">
-${actionsXML}            <Language code="en_US" name="English" parent="en">
-                <title>${title}</title>
-                <bitmap>${bitmap}</bitmap>
-            </Language>
-        </Button>
-`;
-                }
-            } else if (cellData.numberButtonId && buttonType === 'number') {
-                // Number button
-                console.log('Processing number button:', cellData.numberButtonId);
-                const numberButton = numberButtons.find(b => b.id === cellData.numberButtonId);
-                if (numberButton) {
-                    const title = numberButton.title || '';
-                    const bitmap = numberButton.bitmap || '';
-                    const keyscan = numberButton.keyscan || '1';
-                    const keyshift = numberButton.keyshift || '1';
-                    const textup = numberButton.textup || 'BLACK';
-                    const textdn = numberButton.textdn || 'WHITE';
-                    const bgup = numberButton.bgup || 'WHITE';
-                    const bgdn = numberButton.bgdn || 'BLACK';
-                    const outageModeButtonDisabled = numberButton.outageModeButtonDisabled || 'true';
-                    const v = numberButton.v || '1';
-                    const h = numberButton.h || '1';
-                    
-                    // Build actions XML from the actions array
-                    let actionsXML = '';
-                    if (numberButton.actions && Array.isArray(numberButton.actions)) {
-                        numberButton.actions.forEach(action => {
-                            let actionParams = '';
-                            if (action.params) {
-                                Object.keys(action.params).forEach(key => {
-                                    actionParams += `                <Parameter name="${key}" value="${action.params[key]}" />
-`;
-                                });
-                            }
-                            actionsXML += `            <Action type="${action.type}" workflow="${action.workflow}">
-${actionParams}            </Action>
-`;
-                        });
-                    }
-                    
-                    xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmap="${bitmap}"
-            bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}" bgdn="${bgdn}" v="${v}" h="${h}"
-            outageModeButtonDisabled="${outageModeButtonDisabled}">
-${actionsXML}            <Language code="en_US" name="English" parent="en">
-                <title>${title}</title>
-                <bitmap>${bitmap}</bitmap>
-            </Language>
-        </Button>
-`;
-                }
-            } else if (cellData.screenButtonId && buttonType === 'screen') {
-                // Screen button
-                console.log('Processing screen button:', cellData.screenButtonId);
-                const screenButton = screenButtons.find(b => b.id === cellData.screenButtonId);
-                if (screenButton) {
-                    const title = screenButton.title || '';
-                    const bitmap = screenButton.bitmap || '';
-                    const keyscan = screenButton.keyscan || '0';
-                    const keyshift = screenButton.keyshift || '0';
-                    const textup = screenButton.textup || 'BRIGHTWHITE';
-                    const textdn = screenButton.textdn || 'WHITE';
-                    const bgup = screenButton.bgup || 'DARKBLUE';
-                    const bgdn = screenButton.bgdn || 'BLACK';
-                    const outageModeButtonDisabled = screenButton.outageModeButtonDisabled || 'false';
-                    const v = screenButton.v || '1';
-                    const h = screenButton.h || '1';
-                    
-                    // Build actions XML from the actions array
-                    let actionsXML = '';
-                    if (screenButton.actions && Array.isArray(screenButton.actions)) {
-                        screenButton.actions.forEach(action => {
-                            let actionParams = '';
-                            if (action.params) {
-                                Object.keys(action.params).forEach(key => {
-                                    // Use custom screen number if available for ScreenNumber parameter
-                                    let paramValue = action.params[key];
-                                    if (key === 'ScreenNumber' && cellData.customScreenNumber) {
-                                        paramValue = cellData.customScreenNumber;
-                                        console.log(`Using custom screen number ${paramValue} for button ${cellData.screenButtonId}`);
+                        let buttonXML = `<Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmap="${bitmap}" bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}" bgdn="${bgdn}" v="${v}" h="${h}" outageModeButtonDisabled="${outageModeDisabled}">`;
+                        
+                        // Add actions if they exist
+                        if (numberButton.actions && numberButton.actions.length > 0) {
+                            for (const action of numberButton.actions) {
+                                buttonXML += `\n<Action type="${action.type}" workflow="${action.workflow}">`;
+                                if (action.params) {
+                                    for (const [paramName, paramValue] of Object.entries(action.params)) {
+                                        buttonXML += `\n<Parameter name="${escapeXMLAttribute(paramName)}" value="${escapeXMLAttribute(paramValue)}" />`;
                                     }
-                                    actionParams += `                <Parameter name="${key}" value="${paramValue}" />
-`;
-                                });
+                                }
+                                buttonXML += `\n</Action>`;
                             }
-                            actionsXML += `            <Action type="${action.type}" workflow="${action.workflow}">
-${actionParams}            </Action>
+                        }
+                        
+                        buttonXML += `\n<Language code="en_US" name="English" parent="en">
+<title>${escapeXML(numberButton.title || '')}</title>
+<bitmap>${escapeXML(numberButton.bitmap || '')}</bitmap>
+</Language>
+</Button>
 `;
-                        });
+                        xmlContent += buttonXML;
                     }
-                    
-                    xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmap="${bitmap}"
-            bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}" bgdn="${bgdn}" v="${v}" h="${h}"
-            outageModeButtonDisabled="${outageModeButtonDisabled}">
-${actionsXML}            <Language code="en_US" name="English" parent="en">
-                <title>${title}</title>
-                <bitmap>${bitmap}</bitmap>
-            </Language>
-        </Button>
-`;
                 }
+            } else if (buttonType === 'screen' || cellData.screenButtonId) {
+                // Screen button
+                const screenButtonId = cellData.screenButtonId;
+                const customScreenNumber = cellData.customScreenNumber || '301';
+                
+                // Try to get the actual screen button for better title and styling
+                let button = null;
+                if (screenButtonId && window.screenButtons) {
+                    button = window.screenButtons.find(b => b.id === screenButtonId);
+                }
+                
+                const title = button ? escapeXMLAttribute(button.title.replace(/\\n/g, '\n')) : escapeXMLAttribute(`Screen ${customScreenNumber}`);
+                const bitmap = button ? escapeXMLAttribute(button.bitmap || '') : '';
+                const textup = button ? (button.textup || 'BLACK') : 'BLACK';
+                const textdn = button ? (button.textdn || 'WHITE') : 'WHITE';
+                const bgup = button ? (button.bgup || 'WHITE') : 'WHITE';
+                const bgdn = button ? (button.bgdn || 'BLACK') : 'BLACK';
+                const v = button ? (button.v || '1') : '1';
+                const h = button ? (button.h || '1') : '1';
+                const keyscan = button ? (button.keyscan || '0') : '0';
+                const keyshift = button ? (button.keyshift || '0') : '0';
+                const outageModeDisabled = button ? (button.outageModeButtonDisabled || 'false') : 'false';
+                
+                let buttonXML = `<Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmap="${bitmap}" bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}" bgdn="${bgdn}" v="${v}" h="${h}" outageModeButtonDisabled="${outageModeDisabled}">`;
+                
+                // Add actions - prioritize the actual button actions if available, otherwise use screen navigation
+                if (button && button.actions && button.actions.length > 0) {
+                    for (const action of button.actions) {
+                        buttonXML += `\n<Action type="${action.type}" workflow="${action.workflow}">`;
+                        if (action.params) {
+                            for (const [paramName, paramValue] of Object.entries(action.params)) {
+                                // If this is a ScreenNumber parameter and we have a custom screen number, use it
+                                const finalValue = (paramName === 'ScreenNumber' && customScreenNumber) ? customScreenNumber : paramValue;
+                                buttonXML += `\n<Parameter name="${escapeXMLAttribute(paramName)}" value="${escapeXMLAttribute(finalValue)}" />`;
+                            }
+                        }
+                        buttonXML += `\n</Action>`;
+                    }
+                } else {
+                    // Default screen navigation action
+                    buttonXML += `\n<Action type="onclick" workflow="WF_ShowScreen">
+<Parameter name="ScreenNumber" value="${escapeXMLAttribute(customScreenNumber)}" />
+</Action>`;
+                }
+                
+                buttonXML += `\n<Language code="en_US" name="English" parent="en">
+<title>${escapeXML(button ? button.title.replace(/\\n/g, '\n') : `Screen ${customScreenNumber}`)}</title>
+<bitmap>${escapeXML(bitmap)}</bitmap>
+</Language>
+</Button>
+`;
+                xmlContent += buttonXML;
             }
-            
-            buttonNumber++;
         });
-        }
     }
     
     xmlContent += `</Screen>
@@ -662,16 +595,17 @@ function downloadScreenXML() {
 }
 
 function performXMLExport() {
-    try {
-        console.log('Starting XML export...');
-        console.log('Screen manager available:', !!window.screenManager);
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log('Starting XML export...');
+            console.log('Screen manager available:', !!window.screenManager);
+            
+            if (window.screenManager) {
+                const screens = window.screenManager.getAllScreens();
+                console.log('Available screens:', screens.map(s => ({id: s.id, name: s.name, itemCount: s.gridState ? s.gridState.filter(cell => cell).length : 0})));
+            }
         
-        if (window.screenManager) {
-            const screens = window.screenManager.getAllScreens();
-            console.log('Available screens:', screens.map(s => ({id: s.id, name: s.name, itemCount: s.gridState ? s.gridState.filter(cell => cell).length : 0})));
-        }
-        
-        const xmlContent = exportScreenXML();
+        const xmlContent = await exportScreenXML();
         const blob = new Blob([xmlContent], { type: 'application/xml' });
         const url = URL.createObjectURL(blob);
         
@@ -689,10 +623,13 @@ function performXMLExport() {
         
         console.log(`Screen XML exported successfully (${screenCount} screen${screenCount > 1 ? 's' : ''})`);
         alert(`Screen configuration exported successfully!\n\n${screenCount} screen${screenCount > 1 ? 's' : ''} included in export.`);
+        resolve();
     } catch (error) {
         console.error('Error exporting screen XML:', error);
         alert('Error exporting screen configuration: ' + error.message);
+        reject(error);
     }
+    });
 }
 
 // Function to get current configuration summary
