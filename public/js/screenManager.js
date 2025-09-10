@@ -922,7 +922,7 @@ class ScreenManager {
                                 border-radius: 3px;
                                 font-size: 11px;
                                 cursor: pointer;
-                            ">Edit Name</button>
+                            ">📝</button>
                             <button class="edit-screen-number-btn" data-screen-id="${screen.id}" style="
                                 padding: 4px 8px;
                                 background: #007bff;
@@ -931,7 +931,7 @@ class ScreenManager {
                                 border-radius: 3px;
                                 font-size: 11px;
                                 cursor: pointer;
-                            ">Edit #</button>
+                            ">#</button>
                             <button class="delete-screen-btn" data-screen-id="${screen.id}" style="
                                 padding: 4px 8px;
                                 background: #dc3545;
@@ -940,7 +940,7 @@ class ScreenManager {
                                 border-radius: 3px;
                                 font-size: 11px;
                                 cursor: pointer;
-                            ">Delete</button>
+                            ">🗑️</button>
                         ` : `
                             <button class="edit-screen-name-btn" data-screen-id="${screen.id}" style="
                                 padding: 4px 8px;
@@ -950,7 +950,7 @@ class ScreenManager {
                                 border-radius: 3px;
                                 font-size: 11px;
                                 cursor: pointer;
-                            ">Edit Name</button>
+                            ">📝</button>
                         `}
                     </div>
                 </div>
