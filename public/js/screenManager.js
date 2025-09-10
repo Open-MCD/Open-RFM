@@ -788,7 +788,7 @@ class ScreenManager {
                         }
                         
                         if (button) {
-                            const imageUrl = button.bitmap ? `/NP6-Images/${button.bitmap}` : null;
+                            const imageUrl = button.bitmap ? `/US-NP6-Images/${button.bitmap}` : null;
                             const bgColor = convertPOSColor(button.bgup || button.colors?.bgup || 'WHITE');
                             const textColor = convertPOSColor(button.textup || button.colors?.textup || 'BLACK');
                             
