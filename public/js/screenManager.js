@@ -779,9 +779,60 @@ class ScreenManager {
                         gridItem.dataset.customScreenNumber = cellData.customScreenNumber;
                     }
                     
-                    // Restore visual content
-                    if (cellData.innerHTML) {
-                        gridItem.innerHTML = cellData.innerHTML;
+                    // Restore visual content based on button type
+                    if (cellData.buttonType === 'screen' && cellData.screenButtonId) {
+                        // For screen buttons, recreate the visual display properly
+                        let button = window.screenButtons ? window.screenButtons.find(b => b.id === cellData.screenButtonId) : null;
+                        if (!button && window.pageButtons) {
+                            button = window.pageButtons.find(b => b.id === cellData.screenButtonId);
+                        }
+                        
+                        if (button) {
+                            const imageUrl = button.bitmap ? `/NP6-Images/${button.bitmap}` : null;
+                            const bgColor = convertPOSColor(button.bgup || button.colors?.bgup || 'WHITE');
+                            const textColor = convertPOSColor(button.textup || button.colors?.textup || 'BLACK');
+                            
+                            if (imageUrl) {
+                                // Show the image, filling the entire grid cell
+                                gridItem.innerHTML = `
+                                    <img src="${imageUrl}" alt="${button.title}" style="
+                                        width: 100%;
+                                        height: 100%;
+                                        object-fit: cover;
+                                    " onerror="this.style.display='none'; this.parentElement.style.backgroundColor='#f8f8f8';">
+                                `;
+                            } else {
+                                // Show text only with proper styling
+                                gridItem.innerHTML = `
+                                    <div style="
+                                        width: 100%; 
+                                        height: 100%; 
+                                        background: ${bgColor}; 
+                                        color: ${textColor}; 
+                                        display: flex; 
+                                        align-items: center; 
+                                        justify-content: center;
+                                        text-align: center;
+                                        font-family: Arial, sans-serif;
+                                        font-weight: bold;
+                                        font-size: 9px;
+                                        line-height: 1.1;
+                                    ">
+                                        ${button.title.replace(/\\n/g, '<br>')}
+                                    </div>
+                                `;
+                            }
+                        } else {
+                            // Fallback if button not found - use stored innerHTML
+                            if (cellData.innerHTML) {
+                                gridItem.innerHTML = cellData.innerHTML;
+                            }
+                        }
+                    } else {
+                        // For other button types, use stored innerHTML
+                        if (cellData.innerHTML) {
+                            gridItem.innerHTML = cellData.innerHTML;
+                        }
                     }
                     
                     // Add delete button for all filled items
@@ -1077,6 +1128,25 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Screen manager initialized with', screenManager.getAllScreens().length, 'screens');
     console.log('Available screens:', screenManager.getAllScreens().map(s => s.id));
 });
+
+// Convert POS color names to CSS colors
+function convertPOSColor(posColor) {
+    const colorMap = {
+        'WHITE': '#FFFFFF',
+        'BLACK': '#000000',
+        'SILVER': '#C0C0C0',
+        'GOLD': '#FFD700',
+        'ROYALBLUE': '#4169E1',
+        'DARKRED': '#8B0000',
+        'GREEN': '#008000',
+        'LIGHTRED': '#FF6B6B',
+        'BRIGHTWHITE': '#FFFFFF',
+        'SNOW': '#FFFAFA',
+        'LIGHTCYAN': '#E0FFFF',
+        'DARKBLUE': '#00008B'
+    };
+    return colorMap[posColor] || '#FFFFFF';
+}
 
 // Ensure it's available for immediate access (will be null until DOM loads)
 window.screenManager = screenManager;
