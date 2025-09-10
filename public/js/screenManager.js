@@ -4,6 +4,7 @@ class ScreenManager {
         this.screens = new Map(); // Store screen data by ID
         this.currentScreenId = 301; // Default screen ID
         this.nextScreenId = 302; // Next available screen ID
+        this.imageRepository = 'us-np6-images'; // Default to US images
         
         this.init();
     }
@@ -33,6 +34,20 @@ class ScreenManager {
                 console.log('Add screen button event listener attached');
             } else {
                 console.warn('Add screen button not found in DOM');
+            }
+
+            // Image repository selector
+            const imageRepositorySelector = document.getElementById('image-repository-selector');
+            if (imageRepositorySelector) {
+                imageRepositorySelector.addEventListener('change', (e) => {
+                    this.imageRepository = e.target.value;
+                    console.log('Image repository changed to:', this.imageRepository);
+                    // Refresh current screen to update images
+                    this.refreshCurrentScreenImages();
+                });
+                console.log('Image repository selector event listener attached');
+            } else {
+                console.warn('Image repository selector not found in DOM');
             }
         }, 100);
     }
@@ -788,7 +803,7 @@ class ScreenManager {
                         }
                         
                         if (button) {
-                            const imageUrl = button.bitmap ? `/US-NP6-Images/${button.bitmap}` : null;
+                            const imageUrl = this.getImageUrl(button.bitmap);
                             const bgColor = convertPOSColor(button.bgup || button.colors?.bgup || 'WHITE');
                             const textColor = convertPOSColor(button.textup || button.colors?.textup || 'BLACK');
                             
@@ -1128,6 +1143,33 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Screen manager initialized with', screenManager.getAllScreens().length, 'screens');
     console.log('Available screens:', screenManager.getAllScreens().map(s => s.id));
 });
+
+// Helper method to get image URL with current repository
+ScreenManager.prototype.getImageUrl = function(bitmap) {
+    return bitmap ? `/${this.imageRepository}/${bitmap}` : null;
+};
+
+// Global function to get current image repository
+window.getCurrentImageRepository = function() {
+    return window.screenManager ? window.screenManager.imageRepository : 'us-np6-images';
+};
+
+// Global function to get image URL
+window.getImageUrl = function(bitmap) {
+    const repository = window.getCurrentImageRepository();
+    return bitmap ? `/${repository}/${bitmap}` : null;
+};
+
+// Method to refresh current screen images when repository changes
+ScreenManager.prototype.refreshCurrentScreenImages = function() {
+    // Trigger a reload of the current grid to update image paths
+    this.loadGridFromState();
+    
+    // Also refresh product selector if it's open
+    if (window.refreshProductSelectorImages) {
+        window.refreshProductSelectorImages();
+    }
+};
 
 // Convert POS color names to CSS colors
 function convertPOSColor(posColor) {

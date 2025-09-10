@@ -380,7 +380,7 @@ function renderSpecialButtonsList(searchTerm = '') {
     
     // Create special buttons grid
     const specialButtonsHtml = filteredButtons.map(button => {
-        const imageUrl = button.bitmap ? `/NP6-Images/${button.bitmap}` : null;
+        const imageUrl = window.getImageUrl(button.bitmap);
         const imageHtml = imageUrl 
             ? `<img src="${imageUrl}" alt="${button.title}" style="
                 width: 100%;
@@ -562,7 +562,7 @@ function renderPageButtonsList(searchTerm = '') {
 function renderButtonCategory(buttons, container, buttonType, searchTerm = '') {
     // Create buttons grid
     const buttonsHtml = buttons.map(button => {
-        const imageUrl = button.bitmap ? `/NP6-Images/${button.bitmap}` : null;
+        const imageUrl = window.getImageUrl(button.bitmap);
         const imageHtml = imageUrl 
             ? `<img src="${imageUrl}" alt="${button.title}" style="
                 width: 100%;
@@ -705,7 +705,7 @@ function renderProductsList(searchTerm = '') {
     const productsHtml = filteredProducts.map(product => {
         // Determine the image URL - use imageName if available, otherwise show placeholder
         const imageUrl = product.imageName 
-            ? `/NP6-Images/${product.imageName}` 
+            ? window.getImageUrl(product.imageName)
             : null;
         
         const imageHtml = imageUrl 
@@ -845,7 +845,7 @@ function selectSpecialButton(buttonId) {
     
     if (gridItem) {
         // Create image element if bitmap exists
-        const imageUrl = button.bitmap ? `/NP6-Images/${button.bitmap}` : null;
+        const imageUrl = window.getImageUrl(button.bitmap);
         const bgColor = convertPOSColor(button.bgup || button.colors?.bgup || 'WHITE');
         const textColor = convertPOSColor(button.textup || button.colors?.textup || 'BLACK');
         
@@ -949,7 +949,7 @@ function selectProduct(productCode) {
     
     if (gridItem) {
         // Create image element if imageName exists
-        const imageUrl = product.imageName ? `/NP6-Images/${product.imageName}` : null;
+        const imageUrl = window.getImageUrl(product.imageName);
         
         if (imageUrl) {
             // Show only the product image, filling the entire grid cell
@@ -1511,6 +1511,40 @@ window.deleteGridItem = deleteGridItem;
 window.editPlacedScreenButtonScreenNumber = editPlacedScreenButtonScreenNumber;
 window.updatePlacedScreenButtonScreenNumber = updatePlacedScreenButtonScreenNumber;
 window.updateGoToButton = updateGoToButton;
+
+// Function to refresh all product selector images when repository changes
+window.refreshProductSelectorImages = function() {
+    // Re-render all product categories if selector is open
+    const productSelectorModal = document.getElementById('product-selector-modal');
+    if (productSelectorModal && productSelectorModal.style.display === 'block') {
+        // Get current search term and selected category
+        const searchInput = document.getElementById('product-search');
+        const categoryTabs = document.querySelectorAll('.category-tab');
+        let activeCategory = 'products';
+        
+        categoryTabs.forEach(tab => {
+            if (tab.classList.contains('active')) {
+                activeCategory = tab.textContent.toLowerCase();
+            }
+        });
+        
+        const searchTerm = searchInput ? searchInput.value : '';
+        
+        // Re-render the active category
+        const container = document.getElementById('products-grid');
+        if (container) {
+            if (activeCategory === 'products') {
+                renderProducts(container, searchTerm);
+            } else if (activeCategory === 'screen buttons') {
+                renderButtonCategory(screenButtons, container, 'screen', searchTerm);
+            } else if (activeCategory === 'special buttons') {
+                renderButtonCategory(specialButtons, container, 'special', searchTerm);
+            } else if (activeCategory === 'number buttons') {
+                renderButtonCategory(numberButtons, container, 'number', searchTerm);
+            }
+        }
+    }
+};
 
 // Export arrays for access by other modules
 window.screenButtons = screenButtons;
