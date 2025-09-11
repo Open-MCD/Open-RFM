@@ -385,7 +385,7 @@ function renderSpecialButtonsList(searchTerm = '') {
             ? `<img src="${imageUrl}" alt="${button.title}" style="
                 width: 100%;
                 height: 100%;
-                object-fit: cover;
+                object-fit: fill;
                 margin-bottom: 5px;
             " onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`
             : '';
@@ -567,7 +567,7 @@ function renderButtonCategory(buttons, container, buttonType, searchTerm = '') {
             ? `<img src="${imageUrl}" alt="${button.title}" style="
                 width: 100%;
                 height: 100%;
-                object-fit: cover;
+                object-fit: fill;
                 margin-bottom: 5px;
             " onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`
             : '';
@@ -712,7 +712,7 @@ function renderProductsList(searchTerm = '') {
             ? `<img src="${imageUrl}" alt="${product.longName || product.shortName || 'Product'}" style="
                 width: 100%;
                 height: 100%;
-                object-fit: cover;
+                object-fit: fill;
             " onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`
             : '';
         
@@ -961,7 +961,7 @@ function selectProduct(productCode) {
                 <img src="${imageUrl}" alt="${product.longName || product.shortName || 'Product'}" style="
                     width: 100%;
                     height: 100%;
-                    object-fit: cover;
+                    object-fit: fill;
                 " onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=&quot;padding:5px;font-size:10px;text-align:center;color:${textColor};background:${bgColor};display:flex;align-items:center;justify-content:center;height:100%;box-sizing:border-box;&quot;>${product.longName || product.shortName || 'Product'}</div>';">
             `;
             // Set the grid item background color for when image loads

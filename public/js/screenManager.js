@@ -817,7 +817,7 @@ class ScreenManager {
                                     <img src="${imageUrl}" alt="${button.title}" style="
                                         width: 100%;
                                         height: 100%;
-                                        object-fit: cover;
+                                        object-fit: fill;
                                     " onerror="this.style.display='none'; this.parentElement.style.backgroundColor='#f8f8f8';">
                                 `;
                             } else {
@@ -863,7 +863,7 @@ class ScreenManager {
                                         <img src="${imageUrl}" alt="${product.longName || product.shortName || 'Product'}" style="
                                             width: 100%;
                                             height: 100%;
-                                            object-fit: cover;
+                                            object-fit: fill;
                                         " onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=&quot;padding:5px;font-size:10px;text-align:center;color:${textColor};background:${bgColor};display:flex;align-items:center;justify-content:center;height:100%;box-sizing:border-box;&quot;>${product.longName || product.shortName || 'Product'}</div>';">
                                     `;
                                     gridItem.style.backgroundColor = bgColor;
