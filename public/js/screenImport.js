@@ -457,7 +457,7 @@ function createProductButtonHTML(title, bitmap, productCode) {
     
     if (displayImage) {
         // If we have an image, use the same format as working products but with fallback text
-        return `<img src="/NP6-Images/${displayImage}" alt="${displayTitle}" style="
+        return `<img src="${window.getImageUrl ? window.getImageUrl(displayImage) : `/US-NP6-Images/${displayImage}`}" alt="${displayTitle}" style="
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
@@ -545,7 +545,7 @@ function createGenericButtonHTML(title, bitmap) {
             position: relative;
         ">
             ${bitmap ? `
-                <img src="/NP6-Images/${bitmap}" 
+                <img src="${window.getImageUrl ? window.getImageUrl(bitmap) : `/US-NP6-Images/${bitmap}`}" 
                      alt="${title}" 
                      style="
                         width: 100%;

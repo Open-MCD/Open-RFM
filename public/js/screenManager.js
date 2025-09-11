@@ -4,7 +4,7 @@ class ScreenManager {
         this.screens = new Map(); // Store screen data by ID
         this.currentScreenId = 301; // Default screen ID
         this.nextScreenId = 302; // Next available screen ID
-        this.imageRepository = 'us-np6-images'; // Default to US images
+        this.imageRepository = 'US-NP6-Images'; // Default to US images
         
         this.init();
     }
@@ -843,6 +843,28 @@ class ScreenManager {
                                 gridItem.innerHTML = cellData.innerHTML;
                             }
                         }
+                    } else if (cellData.buttonType === 'product' && cellData.productCode) {
+                        // For product buttons, regenerate with current image repository
+                        if (window.addProductToGrid) {
+                            window.addProductToGrid(cellData.productCode, index);
+                        } else if (cellData.innerHTML) {
+                            gridItem.innerHTML = cellData.innerHTML;
+                        }
+                    } else if ((cellData.buttonType === 'special' && cellData.specialButtonId) ||
+                              (cellData.buttonType === 'number' && cellData.numberButtonId)) {
+                        // For special and number buttons, regenerate with current image repository
+                        let button = null;
+                        if (cellData.specialButtonId && window.specialButtons) {
+                            button = window.specialButtons.find(b => b.id === cellData.specialButtonId);
+                        } else if (cellData.numberButtonId && window.numberButtons) {
+                            button = window.numberButtons.find(b => b.id === cellData.numberButtonId);
+                        }
+                        
+                        if (button && window.addButtonToGrid) {
+                            window.addButtonToGrid(button, cellData.buttonType, index);
+                        } else if (cellData.innerHTML) {
+                            gridItem.innerHTML = cellData.innerHTML;
+                        }
                     } else {
                         // For other button types, use stored innerHTML
                         if (cellData.innerHTML) {
@@ -1151,7 +1173,7 @@ ScreenManager.prototype.getImageUrl = function(bitmap) {
 
 // Global function to get current image repository
 window.getCurrentImageRepository = function() {
-    return window.screenManager ? window.screenManager.imageRepository : 'us-np6-images';
+    return window.screenManager ? window.screenManager.imageRepository : 'US-NP6-Images';
 };
 
 // Global function to get image URL
@@ -1163,7 +1185,7 @@ window.getImageUrl = function(bitmap) {
 // Method to refresh current screen images when repository changes
 ScreenManager.prototype.refreshCurrentScreenImages = function() {
     // Trigger a reload of the current grid to update image paths
-    this.loadGridFromState();
+    this.loadGridState(this.currentScreenId);
     
     // Also refresh product selector if it's open
     if (window.refreshProductSelectorImages) {
