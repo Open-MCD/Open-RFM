@@ -157,7 +157,16 @@ function openProductSelector(gridIndex) {
     // Remove any existing overlay first
     closeProductSelector();
     
-    // Set the grid position AFTER closing any existing popup
+    // Clear any existing item at this position first (including spanning buttons)
+    const gridItems = document.querySelectorAll('.grid-item');
+    const targetGridItem = gridItems[gridIndex];
+    
+    if (targetGridItem && targetGridItem.dataset.buttonType) {
+        // If there's an existing item, delete it completely (including spanned cells)
+        deleteGridItemSilently(targetGridItem);
+    }
+    
+    // Set the grid position AFTER closing any existing popup and clearing existing item
     currentGridPosition = gridIndex;
     
     // Create popup overlay
@@ -844,6 +853,12 @@ function selectSpecialButton(buttonId) {
     const gridItem = gridItems[currentGridPosition];
     
     if (gridItem) {
+        // Ensure this is placed as a standard 1x1 item by clearing any spanning CSS
+        gridItem.style.gridRow = '';
+        gridItem.style.gridColumn = '';
+        gridItem.style.zIndex = '';
+        gridItem.style.display = '';
+        
         // Create image element if bitmap exists
         const imageUrl = window.getImageUrl(button.bitmap);
         const bgColor = convertPOSColor(button.bgup || button.colors?.bgup || 'WHITE');
@@ -948,6 +963,12 @@ function selectProduct(productCode) {
     const gridItem = gridItems[currentGridPosition];
     
     if (gridItem) {
+        // Ensure this is placed as a standard 1x1 item by clearing any spanning CSS
+        gridItem.style.gridRow = '';
+        gridItem.style.gridColumn = '';
+        gridItem.style.zIndex = '';
+        gridItem.style.display = '';
+        
         // Create image element if imageName exists
         const imageUrl = window.getImageUrl(product.imageName);
         
@@ -1176,6 +1197,52 @@ function deleteGridItem(gridItem) {
     }
     
     console.log('Grid item(s) deleted');
+}
+
+// Function to delete a grid item silently (without confirmation) - used when replacing items
+function deleteGridItemSilently(gridItem) {
+    // Get the index of this grid item
+    const gridItems = document.querySelectorAll('.grid-item');
+    const gridIndex = Array.from(gridItems).indexOf(gridItem);
+    
+    // Check if this is a spanning button - get v and h values from screen manager
+    let v = 1, h = 1;
+    if (window.screenManager && window.screenManager.screens.has(window.screenManager.currentScreenId)) {
+        const screen = window.screenManager.screens.get(window.screenManager.currentScreenId);
+        if (screen.gridState && screen.gridState[gridIndex]) {
+            v = screen.gridState[gridIndex].v || 1;
+            h = screen.gridState[gridIndex].h || 1;
+        }
+    }
+    
+    // If this is a spanning button, clear all spanned cells
+    if (v > 1 || h > 1) {
+        const startRow = Math.floor(gridIndex / 10);
+        const startCol = gridIndex % 10;
+        
+        // Clear all cells that this button spans
+        for (let row = startRow; row < startRow + v && row < 9; row++) {
+            for (let col = startCol; col < startCol + h && col < 10; col++) {
+                const spanIndex = row * 10 + col;
+                if (spanIndex < gridItems.length) {
+                    const spanItem = gridItems[spanIndex];
+                    
+                    // Clear the spanned cell
+                    clearGridItemContent(spanItem);
+                }
+            }
+        }
+    } else {
+        // Just clear this single cell
+        clearGridItemContent(gridItem);
+    }
+    
+    // Save to screen manager if available
+    if (window.screenManager) {
+        window.screenManager.saveCurrentGridState();
+    }
+    
+    console.log('Grid item(s) cleared for replacement');
 }
 
 // Helper function to clear a single grid item's content
