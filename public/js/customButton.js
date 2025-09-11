@@ -293,17 +293,7 @@ function initializeCustomButtonCreator() {
         const widthValidation = document.getElementById('width-validation');
         
         widthInput.addEventListener('input', function() {
-            const value = parseInt(this.value);
-            
-            if (isNaN(value) || value < 1 || value > 10) {
-                this.style.borderColor = '#dc3545';
-                widthValidation.style.color = '#dc3545';
-                widthValidation.textContent = 'Must be 1-10 cells';
-            } else {
-                this.style.borderColor = '#28a745';
-                widthValidation.style.color = '#28a745';
-                widthValidation.textContent = `Width: ${value} cells ✓`;
-            }
+            validateDimensions();
         });
         
         // Height validation
@@ -311,18 +301,74 @@ function initializeCustomButtonCreator() {
         const heightValidation = document.getElementById('height-validation');
         
         heightInput.addEventListener('input', function() {
-            const value = parseInt(this.value);
+            validateDimensions();
+        });
+        
+        // Function to validate dimensions and grid boundaries
+        function validateDimensions() {
+            const width = parseInt(widthInput.value);
+            const height = parseInt(heightInput.value);
             
-            if (isNaN(value) || value < 1 || value > 9) {
-                this.style.borderColor = '#dc3545';
+            // Basic range validation
+            const widthValid = !isNaN(width) && width >= 1 && width <= 10;
+            const heightValid = !isNaN(height) && height >= 1 && height <= 9;
+            
+            // Get current grid position for boundary checking
+            const currentPosition = window.currentGridPosition;
+            let boundaryValid = true;
+            let boundaryMessage = '';
+            
+            if (currentPosition !== null && widthValid && heightValid) {
+                const startCol = currentPosition % 10;  // Column (0-9)
+                const startRow = Math.floor(currentPosition / 10);  // Row (0-8)
+                
+                // Check if button would extend beyond grid boundaries
+                const endCol = startCol + width - 1;
+                const endRow = startRow + height - 1;
+                
+                if (endCol >= 10) {
+                    boundaryValid = false;
+                    boundaryMessage = `Width ${width} extends beyond grid (max ${10 - startCol} from column ${startCol + 1})`;
+                } else if (endRow >= 9) {
+                    boundaryValid = false;
+                    boundaryMessage = `Height ${height} extends beyond grid (max ${9 - startRow} from row ${startRow + 1})`;
+                }
+            }
+            
+            // Update width validation
+            if (!widthValid) {
+                widthInput.style.borderColor = '#dc3545';
+                widthValidation.style.color = '#dc3545';
+                widthValidation.textContent = 'Must be 1-10 cells';
+            } else if (!boundaryValid && boundaryMessage.includes('Width')) {
+                widthInput.style.borderColor = '#dc3545';
+                widthValidation.style.color = '#dc3545';
+                widthValidation.textContent = boundaryMessage;
+            } else {
+                widthInput.style.borderColor = '#28a745';
+                widthValidation.style.color = '#28a745';
+                widthValidation.textContent = `Width: ${width} cells ✓`;
+            }
+            
+            // Update height validation
+            if (!heightValid) {
+                heightInput.style.borderColor = '#dc3545';
                 heightValidation.style.color = '#dc3545';
                 heightValidation.textContent = 'Must be 1-9 cells';
+            } else if (!boundaryValid && boundaryMessage.includes('Height')) {
+                heightInput.style.borderColor = '#dc3545';
+                heightValidation.style.color = '#dc3545';
+                heightValidation.textContent = boundaryMessage;
             } else {
-                this.style.borderColor = '#28a745';
+                heightInput.style.borderColor = '#28a745';
                 heightValidation.style.color = '#28a745';
-                heightValidation.textContent = `Height: ${value} cells ✓`;
+                heightValidation.textContent = `Height: ${height} cells ✓`;
             }
-        });
+            
+            // Store validation results for overall validation check
+            widthInput.dataset.isValid = (widthValid && (currentPosition === null || !boundaryMessage.includes('Width'))).toString();
+            heightInput.dataset.isValid = (heightValid && (currentPosition === null || !boundaryMessage.includes('Height'))).toString();
+        }
         
         // Trigger initial validation
         titleInput.dispatchEvent(new Event('input'));
@@ -339,13 +385,11 @@ function initializeCustomButtonCreator() {
             const createBtn = document.getElementById('create-custom-btn');
             const title = titleInput.value.trim();
             const image = imageInput.value.trim();
-            const width = parseInt(widthInput.value);
-            const height = parseInt(heightInput.value);
             
             const titleValid = title.length > 0 && title.length <= 20;
             const imageValid = image.length > 0;
-            const widthValid = !isNaN(width) && width >= 1 && width <= 10;
-            const heightValid = !isNaN(height) && height >= 1 && height <= 9;
+            const widthValid = widthInput.dataset.isValid === 'true';
+            const heightValid = heightInput.dataset.isValid === 'true';
             
             if (titleValid && imageValid && widthValid && heightValid) {
                 createBtn.disabled = false;
@@ -508,8 +552,25 @@ function createCustomButton() {
     const widthValid = width >= 1 && width <= 10;
     const heightValid = height >= 1 && height <= 9;
     
-    if (!titleValid || !imageValid || !widthValid || !heightValid) {
-        alert('Please fix all validation errors before creating the button.');
+    // Check grid boundaries
+    let boundaryValid = true;
+    if (window.currentGridPosition !== null) {
+        const startCol = window.currentGridPosition % 10;  // Column (0-9)
+        const startRow = Math.floor(window.currentGridPosition / 10);  // Row (0-8)
+        const endCol = startCol + width - 1;
+        const endRow = startRow + height - 1;
+        
+        if (endCol >= 10 || endRow >= 9) {
+            boundaryValid = false;
+        }
+    }
+    
+    if (!titleValid || !imageValid || !widthValid || !heightValid || !boundaryValid) {
+        if (!boundaryValid) {
+            alert('Button dimensions would extend beyond the grid boundaries. Please adjust the size or position.');
+        } else {
+            alert('Please fix all validation errors before creating the button.');
+        }
         return;
     }
     
