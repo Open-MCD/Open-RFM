@@ -1134,6 +1134,52 @@ function deleteGridItem(gridItem) {
         return;
     }
     
+    // Get the index of this grid item
+    const gridItems = document.querySelectorAll('.grid-item');
+    const gridIndex = Array.from(gridItems).indexOf(gridItem);
+    
+    // Check if this is a spanning button - get v and h values from screen manager
+    let v = 1, h = 1;
+    if (window.screenManager && window.screenManager.screens.has(window.screenManager.currentScreenId)) {
+        const screen = window.screenManager.screens.get(window.screenManager.currentScreenId);
+        if (screen.gridState && screen.gridState[gridIndex]) {
+            v = screen.gridState[gridIndex].v || 1;
+            h = screen.gridState[gridIndex].h || 1;
+        }
+    }
+    
+    // If this is a spanning button, clear all spanned cells
+    if (v > 1 || h > 1) {
+        const startRow = Math.floor(gridIndex / 10);
+        const startCol = gridIndex % 10;
+        
+        // Clear all cells that this button spans
+        for (let row = startRow; row < startRow + v && row < 9; row++) {
+            for (let col = startCol; col < startCol + h && col < 10; col++) {
+                const spanIndex = row * 10 + col;
+                if (spanIndex < gridItems.length) {
+                    const spanItem = gridItems[spanIndex];
+                    
+                    // Clear the spanned cell
+                    clearGridItemContent(spanItem);
+                }
+            }
+        }
+    } else {
+        // Just clear this single cell
+        clearGridItemContent(gridItem);
+    }
+    
+    // Save to screen manager if available
+    if (window.screenManager) {
+        window.screenManager.saveCurrentGridState();
+    }
+    
+    console.log('Grid item(s) deleted');
+}
+
+// Helper function to clear a single grid item's content
+function clearGridItemContent(gridItem) {
     // Clear all data attributes
     delete gridItem.dataset.productCode;
     delete gridItem.dataset.specialButtonId;
@@ -1142,18 +1188,17 @@ function deleteGridItem(gridItem) {
     delete gridItem.dataset.pageButtonId;
     delete gridItem.dataset.buttonType;
     delete gridItem.dataset.customScreenNumber;
+    delete gridItem.dataset.isSpanned;
+    delete gridItem.dataset.parentIndex;
     
     // Clear the grid item content and styling
     gridItem.innerHTML = `<div style="font-size: 10px; color: #666; text-align: center;">Click to<br>select product</div>`;
     gridItem.style.backgroundColor = '';
     gridItem.style.position = '';
-    
-    // Save to screen manager if available
-    if (window.screenManager) {
-        window.screenManager.saveCurrentGridState();
-    }
-    
-    console.log('Grid item deleted');
+    gridItem.style.display = ''; // Reset display for spanned cells
+    gridItem.style.gridRow = ''; // Reset grid positioning
+    gridItem.style.gridColumn = '';
+    gridItem.style.zIndex = '';
 }
 
 // Function to add edit button overlay to grid item for screen buttons

@@ -732,12 +732,27 @@ class ScreenManager {
                     innerHTML: item.innerHTML || ''
                 };
                 
-                // Preserve originalXML from existing gridState if it exists
-                if (screen.gridState && screen.gridState[index] && screen.gridState[index].originalXML) {
-                    cellData.originalXML = screen.gridState[index].originalXML;
+                // Preserve v and h values from existing gridState if they exist
+                if (screen.gridState && screen.gridState[index]) {
+                    if (screen.gridState[index].v) {
+                        cellData.v = screen.gridState[index].v;
+                    }
+                    if (screen.gridState[index].h) {
+                        cellData.h = screen.gridState[index].h;
+                    }
+                    if (screen.gridState[index].originalXML) {
+                        cellData.originalXML = screen.gridState[index].originalXML;
+                    }
                 }
                 
                 gridState[index] = cellData;
+            } else if (item.dataset.isSpanned === 'true') {
+                // This is a spanned cell, preserve the spanning information
+                gridState[index] = {
+                    isSpanned: true,
+                    parentIndex: parseInt(item.dataset.parentIndex),
+                    buttonType: 'spanned'
+                };
             } else {
                 // Empty cells should be null, not empty objects
                 gridState[index] = null;
@@ -760,6 +775,10 @@ class ScreenManager {
             item.innerHTML = '';
             item.style.backgroundColor = '';
             item.style.position = '';
+            item.style.display = ''; // Reset display for spanned cells
+            item.style.gridRow = ''; // Reset grid positioning
+            item.style.gridColumn = '';
+            item.style.zIndex = '';
             delete item.dataset.productCode;
             delete item.dataset.specialButtonId;
             delete item.dataset.numberButtonId;
@@ -767,6 +786,8 @@ class ScreenManager {
             delete item.dataset.screenButtonId;
             delete item.dataset.buttonType;
             delete item.dataset.customScreenNumber;
+            delete item.dataset.isSpanned;
+            delete item.dataset.parentIndex;
         });
         
         // Load saved state
@@ -774,6 +795,34 @@ class ScreenManager {
             screen.gridState.forEach((cellData, index) => {
                 if (cellData && index < gridItems.length) {
                     const gridItem = gridItems[index];
+                    
+                    // Handle spanned cells (cells occupied by spanning buttons)
+                    if (cellData.isSpanned && cellData.parentIndex !== undefined) {
+                        // This cell is part of a spanning button, hide it
+                        gridItem.style.display = 'none';
+                        gridItem.dataset.isSpanned = 'true';
+                        gridItem.dataset.parentIndex = cellData.parentIndex;
+                        return; // Skip further processing for spanned cells
+                    }
+                    
+                    // Handle spanning buttons (main button that spans multiple cells)
+                    const v = cellData.v || 1;
+                    const h = cellData.h || 1;
+                    
+                    if (v > 1 || h > 1) {
+                        // This button spans multiple cells
+                        const startRow = Math.floor(index / 10);
+                        const startCol = index % 10;
+                        
+                        console.log(`Spanning button at index ${index}: v=${v}, h=${h}, startRow=${startRow}, startCol=${startCol}`);
+                        
+                        // Calculate grid positions and CSS for spanning
+                        gridItem.style.gridRow = `${startRow + 1} / span ${v}`;
+                        gridItem.style.gridColumn = `${startCol + 1} / span ${h}`;
+                        gridItem.style.zIndex = '10'; // Ensure spanning buttons appear above others
+                        
+                        console.log(`Applied CSS: gridRow="${gridItem.style.gridRow}", gridColumn="${gridItem.style.gridColumn}"`);
+                    }
                     
                     // Restore data attributes
                     if (cellData.productCode) {

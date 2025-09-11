@@ -338,7 +338,40 @@ function importSingleScreen(screenElement) {
         
         // Only add to gridState if it fits in the 9x10 grid (positions 1-90)
         if (gridIndex >= 0 && gridIndex < 90) {
-            gridState[gridIndex] = cellData;
+            const v = cellData.v || 1;
+            const h = cellData.h || 1;
+            
+            // Calculate which grid cells this button spans
+            const startRow = Math.floor(gridIndex / 10);
+            const startCol = gridIndex % 10;
+            
+            // Check if the button fits within the grid bounds
+            const endRow = startRow + v - 1;
+            const endCol = startCol + h - 1;
+            
+            if (endRow < 9 && endCol < 10) { // 9x10 grid (0-8 rows, 0-9 cols)
+                // Place the main button data at the starting position
+                gridState[gridIndex] = cellData;
+                
+                // Mark occupied cells for spanning buttons
+                for (let row = startRow; row < startRow + v; row++) {
+                    for (let col = startCol; col < startCol + h; col++) {
+                        const spanIndex = row * 10 + col;
+                        if (spanIndex !== gridIndex && spanIndex < 90) {
+                            // Mark as occupied by the main button
+                            gridState[spanIndex] = {
+                                isSpanned: true,
+                                parentIndex: gridIndex,
+                                buttonType: 'spanned'
+                            };
+                        }
+                    }
+                }
+            } else {
+                console.warn(`Button ${buttonNumber} with span ${h}x${v} doesn't fit in grid at position ${gridIndex + 1}`);
+                // Still place at starting position even if it doesn't fit perfectly
+                gridState[gridIndex] = cellData;
+            }
         }
     });
     
@@ -365,6 +398,10 @@ function parseButtonData(buttonElement) {
     const bitmap = buttonElement.getAttribute('bitmap') || '';
     const productCode = buttonElement.getAttribute('productCode');
     
+    // Get v and h values for button spanning
+    const v = parseInt(buttonElement.getAttribute('v')) || 1;
+    const h = parseInt(buttonElement.getAttribute('h')) || 1;
+    
     // Store the complete original XML structure for export
     const originalXML = buttonElement.outerHTML;
     
@@ -381,6 +418,8 @@ function parseButtonData(buttonElement) {
             index: parseInt(buttonElement.getAttribute('number')) - 1,
             productCode: productCode,
             buttonType: 'product',
+            v: v,
+            h: h,
             originalXML: originalXML,
             innerHTML: createProductButtonHTML(displayTitle, bitmap, productCode)
         };
@@ -427,6 +466,8 @@ function parseButtonData(buttonElement) {
                     screenButtonId: buttonId,
                     buttonType: 'screen',
                     customScreenNumber: targetScreen,
+                    v: v,
+                    h: h,
                     originalXML: originalXML,
                     innerHTML: createScreenButtonHTML(displayTitle, bitmap, targetScreen)
                 };
@@ -439,6 +480,8 @@ function parseButtonData(buttonElement) {
         index: parseInt(buttonElement.getAttribute('number')) - 1,
         specialButtonId: `imported-${Date.now()}-${Math.random()}`,
         buttonType: 'special',
+        v: v,
+        h: h,
         originalXML: originalXML,
         innerHTML: createGenericButtonHTML(displayTitle, bitmap)
     };

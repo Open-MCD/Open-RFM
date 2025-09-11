@@ -226,7 +226,7 @@ body {
 .grid-container {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(9, 1fr);
+    grid-template-rows: repeat(9, minmax(60px, 1fr));
     gap: 3px;
     flex: 1;
     background: #bbb;
@@ -297,7 +297,6 @@ body {
     color: #333;
     cursor: pointer;
     transition: background-color 0.2s;
-    aspect-ratio: 297/310;
 }
 
 .grid-item:hover {
