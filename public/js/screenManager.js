@@ -843,28 +843,6 @@ class ScreenManager {
                                 gridItem.innerHTML = cellData.innerHTML;
                             }
                         }
-                    } else if (cellData.buttonType === 'product' && cellData.productCode) {
-                        // For product buttons, regenerate with current image repository
-                        if (window.addProductToGrid) {
-                            window.addProductToGrid(cellData.productCode, index);
-                        } else if (cellData.innerHTML) {
-                            gridItem.innerHTML = cellData.innerHTML;
-                        }
-                    } else if ((cellData.buttonType === 'special' && cellData.specialButtonId) ||
-                              (cellData.buttonType === 'number' && cellData.numberButtonId)) {
-                        // For special and number buttons, regenerate with current image repository
-                        let button = null;
-                        if (cellData.specialButtonId && window.specialButtons) {
-                            button = window.specialButtons.find(b => b.id === cellData.specialButtonId);
-                        } else if (cellData.numberButtonId && window.numberButtons) {
-                            button = window.numberButtons.find(b => b.id === cellData.numberButtonId);
-                        }
-                        
-                        if (button && window.addButtonToGrid) {
-                            window.addButtonToGrid(button, cellData.buttonType, index);
-                        } else if (cellData.innerHTML) {
-                            gridItem.innerHTML = cellData.innerHTML;
-                        }
                     } else {
                         // For other button types, use stored innerHTML
                         if (cellData.innerHTML) {
@@ -1184,8 +1162,27 @@ window.getImageUrl = function(bitmap) {
 
 // Method to refresh current screen images when repository changes
 ScreenManager.prototype.refreshCurrentScreenImages = function() {
-    // Trigger a reload of the current grid to update image paths
-    this.loadGridState(this.currentScreenId);
+    // Update all image URLs in the current grid to use the new repository
+    const gridItems = document.querySelectorAll('.grid-item');
+    
+    gridItems.forEach(gridItem => {
+        // Find all img elements in this grid item
+        const images = gridItem.querySelectorAll('img');
+        
+        images.forEach(img => {
+            const currentSrc = img.src;
+            
+            // Update the image source to use the new repository
+            if (currentSrc.includes('/US-NP6-Images/')) {
+                img.src = currentSrc.replace('/US-NP6-Images/', `/${this.imageRepository}/`);
+            } else if (currentSrc.includes('/AU-NP6-Images/')) {
+                img.src = currentSrc.replace('/AU-NP6-Images/', `/${this.imageRepository}/`);
+            } else if (currentSrc.includes('/NP6-Images/')) {
+                // Handle legacy paths
+                img.src = currentSrc.replace('/NP6-Images/', `/${this.imageRepository}/`);
+            }
+        });
+    });
     
     // Also refresh product selector if it's open
     if (window.refreshProductSelectorImages) {

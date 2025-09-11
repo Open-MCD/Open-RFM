@@ -850,13 +850,13 @@ function selectSpecialButton(buttonId) {
         const textColor = convertPOSColor(button.textup || button.colors?.textup || 'BLACK');
         
         if (imageUrl) {
-            // Show only the image, filling the entire grid cell
+            // Show only the image, filling the entire grid cell with enhanced alt text
             gridItem.innerHTML = `
                 <img src="${imageUrl}" alt="${button.title}" style="
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
-                " onerror="this.style.display='none'; this.parentElement.style.backgroundColor='#f8f8f8';">
+                " onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=&quot;padding:5px;font-size:10px;text-align:center;color:${textColor};background:${bgColor};display:flex;align-items:center;justify-content:center;height:100%;box-sizing:border-box;font-weight:bold;&quot;>${button.title}</div>';">
             `;
         } else {
             // Show text only
@@ -951,19 +951,42 @@ function selectProduct(productCode) {
         // Create image element if imageName exists
         const imageUrl = window.getImageUrl(product.imageName);
         
+        // Get background and text colors from product styling
+        const bgColor = product.buttonStyling ? convertPOSColor(product.buttonStyling.bgup || 'WHITE') : '#FFFFFF';
+        const textColor = product.buttonStyling ? convertPOSColor(product.buttonStyling.textup || 'BLACK') : '#000000';
+        
         if (imageUrl) {
-            // Show only the product image, filling the entire grid cell
+            // Show only the product image, filling the entire grid cell with enhanced alt text
             gridItem.innerHTML = `
-                <img src="${imageUrl}" alt="${product.shortName || 'Product'}" style="
+                <img src="${imageUrl}" alt="${product.longName || product.shortName || 'Product'}" style="
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
-                " onerror="this.style.display='none'; this.parentElement.style.backgroundColor='#f8f8f8';">
+                " onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=&quot;padding:5px;font-size:10px;text-align:center;color:${textColor};background:${bgColor};display:flex;align-items:center;justify-content:center;height:100%;box-sizing:border-box;&quot;>${product.longName || product.shortName || 'Product'}<br><small>${product.productCode}</small></div>';">
             `;
+            // Set the grid item background color for when image loads
+            gridItem.style.backgroundColor = bgColor;
         } else {
-            // If no image, show a subtle background color
-            gridItem.innerHTML = '';
-            gridItem.style.backgroundColor = '#f8f8f8';
+            // If no image, show product name and code with proper styling
+            gridItem.innerHTML = `
+                <div style="
+                    width: 100%; 
+                    height: 100%; 
+                    background: ${bgColor}; 
+                    color: ${textColor};
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center;
+                    text-align: center;
+                    font-family: Arial, sans-serif;
+                    font-size: 10px;
+                    padding: 5px;
+                    box-sizing: border-box;
+                ">
+                    ${product.longName || product.shortName || 'Product'}<br>
+                    <small>${product.productCode}</small>
+                </div>
+            `;
         }
         
         // Store product data on the grid item
