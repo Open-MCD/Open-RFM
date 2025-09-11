@@ -157,16 +157,7 @@ function openProductSelector(gridIndex) {
     // Remove any existing overlay first
     closeProductSelector();
     
-    // Clear any existing item at this position first (including spanning buttons)
-    const gridItems = document.querySelectorAll('.grid-item');
-    const targetGridItem = gridItems[gridIndex];
-    
-    if (targetGridItem && targetGridItem.dataset.buttonType) {
-        // If there's an existing item, delete it completely (including spanned cells)
-        deleteGridItemSilently(targetGridItem);
-    }
-    
-    // Set the grid position AFTER closing any existing popup and clearing existing item
+    // Set the grid position AFTER closing any existing popup
     currentGridPosition = gridIndex;
     
     // Create popup overlay
@@ -793,12 +784,101 @@ function renderProductsList(searchTerm = '') {
         `;
     }).join('');
     
+    // Create custom button HTML
+    const customButtonHtml = `
+        <div class="custom-button-card" style="
+            border: 2px solid #007bff;
+            padding: 15px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            text-align: center;
+            font-weight: bold;
+        ">
+            <div style="
+                width: 100%;
+                height: 0;
+                padding-bottom: 75%;
+                position: relative;
+                margin-bottom: 10px;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255,255,255,0.2);
+                border-radius: 4px;
+            ">
+                <div style="
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-size: 24px;
+                ">⚙️</div>
+            </div>
+            <h4 style="margin: 0 0 5px 0; font-size: 14px; font-family: Arial, sans-serif;">
+                Create Custom Button
+            </h4>
+            <p style="margin: 0; font-size: 11px; opacity: 0.9; font-family: Arial, sans-serif;">
+                Custom size, image, actions
+            </p>
+            <div style="margin-top: 10px; text-align: center;">
+                <button class="select-custom-btn" style="
+                    padding: 8px 16px;
+                    background: rgba(255,255,255,0.2);
+                    color: white;
+                    border: 1px solid rgba(255,255,255,0.3);
+                    cursor: pointer;
+                    font-family: Arial, sans-serif;
+                    width: 100%;
+                    transition: background-color 0.2s;
+                    border-radius: 4px;
+                ">Create Custom</button>
+            </div>
+        </div>
+    `;
+    
     container.innerHTML = `
         <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px;">
+            ${customButtonHtml}
             ${productsHtml}
         </div>
-        ${filteredProducts.length === 0 ? '<p style="text-align: center; color: #666; font-family: Arial, sans-serif; margin-top: 50px;">No products found matching your search.</p>' : ''}
+        ${filteredProducts.length === 0 && !customButtonHtml ? '<p style="text-align: center; color: #666; font-family: Arial, sans-serif; margin-top: 50px;">No products found matching your search.</p>' : ''}
     `;
+    
+    // Add event listener for custom button
+    const customCard = container.querySelector('.custom-button-card');
+    if (customCard) {
+        // Custom button hover effects
+        customCard.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+            this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+        });
+        
+        customCard.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = 'none';
+        });
+        
+        // Custom button functionality
+        const selectCustomBtn = customCard.querySelector('.select-custom-btn');
+        if (selectCustomBtn) {
+            selectCustomBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                openCustomButtonCreator();
+            });
+            
+            selectCustomBtn.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = 'rgba(255,255,255,0.3)';
+            });
+            
+            selectCustomBtn.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = 'rgba(255,255,255,0.2)';
+            });
+        }
+    }
     
     // Add event listeners to product cards and buttons
     const productCards = container.querySelectorAll('.product-card');
@@ -848,8 +928,16 @@ function selectSpecialButton(buttonId) {
     
     if (!button || currentGridPosition === null) return;
     
-    // Update grid item
+    // Clear any existing item at this position first (including spanning buttons)
     const gridItems = document.querySelectorAll('.grid-item');
+    const targetGridItem = gridItems[currentGridPosition];
+    
+    if (targetGridItem && targetGridItem.dataset.buttonType) {
+        // If there's an existing item, delete it completely (including spanned cells)
+        deleteGridItemSilently(targetGridItem);
+    }
+    
+    // Update grid item
     const gridItem = gridItems[currentGridPosition];
     
     if (gridItem) {
@@ -958,8 +1046,16 @@ function selectProduct(productCode) {
     const product = productsData.find(p => p.productCode === productCode);
     if (!product || currentGridPosition === null) return;
     
-    // Update grid item
+    // Clear any existing item at this position first (including spanning buttons)
     const gridItems = document.querySelectorAll('.grid-item');
+    const targetGridItem = gridItems[currentGridPosition];
+    
+    if (targetGridItem && targetGridItem.dataset.buttonType) {
+        // If there's an existing item, delete it completely (including spanned cells)
+        deleteGridItemSilently(targetGridItem);
+    }
+    
+    // Update grid item
     const gridItem = gridItems[currentGridPosition];
     
     if (gridItem) {
@@ -1684,3 +1780,10 @@ window.refreshProductSelectorImages = function() {
 window.screenButtons = screenButtons;
 window.specialButtons = specialButtons;
 window.numberButtons = numberButtons;
+window.deleteGridItemSilently = deleteGridItemSilently;
+
+// Export current grid position for external access
+Object.defineProperty(window, 'currentGridPosition', {
+    get: () => currentGridPosition,
+    set: (value) => { currentGridPosition = value; }
+});

@@ -717,6 +717,7 @@ class ScreenManager {
                              item.dataset.numberButtonId || 
                              item.dataset.pageButtonId || 
                              item.dataset.screenButtonId || 
+                             item.dataset.customButtonId ||
                              item.dataset.buttonType;
             
             if (hasContent) {
@@ -727,6 +728,7 @@ class ScreenManager {
                     numberButtonId: item.dataset.numberButtonId || null,
                     pageButtonId: item.dataset.pageButtonId || null,
                     screenButtonId: item.dataset.screenButtonId || null,
+                    customButtonId: item.dataset.customButtonId || null,
                     buttonType: item.dataset.buttonType || null,
                     customScreenNumber: item.dataset.customScreenNumber || null,
                     innerHTML: item.innerHTML || ''

@@ -115,6 +115,8 @@ async function exportScreenXML() {
 
 // Function to export a single screen's data
 function exportScreenData(screen) {
+    console.log('Exporting screen:', screen.id, 'with grid state length:', screen.gridState ? screen.gridState.length : 'no grid state');
+    
     const screenNumber = screen.id;
     let screenTitle = screen.name || `Screen ${screenNumber}`;
     
@@ -160,8 +162,13 @@ ${actionParams}</Action>
     
     // Process each grid cell in the screen
     if (screen.gridState && screen.gridState.length > 0) {
+        console.log('Export: Processing grid state with', screen.gridState.length, 'cells');
+        console.log('Grid state summary:', screen.gridState.map((cell, i) => cell ? `${i}: ${cell.buttonType || 'unknown'}` : null).filter(Boolean));
+        
         screen.gridState.forEach((cellData, index) => {
             if (!cellData) return;
+            
+            console.log(`Processing cell ${index}:`, cellData);
             
             // Button number should be the grid position + 1 (1-indexed)
             const buttonNumber = index + 1;
@@ -377,6 +384,50 @@ ${actionParams}</Action>
 </Button>
 `;
                 xmlContent += buttonXML;
+            } else if (buttonType === 'custom' || cellData.customButtonId) {
+                // Custom button
+                const customButtonId = cellData.customButtonId;
+                const customButton = window.customButtons ? window.customButtons.find(b => b.id === customButtonId) : null;
+                
+                console.log('Exporting custom button:', { customButtonId, customButton, cellData });
+                
+                if (customButton) {
+                    const title = escapeXMLAttribute(customButton.title.replace(/\\n/g, '\n'));
+                    const bitmap = escapeXMLAttribute(customButton.bitmap || '');
+                    const textup = customButton.textup || 'BLACK';
+                    const textdn = customButton.textdn || 'WHITE';
+                    const bgup = customButton.bgup || 'WHITE';
+                    const bgdn = customButton.bgdn || 'BLACK';
+                    const v = customButton.v || '1';
+                    const h = customButton.h || '1';
+                    const keyscan = customButton.keyscan || '0';
+                    const keyshift = customButton.keyshift || '0';
+                    
+                    let buttonXML = `<Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}" bitmap="${bitmap}" bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}" bgdn="${bgdn}" v="${v}" h="${h}" outageModeButtonDisabled="false">`;
+                    
+                    // Add custom button actions
+                    if (customButton.actions && customButton.actions.length > 0) {
+                        for (const action of customButton.actions) {
+                            buttonXML += `\n<Action type="${action.type}" workflow="${action.workflow}">`;
+                            if (action.params) {
+                                for (const [paramName, paramValue] of Object.entries(action.params)) {
+                                    buttonXML += `\n<Parameter name="${escapeXMLAttribute(paramName)}" value="${escapeXMLAttribute(paramValue)}" />`;
+                                }
+                            }
+                            buttonXML += `\n</Action>`;
+                        }
+                    }
+                    
+                    buttonXML += `\n<Language code="en_US" name="English" parent="en">
+<title>${escapeXML(customButton.title.replace(/\\n/g, '\n'))}</title>
+<bitmap>${escapeXML(bitmap)}</bitmap>
+</Language>
+</Button>
+`;
+                    xmlContent += buttonXML;
+                } else {
+                    console.warn(`Custom button ${customButtonId} not found in custom buttons array`);
+                }
             }
         });
     }
@@ -550,6 +601,47 @@ ${actionsXML}            <Language code="en_US" name="English" parent="en">
         </Button>
 `;
             }
+        } else if (item.dataset.customButtonId && buttonType === 'custom') {
+            // Custom button
+            const customButtonId = item.dataset.customButtonId;
+            const customButton = window.customButtons ? window.customButtons.find(b => b.id === customButtonId) : null;
+            
+            if (customButton) {
+                const title = customButton.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const bitmap = customButton.bitmap || '';
+                const textup = customButton.textup || 'BLACK';
+                const textdn = customButton.textdn || 'WHITE';
+                const bgup = customButton.bgup || 'WHITE';
+                const bgdn = customButton.bgdn || 'BLACK';
+                const v = customButton.v || '1';
+                const h = customButton.h || '1';
+                const keyscan = customButton.keyscan || '0';
+                const keyshift = customButton.keyshift || '0';
+                
+                // Build actions XML
+                let actionsXML = '';
+                if (customButton.actions && customButton.actions.length > 0) {
+                    for (const action of customButton.actions) {
+                        actionsXML += `            <Action type="${action.type}" workflow="${action.workflow}">\n`;
+                        if (action.params) {
+                            for (const [paramName, paramValue] of Object.entries(action.params)) {
+                                actionsXML += `                <Parameter name="${paramName}" value="${paramValue}" />\n`;
+                            }
+                        }
+                        actionsXML += `            </Action>\n`;
+                    }
+                }
+                
+                xmlContent += `        <Button number="${buttonNumber}" category="1" title="${title}" keyscan="${keyscan}" keyshift="${keyshift}"
+            bitmap="${bitmap}" bitmapdn="" textup="${textup}" textdn="${textdn}" bgup="${bgup}"
+            bgdn="${bgdn}" v="${v}" h="${h}" outageModeButtonDisabled="false">
+${actionsXML}            <Language code="en_US" name="English" parent="en">
+                <title>${title}</title>
+                <bitmap>${bitmap}</bitmap>
+            </Language>
+        </Button>
+`;
+            }
         }
         
         buttonNumber++;
@@ -641,6 +733,7 @@ function getConfigurationSummary() {
         let totalSpecialButtons = 0;
         let totalNumberButtons = 0;
         let totalScreenButtons = 0;
+        let totalCustomButtons = 0;
         let totalEmpty = 0;
         let totalCells = 0;
         
@@ -657,6 +750,8 @@ function getConfigurationSummary() {
                             totalNumberButtons++;
                         } else if (cellData.screenButtonId && cellData.buttonType === 'screen') {
                             totalScreenButtons++;
+                        } else if (cellData.customButtonId && cellData.buttonType === 'custom') {
+                            totalCustomButtons++;
                         } else {
                             totalEmpty++;
                         }
@@ -677,6 +772,7 @@ function getConfigurationSummary() {
             specialButtons: totalSpecialButtons,
             numberButtons: totalNumberButtons,
             screenButtons: totalScreenButtons,
+            customButtons: totalCustomButtons,
             empty: totalEmpty
         };
     } else {
@@ -686,6 +782,7 @@ function getConfigurationSummary() {
         let specialButtonCount = 0;
         let numberButtonCount = 0;
         let screenButtonCount = 0;
+        let customButtonCount = 0;
         let emptyCount = 0;
         
         gridItems.forEach(item => {
@@ -697,6 +794,8 @@ function getConfigurationSummary() {
                 numberButtonCount++;
             } else if (item.dataset.screenButtonId && item.dataset.buttonType === 'screen') {
                 screenButtonCount++;
+            } else if (item.dataset.customButtonId && item.dataset.buttonType === 'custom') {
+                customButtonCount++;
             } else {
                 emptyCount++;
             }
@@ -709,6 +808,7 @@ function getConfigurationSummary() {
             specialButtons: specialButtonCount,
             numberButtons: numberButtonCount,
             screenButtons: screenButtonCount,
+            customButtons: customButtonCount,
             empty: emptyCount
         };
     }
