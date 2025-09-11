@@ -39,13 +39,17 @@ class ScreenManager {
             // Image repository selector
             const imageRepositorySelector = document.getElementById('image-repository-selector');
             if (imageRepositorySelector) {
+                // Reset to US on page load
+                imageRepositorySelector.value = 'US-NP6-Images';
+                this.imageRepository = 'US-NP6-Images';
+                
                 imageRepositorySelector.addEventListener('change', (e) => {
                     this.imageRepository = e.target.value;
                     console.log('Image repository changed to:', this.imageRepository);
                     // Refresh current screen to update images
                     this.refreshCurrentScreenImages();
                 });
-                console.log('Image repository selector event listener attached');
+                console.log('Image repository selector event listener attached and reset to US');
             } else {
                 console.warn('Image repository selector not found in DOM');
             }
@@ -844,9 +848,21 @@ class ScreenManager {
                             }
                         }
                     } else {
-                        // For other button types, use stored innerHTML
+                        // For other button types, update image paths in stored innerHTML
                         if (cellData.innerHTML) {
-                            gridItem.innerHTML = cellData.innerHTML;
+                            let updatedHTML = cellData.innerHTML;
+                            
+                            // Update any image src attributes to use current repository
+                            updatedHTML = updatedHTML.replace(/src="[^"]*\/US-NP6-Images\/([^"]+)"/g, `src="/${this.imageRepository}/$1"`);
+                            updatedHTML = updatedHTML.replace(/src="[^"]*\/AU-NP6-Images\/([^"]+)"/g, `src="/${this.imageRepository}/$1"`);
+                            updatedHTML = updatedHTML.replace(/src="[^"]*\/NP6-Images\/([^"]+)"/g, `src="/${this.imageRepository}/$1"`);
+                            
+                            // Also update any onerror handlers that contain hardcoded paths
+                            updatedHTML = updatedHTML.replace(/\/US-NP6-Images\//g, `/${this.imageRepository}/`);
+                            updatedHTML = updatedHTML.replace(/\/AU-NP6-Images\//g, `/${this.imageRepository}/`);
+                            updatedHTML = updatedHTML.replace(/\/NP6-Images\//g, `/${this.imageRepository}/`);
+                            
+                            gridItem.innerHTML = updatedHTML;
                         }
                     }
                     
@@ -1162,27 +1178,11 @@ window.getImageUrl = function(bitmap) {
 
 // Method to refresh current screen images when repository changes
 ScreenManager.prototype.refreshCurrentScreenImages = function() {
-    // Update all image URLs in the current grid to use the new repository
-    const gridItems = document.querySelectorAll('.grid-item');
+    console.log('Refreshing images to repository:', this.imageRepository);
     
-    gridItems.forEach(gridItem => {
-        // Find all img elements in this grid item
-        const images = gridItem.querySelectorAll('img');
-        
-        images.forEach(img => {
-            const currentSrc = img.src;
-            
-            // Update the image source to use the new repository
-            if (currentSrc.includes('/US-NP6-Images/')) {
-                img.src = currentSrc.replace('/US-NP6-Images/', `/${this.imageRepository}/`);
-            } else if (currentSrc.includes('/AU-NP6-Images/')) {
-                img.src = currentSrc.replace('/AU-NP6-Images/', `/${this.imageRepository}/`);
-            } else if (currentSrc.includes('/NP6-Images/')) {
-                // Handle legacy paths
-                img.src = currentSrc.replace('/NP6-Images/', `/${this.imageRepository}/`);
-            }
-        });
-    });
+    // For a complete refresh that handles all button types including imported ones,
+    // we need to reload the entire grid state to regenerate everything
+    this.loadGridState(this.currentScreenId);
     
     // Also refresh product selector if it's open
     if (window.refreshProductSelectorImages) {
