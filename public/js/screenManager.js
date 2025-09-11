@@ -848,21 +848,92 @@ class ScreenManager {
                             }
                         }
                     } else {
-                        // For other button types, update image paths in stored innerHTML
-                        if (cellData.innerHTML) {
-                            let updatedHTML = cellData.innerHTML;
-                            
-                            // Update any image src attributes to use current repository
-                            updatedHTML = updatedHTML.replace(/src="[^"]*\/US-NP6-Images\/([^"]+)"/g, `src="/${this.imageRepository}/$1"`);
-                            updatedHTML = updatedHTML.replace(/src="[^"]*\/AU-NP6-Images\/([^"]+)"/g, `src="/${this.imageRepository}/$1"`);
-                            updatedHTML = updatedHTML.replace(/src="[^"]*\/NP6-Images\/([^"]+)"/g, `src="/${this.imageRepository}/$1"`);
-                            
-                            // Also update any onerror handlers that contain hardcoded paths
-                            updatedHTML = updatedHTML.replace(/\/US-NP6-Images\//g, `/${this.imageRepository}/`);
-                            updatedHTML = updatedHTML.replace(/\/AU-NP6-Images\//g, `/${this.imageRepository}/`);
-                            updatedHTML = updatedHTML.replace(/\/NP6-Images\//g, `/${this.imageRepository}/`);
-                            
-                            gridItem.innerHTML = updatedHTML;
+                        // For other button types, check if we need to regenerate vs just update paths
+                        if (cellData.buttonType === 'product' && cellData.productCode) {
+                            // For products, regenerate the HTML completely to ensure proper image handling
+                            const product = window.productsData ? window.productsData.find(p => p.productCode === cellData.productCode) : null;
+                            if (product) {
+                                const imageUrl = this.getImageUrl(product.imageName);
+                                const bgColor = product.buttonStyling ? convertPOSColor(product.buttonStyling.bgup || 'WHITE') : '#FFFFFF';
+                                const textColor = product.buttonStyling ? convertPOSColor(product.buttonStyling.textup || 'BLACK') : '#000000';
+                                
+                                if (imageUrl) {
+                                    // Show the product image
+                                    gridItem.innerHTML = `
+                                        <img src="${imageUrl}" alt="${product.longName || product.shortName || 'Product'}" style="
+                                            width: 100%;
+                                            height: 100%;
+                                            object-fit: cover;
+                                        " onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=&quot;padding:5px;font-size:10px;text-align:center;color:${textColor};background:${bgColor};display:flex;align-items:center;justify-content:center;height:100%;box-sizing:border-box;&quot;>${product.longName || product.shortName || 'Product'}</div>';">
+                                    `;
+                                    gridItem.style.backgroundColor = bgColor;
+                                } else {
+                                    // Show product name only
+                                    gridItem.innerHTML = `
+                                        <div style="
+                                            width: 100%; 
+                                            height: 100%; 
+                                            background: ${bgColor}; 
+                                            color: ${textColor};
+                                            display: flex; 
+                                            align-items: center; 
+                                            justify-content: center;
+                                            text-align: center;
+                                            font-family: Arial, sans-serif;
+                                            font-size: 10px;
+                                            padding: 5px;
+                                            box-sizing: border-box;
+                                        ">
+                                            ${product.longName || product.shortName || 'Product'}
+                                        </div>
+                                    `;
+                                }
+                            } else {
+                                // Product not found, use stored HTML with path updates
+                                if (cellData.innerHTML) {
+                                    let updatedHTML = cellData.innerHTML;
+                                    updatedHTML = updatedHTML.replace(/src="[^"]*\/US-NP6-Images\/([^"]+)"/g, `src="/${this.imageRepository}/$1"`);
+                                    updatedHTML = updatedHTML.replace(/src="[^"]*\/AU-NP6-Images\/([^"]+)"/g, `src="/${this.imageRepository}/$1"`);
+                                    updatedHTML = updatedHTML.replace(/src="[^"]*\/NP6-Images\/([^"]+)"/g, `src="/${this.imageRepository}/$1"`);
+                                    updatedHTML = updatedHTML.replace(/\/US-NP6-Images\//g, `/${this.imageRepository}/`);
+                                    updatedHTML = updatedHTML.replace(/\/AU-NP6-Images\//g, `/${this.imageRepository}/`);
+                                    updatedHTML = updatedHTML.replace(/\/NP6-Images\//g, `/${this.imageRepository}/`);
+                                    updatedHTML = updatedHTML.replace(/alt="([^"]+?)\s+\d+"([^>]*>)/g, 'alt="$1"$2');
+                                    updatedHTML = updatedHTML.replace(/<br>\s*<small>\d+<\/small>/g, '');
+                                    gridItem.innerHTML = updatedHTML;
+                                }
+                            }
+                        } else {
+                            // For other button types, update image paths in stored innerHTML
+                            if (cellData.innerHTML) {
+                                let updatedHTML = cellData.innerHTML;
+                                
+                                console.log('Processing stored HTML for repository update:', {
+                                    index: index,
+                                    buttonType: cellData.buttonType,
+                                    originalHTML: updatedHTML.substring(0, 100) + '...',
+                                    repository: this.imageRepository
+                                });
+                                
+                                // Update any image src attributes to use current repository
+                                updatedHTML = updatedHTML.replace(/src="[^"]*\/US-NP6-Images\/([^"]+)"/g, `src="/${this.imageRepository}/$1"`);
+                                updatedHTML = updatedHTML.replace(/src="[^"]*\/AU-NP6-Images\/([^"]+)"/g, `src="/${this.imageRepository}/$1"`);
+                                updatedHTML = updatedHTML.replace(/src="[^"]*\/NP6-Images\/([^"]+)"/g, `src="/${this.imageRepository}/$1"`);
+                                
+                                // Also update any onerror handlers that contain hardcoded paths
+                                updatedHTML = updatedHTML.replace(/\/US-NP6-Images\//g, `/${this.imageRepository}/`);
+                                updatedHTML = updatedHTML.replace(/\/AU-NP6-Images\//g, `/${this.imageRepository}/`);
+                                updatedHTML = updatedHTML.replace(/\/NP6-Images\//g, `/${this.imageRepository}/`);
+                                
+                                // Fix old alt text format for products that includes the number at the end
+                                // Match patterns like alt="Big Mac 1" and change to alt="Big Mac"
+                                updatedHTML = updatedHTML.replace(/alt="([^"]+?)\s+\d+"([^>]*>)/g, 'alt="$1"$2');
+                                
+                                // Also remove product code from stored HTML (remove <br><small>number</small> patterns)
+                                updatedHTML = updatedHTML.replace(/<br>\s*<small>\d+<\/small>/g, '');
+                                
+                                gridItem.innerHTML = updatedHTML;
+                            }
                         }
                     }
                     

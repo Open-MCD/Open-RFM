@@ -962,12 +962,12 @@ function selectProduct(productCode) {
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
-                " onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=&quot;padding:5px;font-size:10px;text-align:center;color:${textColor};background:${bgColor};display:flex;align-items:center;justify-content:center;height:100%;box-sizing:border-box;&quot;>${product.longName || product.shortName || 'Product'}<br><small>${product.productCode}</small></div>';">
+                " onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=&quot;padding:5px;font-size:10px;text-align:center;color:${textColor};background:${bgColor};display:flex;align-items:center;justify-content:center;height:100%;box-sizing:border-box;&quot;>${product.longName || product.shortName || 'Product'}</div>';">
             `;
             // Set the grid item background color for when image loads
             gridItem.style.backgroundColor = bgColor;
         } else {
-            // If no image, show product name and code with proper styling
+            // If no image, show product name only with proper styling
             gridItem.innerHTML = `
                 <div style="
                     width: 100%; 
@@ -983,8 +983,7 @@ function selectProduct(productCode) {
                     padding: 5px;
                     box-sizing: border-box;
                 ">
-                    ${product.longName || product.shortName || 'Product'}<br>
-                    <small>${product.productCode}</small>
+                    ${product.longName || product.shortName || 'Product'}
                 </div>
             `;
         }
